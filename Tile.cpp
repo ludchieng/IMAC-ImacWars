@@ -4,15 +4,10 @@
 
 #include "Tile.h"
 
-Tile::Tile(int posX, int posY, int mpCost) {
+Tile::Tile(int posX, int posY) {
 	m_posX = posX;
 	m_posY = posY;
-	m_mpCost = mpCost;
 	m_unit = NULL;
-}
-
-int Tile::getMpCost() const {
-	return m_mpCost;
 }
 
 int Tile::getPosX() const {
@@ -23,26 +18,21 @@ int Tile::getPosY() const {
 	return m_posY;
 }
 
-Unit* Tile::getUnit() {
+Unit* Tile::getUnit() const {
 	return m_unit;
 }
 
-void Tile::setUnit(Unit* unit) {
-	m_unit = unit;
+void Tile::setUnit(Unit *u) {
+	m_unit = u;
 }
-
-string Tile::toString() {
-	stringstream ss;
-	ss << "\n\n---- TILE ----";
-	ss << "\nposX: " << m_posX;
-	ss << "\nposY: " << m_posY;
-	return ss.str();
+void Tile::delUnit() {
+	m_unit = NULL;
 }
 
 
 // ---
 
 
-bool Tile::hasUnit() {
+bool Tile::hasUnit() const {
 	return m_unit != NULL;
 }

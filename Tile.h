@@ -7,23 +7,22 @@
 
 #include "Unit.h"
 
+class Unit;
+
 class Tile {
 	int m_posX;
 	int m_posY;
-	int m_mpCost;
 	Unit* m_unit;
 
 public:
-	Tile(int posX, int posY, int mpCost);
+	Tile(int posX, int posY);
 
-	int getMpCost() const;
 	int getPosX() const;
 	int getPosY() const;
-	Unit* getUnit();
-	void setUnit(Unit* unit);
-	string toString();
-
-	bool hasUnit();
+	Unit* getUnit() const;
+	void setUnit(Unit *unit);
+	void delUnit();
+	bool hasUnit() const;
 
 };
 

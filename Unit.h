@@ -5,17 +5,16 @@
 #ifndef UNIT_H_
 #define UNIT_H_
 
-#include <sstream>
-#include <iostream>
+#include "Player.h"
+#include "Tile.h"
 
-#include <stdlib.h>
-#include <time.h>
-#include <string>
-using namespace std;
+class Tile;
+class Player;
 
 class Unit {
 	int m_id;
-	int m_player;
+	Player *m_player;
+	Tile *m_tile;
 	int m_hp;
 	int m_hpMax;
 	int m_mp;
@@ -25,8 +24,12 @@ class Unit {
 	int m_def;
 
 public:
-	Unit(int id, int player);
-	Unit(int id, int player, int hp, int hpMax, int mp, int mpMax, int ratk, int atk, int def);
+	Unit(int id, Player &player);
+	Unit(int id, Player &player,
+		int hp, int hpMax,
+		int mp, int mpMax,
+		int ratk, int atk,
+		int def);
 
 	int getId() const;
 	void setId(int id);
@@ -42,20 +45,18 @@ public:
 	void setMp(int mp);
 	int getMpMax() const;
 	void setMpMax(int mpMax);
-	int getPlayer() const;
-	void setPlayer(int player);
+	Player* getPlayer() const;
+	void setPlayer(Player *player);
+	Tile* getTile() const;
+	void setTile(Tile *tile);
 	int getRatk() const;
 	void setRatk(int ratk);
-	std::string toString();
 
-	bool isVisibleBy(const Unit *&u);
-	bool isDead();
-
-	void move();
 	void takeDamage(int v);
+	bool canMoveOn(const Tile &t) const;
+	bool canMoveOn(int x, int y) const;
+	bool isDead() const;
 	void die();
-
-	void attack(Unit *&target);
 };
 
 

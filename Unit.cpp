@@ -4,9 +4,10 @@
 
 #include "Unit.h"
 
-Unit::Unit(int id, int player) {
+Unit::Unit(int id, Player &player) {
 	m_id = id;
-	m_player = player;
+	m_player = &player;
+	m_tile = NULL;
 	m_hpMax = 100;
 	m_hp = m_hpMax;
 	m_mpMax = 4;
@@ -16,9 +17,10 @@ Unit::Unit(int id, int player) {
 	m_def = 15;
 }
 
-Unit::Unit(int id, int player, int hp, int hpMax, int mp, int mpMax, int ratk, int atk, int def) {
+Unit::Unit(int id, Player &player, int hp, int hpMax, int mp, int mpMax, int ratk, int atk, int def) {
 	m_id = id;
-	m_player = player;
+	m_player = &player;
+	m_tile = NULL;
 	m_hp = hp;
 	m_hpMax = hpMax;
 	m_mp = mp;
@@ -85,12 +87,20 @@ void Unit::setMpMax(int mpMax) {
 	m_mpMax = mpMax;
 }
 
-int Unit::getPlayer() const {
+Player* Unit::getPlayer() const {
 	return m_player;
 }
 
-void Unit::setPlayer(int player) {
+void Unit::setPlayer(Player *player) {
 	m_player = player;
+}
+
+Tile* Unit::getTile() const {
+	return m_tile;
+}
+
+void Unit::setTile(Tile *tile) {
+	m_tile = tile;
 }
 
 int Unit::getRatk() const {
@@ -101,34 +111,11 @@ void Unit::setRatk(int ratk) {
 	m_ratk = ratk;
 }
 
-string Unit::toString() {
-	stringstream ss;
-	ss << "\n\n--- UNIT" << m_id << " ---";
-	ss << "\nplayer: ";
-	ss << m_player;
-	ss << "\nhp: ";
-	ss << m_hp;
-	ss << "\nhpMax: ";
-	ss << m_hpMax;
-	ss << "\nmp: ";
-	ss << m_mp;
-	ss << "\nmpMax: ";
-	ss << m_mpMax;
-	ss << "\nratk: ";
-	ss << m_ratk;
-	ss << "\natk: ";
-	ss << m_atk;
-	ss << "\ndef: ";
-	ss << m_def;
-	ss << "\n-------------";
-	return ss.str();
-}
-
 
 // ---
 
 
-bool Unit::isDead() {
+bool Unit::isDead() const {
 	return m_hp <= 0;
 }
 
@@ -139,18 +126,21 @@ void Unit::takeDamage(int dmg) {
 	}
 }
 
-void Unit::die() {
-	m_hp = 0;
+bool Unit::canMoveOn(const Tile &t) const {
+	int dx = t.getPosX() - m_tile->getPosX();
+	int dy = t.getPosY() - m_tile->getPosY();
+	if (dx < 0) { dx = -dx; }
+	if (dy < 0) { dy = -dy; }
+	return (dx + dy) <= m_mp;
+}
+bool Unit::canMoveOn(int x, int y) const {
+	int dx = x - m_tile->getPosX();
+	int dy = y - m_tile->getPosY();
+	if (dx < 0) { dx = -dx; }
+	if (dy < 0) { dy = -dy; }
+	return (dx + dy) <= m_mp;
 }
 
-void Unit::attack(Unit *&target) {
-	if (isDead()) {
-		throw "illegal state: unit is dead.";
-	}
-	srand(time(NULL));
-	float bonus = 1 + ((float)(rand() % 20))/100;
-	int dmgOnTarget = m_hp/m_hpMax * m_atk * bonus - target->getDef();
-	int dmgOnAssailant = target->getHp()/target->getHpMax() * target->getAtk() - getDef();
-	target->takeDamage(dmgOnTarget);
-	this->takeDamage(dmgOnAssailant);
+void Unit::die() {
+	m_hp = 0;
 }
