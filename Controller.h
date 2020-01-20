@@ -8,17 +8,18 @@
 #include "Player.h"
 #include "View.h"
 #include "Model.h"
+#include "Util.h"
 #include <algorithm>
 
 class View;
 
-class Controller {
-
+class Controller
+{
 public:
     View *v;
     Model *m;
     Player *m_winner;
-    Unit* m_sUnit; // selected Unit
+    Unit *m_sUnit; // selected Unit
 
     Controller();
     ~Controller();

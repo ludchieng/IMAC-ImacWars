@@ -15,11 +15,12 @@ using namespace std;
 
 class Controller;
 
-class View {
+class View
+{
 
 public:
-
-	typedef struct {
+	typedef struct
+	{
 		int ansiFormat;
 		string content;
 	} Message;
@@ -61,28 +62,28 @@ public:
 	Message m_msg;
 	Model::FightReport m_fightReport;
 
-    View();
+	View();
 
-    void render(Controller *c);
-    string renderHeader(Controller *c);
-    string renderMap(Controller *c);
-    string renderPanel(Controller *c);
-    string renderMsg();
+	void render(Controller *c);
+	string renderHeader(Controller *c);
+	string renderMap(Controller *c);
+	string renderPanel(Controller *c);
+	string renderMsg();
 
-    void clearMsg();
+	void clearMsg();
 
-    static string insertANSI(int code);
-    static string insertANSI();
-    static string formatANSI(char* s, int inner);
-    static string formatANSI(string s, int inner);
-    static string formatANSI(char* s, int inner, int after);
-    static string formatANSI(string s, int inner, int after);
+	static string insertANSI(int code);
+	static string insertANSI();
+	static string formatANSI(char *s, int inner);
+	static string formatANSI(string s, int inner);
+	static string formatANSI(char *s, int inner, int after);
+	static string formatANSI(string s, int inner, int after);
 
-    static string formatUnitAbbrLabel(Unit* u);
-    static string formatUnitLabel(Unit* u);
+	static string formatUnitAbbrLabel(Unit *u);
+	static string formatUnitLabel(Unit *u);
 
-    static int getPlayerColour(Player* p);
-    static int getPlayerHColour(Player* p);
+	static int getPlayerColour(Player *p);
+	static int getPlayerHColour(Player *p);
 };
 
 #endif /* VIEW_H_*/

@@ -4,28 +4,27 @@
 
 #include "View.h"
 
-
 const int View::ANSI_COLOURS[] = {
 		View::ANSI_YELLOW, View::ANSI_GREEN,
 		View::ANSI_MAGENTA, View::ANSI_BLUE,
-		View::ANSI_RED, View::ANSI_CYAN, View::ANSI_GREY
-};
+		View::ANSI_RED, View::ANSI_CYAN, View::ANSI_GREY};
+
 const int View::ANSI_H_COLOURS[] = {
 		View::ANSI_H_YELLOW, View::ANSI_H_GREEN,
 		View::ANSI_H_MAGENTA, View::ANSI_H_BLUE,
 		View::ANSI_H_RED, View::ANSI_H_CYAN,
-		View::ANSI_H_GREY
-};
+		View::ANSI_H_GREY};
 
-
-View::View() {
+View::View()
+{
 	m_msg.ansiFormat = ANSI_CYAN;
 	m_msg.content = "Début de partie !";
 }
 
-
-void View::render(Controller *c) {
-	for (int i = 0; i < LINEBREAKS_ON_RENDER_COUNT; i++) {
+void View::render(Controller *c)
+{
+	for (int i = 0; i < LINEBREAKS_ON_RENDER_COUNT; i++)
+	{
 		cout << endl;
 	}
 	cout << this->renderHeader(c) << endl;
@@ -34,9 +33,9 @@ void View::render(Controller *c) {
 	cout << this->renderMsg() << endl;
 }
 
-
-string View::renderHeader(Controller *c) {
-	Model* m = c->m;
+string View::renderHeader(Controller *c)
+{
+	Model *m = c->m;
 	string res;
 	res += "\n  JOUEUR ";
 	res += to_string(1 + m->getPlayerTurn()->getId());
@@ -46,30 +45,36 @@ string View::renderHeader(Controller *c) {
 	return res;
 }
 
-
-string View::renderMap(Controller *c) {
-	Model* m = c->m;
+string View::renderMap(Controller *c)
+{
+	Model *m = c->m;
 	string res;
 	res += insertANSI(View::ANSI_MAGENTA);
 	res += "    |";
-	for (int i = 0; i < m->MAP_COLS_COUNT; i++) {
+	for (int i = 0; i < m->MAP_COLS_COUNT; i++)
+	{
 		res += ' ';
 		res += m->MAP_COLS_LABEL[i];
 		res += " |";
 	}
 	res += '\n';
 
-	for (int i = 0; i < m->MAP_ROWS_COUNT; i++) {
+	for (int i = 0; i < m->MAP_ROWS_COUNT; i++)
+	{
 		res += " ";
 		res += Util::leftPad(to_string(i + 1), 2);
 		res += " |";
-		for (int j = 0; j < m->MAP_COLS_COUNT; j++) {
+		for (int j = 0; j < m->MAP_COLS_COUNT; j++)
+		{
 			string temp2;
-			try {
-				Unit* u = m->getTiles()[i][j]->getUnit();
+			try
+			{
+				Unit *u = m->getTiles()[i][j]->getUnit();
 				temp2 += formatUnitAbbrLabel(u);
 				temp2 = formatANSI(temp2, getPlayerColour(u->getPlayer()), View::ANSI_MAGENTA);
-			} catch (NoSuchUnit &e) {
+			}
+			catch (NoSuchUnit &e)
+			{
 				temp2 += "   ";
 			}
 			temp2 += '|';
@@ -83,47 +88,59 @@ string View::renderMap(Controller *c) {
 	return res;
 }
 
-
-string View::renderPanel(Controller *c) {
-	Model* m = c->m;
+string View::renderPanel(Controller *c)
+{
+	Model *m = c->m;
 	string res;
 	res += "--------------------------------------------\n";
-	for (Player* p : m->m_players) {
+	for (Player *p : m->m_players)
+	{
 		string temp = insertANSI(getPlayerColour(p));
 		temp += "JOUEUR ";
-		temp += to_string(p->getId()+1);
-		if (p == m->getPlayerTurn()) {
+		temp += to_string(p->getId() + 1);
+		if (p == m->getPlayerTurn())
+		{
 			temp += ' ';
 			temp += insertANSI(getPlayerHColour(p));
 			temp += " ";
 			temp += insertANSI();
 			temp += insertANSI(getPlayerColour(p));
 			temp = Util::rghtPad(temp, 43);
-		} else {
+		}
+		else
+		{
 			temp = Util::rghtPad(temp, 30);
 		}
 		temp += "HP  MP    ATK  DEF\n";
 		temp += insertANSI();
 		res += temp;
 
-		if (p != m->getPlayerTurn()) {
+		if (p != m->getPlayerTurn())
+		{
 			res += insertANSI(ANSI_DIM);
 		}
 
-		for (Unit* u : p->m_units) {
+		for (Unit *u : p->m_units)
+		{
 			res += ' ';
-			if (!u->isDead()) {
-				Tile* t = u->getTile();
+			if (!u->isDead())
+			{
+				Tile *t = u->getTile();
 				string temp;
-				if (c->m_sUnit == u) {
+				if (c->m_sUnit == u)
+				{
 					temp += insertANSI(getPlayerHColour(u->getPlayer()));
 					temp += Util::rghtPad(Util::xyToA1(t->getPosX(), t->getPosY()), 3);
 					temp += insertANSI();
-				} else {
+				}
+				else
+				{
 					temp += Util::rghtPad(Util::xyToA1(t->getPosX(), t->getPosY()), 3);
 				}
 				res += temp;
-			} else {
+			}
+			else
+			{
 				res += "   ";
 			}
 			res += "    ";
@@ -140,7 +157,8 @@ string View::renderPanel(Controller *c) {
 			res += '\n';
 		}
 		res += '\n';
-		if (p != m->getPlayerTurn()) {
+		if (p != m->getPlayerTurn())
+		{
 			res += insertANSI();
 		}
 	}
@@ -148,32 +166,32 @@ string View::renderPanel(Controller *c) {
 	return res;
 }
 
-
-string View::renderMsg() {
-	return formatANSI(Util::rghtPad(m_msg.content, 43), m_msg.ansiFormat, 0);;
+string View::renderMsg()
+{
+	return formatANSI(Util::rghtPad(m_msg.content, 43), m_msg.ansiFormat, 0);
 }
 
-
-void View::clearMsg() {
+void View::clearMsg()
+{
 	m_msg.content = "";
 	m_msg.ansiFormat = 0;
 }
 
-
-string View::insertANSI(int code) {
+string View::insertANSI(int code)
+{
 	string res = "\033[";
 	res += to_string(code);
 	res += "m";
 	return res;
 }
 
-
-string View::insertANSI() {
+string View::insertANSI()
+{
 	return "\033[m";
 }
 
-
-string View::formatANSI(char* s, int inner) {
+string View::formatANSI(char *s, int inner)
+{
 	string res;
 	res += insertANSI(inner);
 	res += s;
@@ -181,8 +199,8 @@ string View::formatANSI(char* s, int inner) {
 	return res;
 }
 
-
-string View::formatANSI(string s, int inner) {
+string View::formatANSI(string s, int inner)
+{
 	string res;
 	res += insertANSI(inner);
 	res += s;
@@ -190,8 +208,8 @@ string View::formatANSI(string s, int inner) {
 	return res;
 }
 
-
-string View::formatANSI(char* s, int inner, int after) {
+string View::formatANSI(char *s, int inner, int after)
+{
 	string res;
 	res += insertANSI(inner);
 	res += s;
@@ -199,8 +217,8 @@ string View::formatANSI(char* s, int inner, int after) {
 	return res;
 }
 
-
-string View::formatANSI(string s, int inner, int after) {
+string View::formatANSI(string s, int inner, int after)
+{
 	string res;
 	res += insertANSI(inner);
 	res += s;
@@ -208,10 +226,11 @@ string View::formatANSI(string s, int inner, int after) {
 	return res;
 }
 
-
-string View::formatUnitAbbrLabel(Unit* u) {
+string View::formatUnitAbbrLabel(Unit *u)
+{
 	string res;
-	switch(u->getType()) {
+	switch (u->getType())
+	{
 	case Unit::Type::Infantry:
 		res += "IN";
 		break;
@@ -221,14 +240,15 @@ string View::formatUnitAbbrLabel(Unit* u) {
 	case Unit::Type::Tank:
 		res += "TK";
 	}
-	res += to_string(u->getId()+1);
+	res += to_string(u->getId() + 1);
 	return res;
 }
 
-
-string View::formatUnitLabel(Unit* u) {
+string View::formatUnitLabel(Unit *u)
+{
 	string res;
-	switch(u->getType()) {
+	switch (u->getType())
+	{
 	case Unit::Type::Infantry:
 		res += "Infanterie ";
 		break;
@@ -238,14 +258,16 @@ string View::formatUnitLabel(Unit* u) {
 	case Unit::Type::Tank:
 		res += "Tank ";
 	}
-	res += to_string(u->getId()+1);
+	res += to_string(u->getId() + 1);
 	return res;
 }
 
-int View::getPlayerColour(Player* p) {
+int View::getPlayerColour(Player *p)
+{
 	return ANSI_COLOURS[p->getId() % ANSI_COLOURS_COUNT];
 }
 
-int View::getPlayerHColour(Player* p) {
+int View::getPlayerHColour(Player *p)
+{
 	return ANSI_H_COLOURS[p->getId() % ANSI_COLOURS_COUNT];
 }

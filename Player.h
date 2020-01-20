@@ -11,14 +11,17 @@ using namespace std;
 
 class Unit;
 
-class Player {
-	int m_id;
+class Player
+{
 
 public:
-    vector<Unit*> m_units;
+    vector<Unit *> m_units;
     Player(int id);
     bool hasActiveUnits() const;
     int getId() const;
+
+private:
+    int m_id;
 };
 
 #endif /* PLAYER_H_ */

@@ -12,18 +12,24 @@
 class Tile;
 class Player;
 
-class Unit {
+class Unit
+{
 
 public:
-	enum Type {Infantry, Artillery, Tank};
+	enum Type
+	{
+		Infantry,
+		Artillery,
+		Tank
+	};
 
-	Unit(int id, Player* player);
-	Unit(int id, Player* player, Type type);
-	Unit(int id, Player* player, Type type,
-		int hp, int hpMax,
-		int mp, int mpMax,
-		int ratk, int atkcost,
-		int atk, int def);
+	Unit(int id, Player *player);
+	Unit(int id, Player *player, Type type);
+	Unit(int id, Player *player, Type type,
+			 int hp, int hpMax,
+			 int mp, int mpMax,
+			 int ratk, int atkcost,
+			 int atk, int def);
 
 	int getId() const;
 	void setId(int id);
@@ -43,9 +49,9 @@ public:
 	void setMp(int mp);
 	int getMpMax() const;
 	void setMpMax(int mpMax);
-	Player* getPlayer() const;
+	Player *getPlayer() const;
 	void setPlayer(Player *player);
-	Tile* getTile() const;
+	Tile *getTile() const;
 	void setTile(Tile *tile);
 	int getRatk() const;
 	void setRatk(int ratk);
@@ -75,6 +81,5 @@ private:
 	int m_atk;
 	int m_def;
 };
-
 
 #endif /* UNIT_H_ */
