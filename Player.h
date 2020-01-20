@@ -12,10 +12,13 @@ using namespace std;
 class Unit;
 
 class Player {
+	int m_id;
+
 public:
     vector<Unit*> m_units;
-    Player();
-    bool hasUnits() const;
+    Player(int id);
+    bool hasActiveUnits() const;
+    int getId() const;
 };
 
 #endif /* PLAYER_H_ */

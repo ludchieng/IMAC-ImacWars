@@ -6,6 +6,7 @@
 #define TILE_H_
 
 #include "Unit.h"
+#include "exceptions.cpp"
 
 class Unit;
 

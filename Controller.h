@@ -8,18 +8,24 @@
 #include "Player.h"
 #include "View.h"
 #include "Model.h"
+#include <algorithm>
+
+class View;
 
 class Controller {
-    View *m_view;
-    Model *m_model;
-    bool m_isRunning;
-    Player *m_player;
 
 public:
+    View *v;
+    Model *m;
+    Player *m_winner;
+    Unit* m_sUnit; // selected Unit
+
     Controller();
     ~Controller();
+
     void playGame();
     void endGame();
+    bool checkWinner();
 };
 
 #endif /* CONTROLLER_H_ */

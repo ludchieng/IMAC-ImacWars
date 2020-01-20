@@ -19,6 +19,10 @@ int Tile::getPosY() const {
 }
 
 Unit* Tile::getUnit() const {
+	if (m_unit == NULL) {
+		NoSuchUnit e;
+		throw e;
+	}
 	return m_unit;
 }
 

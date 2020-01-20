@@ -5,36 +5,34 @@
 #ifndef UNIT_H_
 #define UNIT_H_
 
-#include "Player.h"
 #include "Tile.h"
+#include "Player.h"
+#include "exceptions.cpp"
 
 class Tile;
 class Player;
 
 class Unit {
-	int m_id;
-	Player *m_player;
-	Tile *m_tile;
-	int m_hp;
-	int m_hpMax;
-	int m_mp;
-	int m_mpMax;
-	int m_ratk;
-	int m_atk;
-	int m_def;
 
 public:
-	Unit(int id, Player &player);
-	Unit(int id, Player &player,
+	enum Type {Infantry, Artillery, Tank};
+
+	Unit(int id, Player* player);
+	Unit(int id, Player* player, Type type);
+	Unit(int id, Player* player, Type type,
 		int hp, int hpMax,
 		int mp, int mpMax,
-		int ratk, int atk,
-		int def);
+		int ratk, int atkcost,
+		int atk, int def);
 
 	int getId() const;
 	void setId(int id);
+	Type getType() const;
+	void setType(Type type);
 	int getAtk() const;
 	void setAtk(int atk);
+	int getAtkCost() const;
+	void setAtkCost(int atk);
 	int getDef() const;
 	void setDef(int def);
 	int getHp() const;
@@ -53,10 +51,29 @@ public:
 	void setRatk(int ratk);
 
 	void takeDamage(int v);
-	bool canMoveOn(const Tile &t) const;
+	bool canMoveOn(Tile *t) const;
 	bool canMoveOn(int x, int y) const;
+	bool canHit(Unit *u) const;
+	bool canHit(Tile *t) const;
+	bool canHit(int x, int y) const;
+	int distanceFrom(Tile *t) const;
+	int distanceFrom(int x, int y) const;
 	bool isDead() const;
 	void die();
+
+private:
+	int m_id;
+	Type m_type;
+	Player *m_player;
+	Tile *m_tile;
+	int m_hp;
+	int m_hpMax;
+	int m_mp;
+	int m_mpMax;
+	int m_ratk;
+	int m_atkcost;
+	int m_atk;
+	int m_def;
 };
 
 

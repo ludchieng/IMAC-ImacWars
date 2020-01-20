@@ -3,7 +3,7 @@
 
 int main (void) {
 	Controller* c = new Controller();
-    printf("End\n");
+    printf("\n\n");
     delete c;
 	return 0;
 }
