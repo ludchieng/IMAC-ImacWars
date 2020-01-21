@@ -66,7 +66,7 @@ dmgOn2 = atk1 * (power1 / power2) + variation1 + bonus;
 dmgOn1 = atk2 * (power2 / power1) + variation2;
 ```
 
-Variations parameter go randomly from -10 to +10. The bonus represents the surprise effect the assailant has upon the target.
+Variation parameters go randomly from -10 to +10. The bonus represents the surprise effect the assailant has upon the target.
 
 Last but not least, if the assailant has a higher range of fire than the target. The target might not have the possibility to strike back. In that case, `dmgOnAssailant` equals 0.
 
