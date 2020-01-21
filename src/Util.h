@@ -2,11 +2,12 @@
  * Util.h
  */
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef SRC_UTIL_H_
+#define SRC_UTIL_H_
+
+#include <string>
 
 #include "Model.h"
-#include <string>
 using namespace std;
 
 class Util
@@ -24,4 +25,4 @@ public:
 	static bool isIncluded(int e, int *arr, int size);
 };
 
-#endif /* UTIL_H_ */
+#endif /* SRC_UTIL_H_ */

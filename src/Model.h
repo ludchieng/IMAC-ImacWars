@@ -2,19 +2,20 @@
  * Model.h
  */
 
-#ifndef MODEL_H_
-#define MODEL_H_
+#ifndef SRC_MODEL_H_
+#define SRC_MODEL_H_
 
-#include "Tile.h"
-#include "Player.h"
 #include <iostream>
 #include <algorithm>
+
 #include "exceptions.cpp"
+#include "Player.h"
+#include "Tile.h"
 
 class Model
 {
 public:
-    typedef enum
+    typedef enum ArmySize
     {
         CREW,
         FACE_TO_FACE,
@@ -26,7 +27,7 @@ public:
         DIVISION
     } ArmySize;
 
-    typedef struct
+    typedef struct FightReport
     {
         Unit *assailant;
         Unit *target;
@@ -76,4 +77,4 @@ private:
     Player *m_playerTurn;
 };
 
-#endif /* MODEL_H_ */
+#endif /* SRC_MODEL_H_ */

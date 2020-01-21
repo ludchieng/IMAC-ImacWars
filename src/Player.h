@@ -2,11 +2,12 @@
  * Player.h
  */
 
-#ifndef PLAYER_H_
-#define PLAYER_H_
+#ifndef SRC_PLAYER_H_
+#define SRC_PLAYER_H_
+
+#include <vector>
 
 #include "Unit.h"
-#include <vector>
 using namespace std;
 
 class Unit;
@@ -24,4 +25,4 @@ private:
     int m_id;
 };
 
-#endif /* PLAYER_H_ */
+#endif /* SRC_PLAYER_H_ */

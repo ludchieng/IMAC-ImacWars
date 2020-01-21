@@ -37,8 +37,8 @@ Model::Model()
 	}
 	m_playerTurn = m_players[0];
 
-	generateArmies(ArmySize::CREW);
-	//generateArmies(ArmySize::FACE_TO_FACE);
+	//generateArmies(ArmySize::CREW);
+	generateArmies(ArmySize::FACE_TO_FACE);
 	//generateArmies(ArmySize::SECTION);
 	//generateArmies(ArmySize::BATTERY);
 	//generateArmies(ArmySize::COMPANY);

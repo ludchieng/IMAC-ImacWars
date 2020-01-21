@@ -2,12 +2,12 @@
  * Unit.h
  */
 
-#ifndef UNIT_H_
-#define UNIT_H_
+#ifndef SRC_UNIT_H_
+#define SRC_UNIT_H_
 
-#include "Tile.h"
-#include "Player.h"
 #include "exceptions.cpp"
+#include "Player.h"
+#include "Tile.h"
 
 class Tile;
 class Player;
@@ -82,4 +82,4 @@ private:
 	int m_def;
 };
 
-#endif /* UNIT_H_ */
+#endif /* SRC_UNIT_H_ */

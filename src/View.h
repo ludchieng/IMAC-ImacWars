@@ -2,15 +2,16 @@
  * View.h
  */
 
-#ifndef VIEW_H_
-#define VIEW_H_
+#ifndef SRC_VIEW_H_
+#define SRC_VIEW_H_
 
-#include "Controller.h"
-#include "Model.h"
-#include "Util.h"
-#include "exceptions.cpp"
 #include <iostream>
 #include <string>
+
+#include "Controller.h"
+#include "exceptions.cpp"
+#include "Model.h"
+#include "Util.h"
 using namespace std;
 
 class Controller;
@@ -86,4 +87,4 @@ public:
 	static int getPlayerHColour(Player *p);
 };
 
-#endif /* VIEW_H_*/
+#endif /* SRC_VIEW_H_*/

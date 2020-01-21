@@ -2,11 +2,11 @@
  * Tile.h
  */
 
-#ifndef TILE_H_
-#define TILE_H_
+#ifndef SRC_TILE_H_
+#define SRC_TILE_H_
 
-#include "Unit.h"
 #include "exceptions.cpp"
+#include "Unit.h"
 
 class Unit;
 
@@ -29,4 +29,4 @@ private:
 	Unit *m_unit;
 };
 
-#endif /* TILE_H_ */
+#endif /* SRC_TILE_H_ */

@@ -25,14 +25,14 @@ void Controller::playGame()
 	do
 	{
 		// Execute a game turn
-		string unitCoords;		 // Selected Unit coordinates
-		int actionType;				 // Action to achieve (pass, move, attack)
-		string actionCoords;	 // Action destination/target coordinates
-		bool isValidInput;		 // Assert input string specific pattern
-		bool isValidSelection; // Assert player is allowed to select this unit
-		bool isValidAction;		 // Assert player is allowed to perform this action
-		bool endTurn = false;	// Assert game turn should end after the action
-		int x, y;							 // Buffer variables for coordinates
+		string unitCoords;      // Selected Unit coordinates
+		int actionType;         // Action to achieve (pass, move, attack)
+		string actionCoords;    // Action destination/target coordinates
+		bool isValidInput;      // Assert input string specific pattern
+		bool isValidSelection;  // Assert player is allowed to select this unit
+		bool isValidAction;     // Assert player is allowed to perform this action
+		bool endTurn = false;   // Assert game turn should end after the action
+		int x, y;               // Buffer variables for coordinates
 
 		// Unit selection
 		do

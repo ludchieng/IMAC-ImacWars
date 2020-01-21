@@ -1,5 +1,5 @@
-#include "Controller.h"
 #include <stdio.h>
+#include "Controller.h"
 
 int main (void) {
 	Controller* c = new Controller();

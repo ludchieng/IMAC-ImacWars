@@ -2,14 +2,14 @@
  * Controller.h
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef SRC_CONTROLLER_H_
+#define SRC_CONTROLLER_H_
 
-#include "Player.h"
-#include "View.h"
-#include "Model.h"
-#include "Util.h"
 #include <algorithm>
+#include "Model.h"
+#include "Player.h"
+#include "Util.h"
+#include "View.h"
 
 class View;
 
@@ -29,4 +29,4 @@ public:
     bool checkWinner();
 };
 
-#endif /* CONTROLLER_H_ */
+#endif /* SRC_CONTROLLER_H_ */
