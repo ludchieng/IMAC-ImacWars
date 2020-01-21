@@ -4,3 +4,5 @@ Based on Advance Wars game.
 Short C++ project for programming courses purposes.
  
 You might want to change the armies configuration. To do so, edit Model.cpp, uncomment the function "generateArmies(...)" of your choice (line 40)
+
+![Gif Demo 1](demo-2.gif)
