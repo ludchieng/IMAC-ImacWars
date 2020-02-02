@@ -5,6 +5,7 @@
 #ifndef SRC_TILE_H_
 #define SRC_TILE_H_
 
+#include <stdlib.h>
 #include "exceptions.cpp"
 #include "Unit.h"
 

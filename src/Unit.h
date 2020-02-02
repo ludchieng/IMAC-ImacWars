@@ -5,6 +5,7 @@
 #ifndef SRC_UNIT_H_
 #define SRC_UNIT_H_
 
+#include <stdlib.h>
 #include "exceptions.cpp"
 #include "Player.h"
 #include "Tile.h"

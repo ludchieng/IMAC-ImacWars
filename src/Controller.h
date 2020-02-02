@@ -5,6 +5,7 @@
 #ifndef SRC_CONTROLLER_H_
 #define SRC_CONTROLLER_H_
 
+#include <stdlib.h>
 #include <algorithm>
 #include "Model.h"
 #include "Player.h"

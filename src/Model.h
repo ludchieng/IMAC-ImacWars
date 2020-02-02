@@ -5,6 +5,7 @@
 #ifndef SRC_MODEL_H_
 #define SRC_MODEL_H_
 
+#include <stdlib.h>
 #include <iostream>
 #include <algorithm>
 
