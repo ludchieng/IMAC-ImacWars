@@ -6,7 +6,7 @@
 #define SRC_TILE_H_
 
 #include <stdlib.h>
-#include "exceptions.cpp"
+#include "Exceptions.cpp"
 #include "Unit.h"
 
 class Unit;

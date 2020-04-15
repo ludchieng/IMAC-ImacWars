@@ -9,7 +9,7 @@
 #include <string>
 
 #include "Controller.h"
-#include "exceptions.cpp"
+#include "Exceptions.cpp"
 #include "Model.h"
 #include "Util.h"
 using namespace std;

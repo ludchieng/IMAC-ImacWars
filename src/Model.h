@@ -9,7 +9,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "exceptions.cpp"
+#include "Exceptions.cpp"
 #include "Player.h"
 #include "Tile.h"
 
