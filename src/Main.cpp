@@ -1,9 +1,14 @@
-#include <stdio.h>
-#include "Controller.h"
+#include "Game.hpp"
 
 int main (void) {
-	Controller* c = new Controller();
-    printf("\n\n");
-    delete c;
+	Game* g = new Game();
+    g->init();
+    while (g->isRunning()) {
+        g->handleEvents();
+        g->update();
+        g->render();
+    }
+    g->quit();
+    delete g;
 	return 0;
 }

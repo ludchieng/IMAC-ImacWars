@@ -8,11 +8,9 @@ using namespace std;
 #ifndef NO_SUCH_UNIT
 #define NO_SUCH_UNIT
 
-class NoSuchUnit : public exception
-{
+class NoSuchUnit : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "No such unit";
 	}
 };
@@ -22,11 +20,9 @@ public:
 #ifndef NO_SUCH_TILE
 #define NO_SUCH_TILE
 
-class NoSuchTile : public exception
-{
+class NoSuchTile : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "No such tile";
 	}
 };
@@ -36,11 +32,9 @@ public:
 #ifndef OUT_OF_BOUND
 #define OUT_OF_BOUND
 
-class OutOfBound : public exception
-{
+class OutOfBound : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Out of bound";
 	}
 };
@@ -50,11 +44,9 @@ public:
 #ifndef ILLEGAL_STATE
 #define ILLEGAL_STATE
 
-class IllegalState : public exception
-{
+class IllegalState : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal state";
 	}
 };
@@ -64,11 +56,9 @@ public:
 #ifndef ILLEGAL_STATE_NOT_ENOUGH_MP
 #define ILLEGAL_STATE_NOT_ENOUGH_MP
 
-class IllegalStateNotEnoughMP : public IllegalState
-{
+class IllegalStateNotEnoughMP : public IllegalState {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal state not enough MP";
 	}
 };
@@ -78,11 +68,9 @@ public:
 #ifndef ILLEGAL_ARGUMENT
 #define ILLEGAL_ARGUMENT
 
-class IllegalArgument : public exception
-{
+class IllegalArgument : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal argument";
 	}
 };
@@ -92,11 +80,9 @@ public:
 #ifndef ILLEGAL_UNIT_SELECTION
 #define ILLEGAL_UNIT_SELECTION
 
-class IllegalUnitSelection : public exception
-{
+class IllegalUnitSelection : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal unit selection";
 	}
 };
@@ -106,11 +92,9 @@ public:
 #ifndef ILLEGAL_MOVE_OUT_OF_RANGE
 #define ILLEGAL_MOVE_OUT_OF_RANGE
 
-class IllegalMoveOutOfRange : public exception
-{
+class IllegalMoveOutOfRange : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal move out of range";
 	}
 };
@@ -120,11 +104,9 @@ public:
 #ifndef ILLEGAL_MOVE_OCCUPIED_TILE
 #define ILLEGAL_MOVE_OCCUPIED_TILE
 
-class IllegalMoveOccupiedTile : public exception
-{
+class IllegalMoveOccupiedTile : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal move occupied tile";
 	}
 };
@@ -134,11 +116,9 @@ public:
 #ifndef ILLEGAL_ATTACK_OUT_OF_RANGE
 #define ILLEGAL_ATTACK_OUT_OF_RANGE
 
-class IllegalAttackOutOfRange : public exception
-{
+class IllegalAttackOutOfRange : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal attack out of range";
 	}
 };
@@ -148,11 +128,9 @@ public:
 #ifndef ILLEGAL_ATTACK_FRIENDLY_FIRE
 #define ILLEGAL_ATTACK_FRIENDLY_FIRE
 
-class IllegalAttackFriendlyFire : public exception
-{
+class IllegalAttackFriendlyFire : public exception {
 public:
-	const char *what()
-	{
+	const char *what() {
 		return "Illegal attack friendly fire";
 	}
 };

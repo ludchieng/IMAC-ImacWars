@@ -1,28 +1,30 @@
 /*
- * Player.h
+ * Player.hpp
  */
 
-#ifndef SRC_PLAYER_H_
-#define SRC_PLAYER_H_
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include <vector>
 
-#include "Unit.h"
+#include "Unit.hpp"
 using namespace std;
 
 class Unit;
 
-class Player
-{
+class Player {
 
 public:
     vector<Unit *> m_units;
+
     Player(int id);
+    ~Player();
+
     bool hasActiveUnits() const;
-    int getId() const;
+    int getId() const { return m_id; }
 
 private:
     int m_id;
 };
 
-#endif /* SRC_PLAYER_H_ */
+#endif /* PLAYER_HPP */
