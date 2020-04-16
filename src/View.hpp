@@ -11,7 +11,9 @@ class Controller;
 class View {
 public:
 	View();
+	~View();
 	void render(Controller *c);
+	void free();
 };
 
 #endif /* VIEW_HPP*/

@@ -8,6 +8,10 @@ Player::Player(int id) {
 	m_id = id;
 }
 
+Player::~Player() {
+	
+}
+
 bool Player::hasActiveUnits() const {
 	for (Unit *u : m_units) {
 		if (!u->isDead()) {

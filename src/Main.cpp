@@ -2,11 +2,12 @@
 
 int main (void) {
 	Game* g = new Game();
-    g->init();
     while (g->isRunning()) {
+        g->startLoop();
+        g->render();
         g->handleEvents();
         g->update();
-        g->render();
+        g->endLoop();
     }
     g->quit();
     delete g;

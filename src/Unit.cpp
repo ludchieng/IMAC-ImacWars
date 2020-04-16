@@ -19,6 +19,10 @@ Unit::Unit(int id, Player *player) {
 	m_def = 15;
 }
 
+Unit::~Unit() {
+	
+}
+
 Unit::Unit(int id, Player *player, Type type) {
 	m_id = id;
 	m_type = type;

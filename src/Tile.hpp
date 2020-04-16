@@ -22,7 +22,7 @@ public:
 	Unit *getUnit() const;
 	void setUnit(Unit *u) { m_unit = u; }
 	void delUnit() { m_unit = NULL; }
-	bool hasUnit() const { m_unit != NULL; }
+	bool hasUnit() const { return m_unit != NULL; }
 
 private:
 	int m_posX;

@@ -9,7 +9,6 @@ Controller::Controller() {
 	m = new Model();
 	m_winner = NULL;
 	m_sUnit = NULL;
-	this->playGame();
 }
 
 Controller::~Controller() {
@@ -17,13 +16,18 @@ Controller::~Controller() {
 	delete m;
 }
 
-void Controller::playGame() {
-	Player *p = m->getPlayerTurn();
+void Controller::handle(SDL_Event *e) {
+	switch (e->type) {
+	case SDL_MOUSEBUTTONUP:
+		break;
+	
+	default:
+		break;
+	}
+}
 
-
-	// End of game
-	m->setPlayerTurn(m_winner);
-	v->render(this);
+void Controller::update() {
+	
 }
 
 bool Controller::checkWinner() {

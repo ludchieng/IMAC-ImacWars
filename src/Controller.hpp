@@ -5,6 +5,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "Game.hpp"
 #include "Model.hpp"
 #include "View.hpp"
 
@@ -20,7 +21,8 @@ public:
     Controller();
     ~Controller();
 
-    void playGame();
+    void handle(SDL_Event *e);
+    void update();
     bool checkWinner();
 };
 

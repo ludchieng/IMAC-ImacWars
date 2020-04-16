@@ -8,6 +8,14 @@ View::View() {
 
 }
 
+View::~View() {
+
+}
+
 void View::render(Controller *c) {
+
+}
+
+void View::free() {
 
 }
