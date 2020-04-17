@@ -1,7 +1,7 @@
-#include "Game.hpp"
+#include "../includes/Game.hpp"
 
 int main (void) {
-	Game* g = new Game();
+	Game* g = new Game(false);
     while (g->isRunning()) {
         g->startLoop();
         g->render();

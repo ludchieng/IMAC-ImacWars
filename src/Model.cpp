@@ -2,18 +2,10 @@
  * Model.cpp
  */
 
-#include "Model.hpp"
+#include "../includes/Model.hpp"
 
 Model::Model() {
-	// Create tiles
-	m_tiles = vector<vector<Tile *>>();
-	for (int y = 0; y < MAP_ROWS_COUNT; y++) {
-		m_tiles.push_back(vector<Tile *>());
-		for (int x = 0; x < MAP_COLS_COUNT; x++) {
-			Tile *t = new Tile(x, y);
-			m_tiles[y].push_back(t);
-		}
-	}
+	m_map = new Map();
 
 	// Create players
 	m_players = vector<Player *>();
@@ -33,10 +25,6 @@ Model::Model() {
 }
 
 Model::~Model() {
-	for (vector<Tile *> row : m_tiles) {
-		for (Tile *t : row)
-			delete t;
-	}
 	for (Player *p : m_players) {
 		for (Unit *u : p->m_units)
 			delete u;
@@ -49,7 +37,7 @@ Unit* Model::getUnit(int x, int y) const {
 		OutOfBound e;
 		throw e;
 	}
-	return m_tiles[y][x]->getUnit();
+	return m_map->getTiles()[y][x]->getUnit();
 }
 
 Player* Model::nextTurn() {
@@ -96,15 +84,15 @@ void Model::moveUnit(Unit *u, int x, int y) {
 		IllegalMoveOutOfRange e;
 		throw e;
 	}
-	if (m_tiles[y][x]->hasUnit()) {
+	if (m_map->getTiles()[y][x]->hasUnit()) {
 		IllegalMoveOccupiedTile e;
 		throw e;
 	}
 	// Update unit and tiles
 	u->setMp(u->getMp() - u->distanceFrom(x, y));
-	m_tiles[y][x]->setUnit(u);
+	m_map->getTiles()[y][x]->setUnit(u);
 	u->getTile()->delUnit();
-	u->setTile(m_tiles[y][x]);
+	u->setTile(m_map->getTiles()[y][x]);
 }
 
 Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
@@ -199,13 +187,13 @@ void Model::generateArmies(Model::ArmySize at) {
 		uCount = 0;
 		p = m_players[0];
 		u = new Unit(uCount++, p, Unit::Type::Infantry);
-		createUnit(p, m_tiles[4][4], u);
+		createUnit(p, m_map->getTiles()[4][4], u);
 
 		// Create units player 2
 		uCount = 0;
 		p = m_players[1];
 		u = new Unit(uCount++, p, Unit::Type::Infantry);
-		createUnit(p, m_tiles[11][4], u);
+		createUnit(p, m_map->getTiles()[11][4], u);
 		break;
 
 	case ArmySize::FACE_TO_FACE:
@@ -214,21 +202,21 @@ void Model::generateArmies(Model::ArmySize at) {
 		uCount = 0;
 		p = m_players[0];
 		u = new Unit(uCount++, p, Unit::Type::Infantry);
-		createUnit(p, m_tiles[4][1], u);
+		createUnit(p, m_map->getTiles()[4][1], u);
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[4][4], u);
+		createUnit(p, m_map->getTiles()[4][4], u);
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[4][7], u);
+		createUnit(p, m_map->getTiles()[4][7], u);
 
 		// Create units player 2
 		uCount = 0;
 		p = m_players[1];
 		u = new Unit(uCount++, p, Unit::Type::Infantry);
-		createUnit(p, m_tiles[7][1], u);
+		createUnit(p, m_map->getTiles()[7][1], u);
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[7][4], u);
+		createUnit(p, m_map->getTiles()[7][4], u);
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[7][7], u);
+		createUnit(p, m_map->getTiles()[7][7], u);
 		break;
 
 	case ArmySize::SECTION:
@@ -238,7 +226,7 @@ void Model::generateArmies(Model::ArmySize at) {
 		p = m_players[0];
 		for (int i = 0; i < 4; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Infantry);
-			createUnit(p, m_tiles[2][1 + i], u);
+			createUnit(p, m_map->getTiles()[2][1 + i], u);
 		}
 
 		// Create units player 2
@@ -246,7 +234,7 @@ void Model::generateArmies(Model::ArmySize at) {
 		p = m_players[1];
 		for (int i = 0; i < 4; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Infantry);
-			createUnit(p, m_tiles[13][7 - i], u);
+			createUnit(p, m_map->getTiles()[13][7 - i], u);
 		}
 		break;
 
@@ -256,20 +244,20 @@ void Model::generateArmies(Model::ArmySize at) {
 		uCount = 0;
 		p = m_players[0];
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[4][4], u);
+		createUnit(p, m_map->getTiles()[4][4], u);
 		for (int i = 0; i < 5; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Artillery);
-			createUnit(p, m_tiles[3][2 + i], u);
+			createUnit(p, m_map->getTiles()[3][2 + i], u);
 		}
 
 		// Create units player 2
 		uCount = 0;
 		p = m_players[1];
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[11][4], u);
+		createUnit(p, m_map->getTiles()[11][4], u);
 		for (int i = 0; i < 5; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Artillery);
-			createUnit(p, m_tiles[12][6 - i], u);
+			createUnit(p, m_map->getTiles()[12][6 - i], u);
 		}
 		break;
 
@@ -278,28 +266,28 @@ void Model::generateArmies(Model::ArmySize at) {
 		uCount = 0;
 		p = m_players[0];
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[2][6], u);
+		createUnit(p, m_map->getTiles()[2][6], u);
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[2][2], u);
+		createUnit(p, m_map->getTiles()[2][2], u);
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[2][4], u);
+		createUnit(p, m_map->getTiles()[2][4], u);
 		for (int i = 0; i < 4; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Infantry);
-			createUnit(p, m_tiles[1][1 + i * 2], u);
+			createUnit(p, m_map->getTiles()[1][1 + i * 2], u);
 		}
 
 		// Create units player 2
 		uCount = 0;
 		p = m_players[1];
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[13][2], u);
+		createUnit(p, m_map->getTiles()[13][2], u);
 		u = new Unit(uCount++, p, Unit::Type::Artillery);
-		createUnit(p, m_tiles[13][6], u);
+		createUnit(p, m_map->getTiles()[13][6], u);
 		u = new Unit(uCount++, p, Unit::Type::Tank);
-		createUnit(p, m_tiles[13][4], u);
+		createUnit(p, m_map->getTiles()[13][4], u);
 		for (int i = 0; i < 4; i++) {
 			u = new Unit(uCount++, p, Unit::Type::Infantry);
-			createUnit(p, m_tiles[14][7 - i * 2], u);
+			createUnit(p, m_map->getTiles()[14][7 - i * 2], u);
 		}
 		break;
 

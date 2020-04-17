@@ -9,9 +9,10 @@
 #include <iostream>
 #include <algorithm>
 
+#include "../includes/Map.hpp"
+#include "../includes/Player.hpp"
+#include "../includes/Tile.hpp"
 #include "Exceptions.cpp"
-#include "Player.hpp"
-#include "Tile.hpp"
 
 class Model {
 public:
@@ -43,13 +44,11 @@ public:
     Model();
     ~Model();
 
-    vector<vector<Tile *>> getTiles() { return m_tiles; }
+    Map *getMap() { return m_map; }
     Unit* getUnit(int x, int y) const;
 
     Player* getPlayerTurn() const { return m_playerTurn; }
     void setPlayerTurn(Player *p) { m_playerTurn = p; }
-    int getMapRowsCount() const { return m_tiles.size(); }
-    int getMapColsCount() const { return m_tiles[0].size(); }
 
     Player* nextTurn();
 
@@ -62,7 +61,7 @@ public:
     void generateArmies(ArmySize at);
 
 private:
-    vector<vector<Tile *>> m_tiles;
+    Map *m_map;
     Player *m_playerTurn;
 };
 

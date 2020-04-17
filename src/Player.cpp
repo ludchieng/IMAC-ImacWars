@@ -2,7 +2,7 @@
  * Player.cpp
  */
 
-#include "Player.hpp"
+#include "../includes/Player.hpp"
 
 Player::Player(int id) {
 	m_id = id;

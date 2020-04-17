@@ -2,11 +2,12 @@
  * Tile.cpp
  */
 
-#include "Tile.hpp"
+#include "../includes/Tile.hpp"
 
 Tile::Tile(int posX, int posY) {
 	m_posX = posX;
 	m_posY = posY;
+	m_altitude = 0.0;
 	m_unit = NULL;
 }
 

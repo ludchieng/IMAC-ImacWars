@@ -5,15 +5,20 @@
 #ifndef VIEW_HPP
 #define VIEW_HPP
 
-#include "Controller.hpp"
+#include "../includes/Controller.hpp"
+#include "../includes/Model.hpp"
+
 class Controller;
 
 class View {
 public:
-	View();
+	View(Model *m);
 	~View();
-	void render(Controller *c);
+	void render();
+	void renderMap();
 	void free();
+private:
+	Model *m;
 };
 
 #endif /* VIEW_HPP*/

@@ -196,6 +196,36 @@ src/Exceptions.cpp.s:
 	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Exceptions.cpp.s
 .PHONY : src/Exceptions.cpp.s
 
+src/Game.o: src/Game.cpp.o
+
+.PHONY : src/Game.o
+
+# target to build an object file
+src/Game.cpp.o:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Game.cpp.o
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Game.cpp.o
+.PHONY : src/Game.cpp.o
+
+src/Game.i: src/Game.cpp.i
+
+.PHONY : src/Game.i
+
+# target to preprocess a source file
+src/Game.cpp.i:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Game.cpp.i
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Game.cpp.i
+.PHONY : src/Game.cpp.i
+
+src/Game.s: src/Game.cpp.s
+
+.PHONY : src/Game.s
+
+# target to generate assembly for a file
+src/Game.cpp.s:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Game.cpp.s
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Game.cpp.s
+.PHONY : src/Game.cpp.s
+
 src/Main.o: src/Main.cpp.o
 
 .PHONY : src/Main.o
@@ -222,6 +252,36 @@ src/Main.s: src/Main.cpp.s
 src/Main.cpp.s:
 	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Main.cpp.s
 .PHONY : src/Main.cpp.s
+
+src/Map.o: src/Map.cpp.o
+
+.PHONY : src/Map.o
+
+# target to build an object file
+src/Map.cpp.o:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Map.cpp.o
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Map.cpp.o
+.PHONY : src/Map.cpp.o
+
+src/Map.i: src/Map.cpp.i
+
+.PHONY : src/Map.i
+
+# target to preprocess a source file
+src/Map.cpp.i:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Map.cpp.i
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Map.cpp.i
+.PHONY : src/Map.cpp.i
+
+src/Map.s: src/Map.cpp.s
+
+.PHONY : src/Map.s
+
+# target to generate assembly for a file
+src/Map.cpp.s:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Map.cpp.s
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Map.cpp.s
+.PHONY : src/Map.cpp.s
 
 src/Model.o: src/Model.cpp.o
 
@@ -343,36 +403,6 @@ src/Unit.cpp.s:
 	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Unit.cpp.s
 .PHONY : src/Unit.cpp.s
 
-src/Util.o: src/Util.cpp.o
-
-.PHONY : src/Util.o
-
-# target to build an object file
-src/Util.cpp.o:
-	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Util.cpp.o
-	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Util.cpp.o
-.PHONY : src/Util.cpp.o
-
-src/Util.i: src/Util.cpp.i
-
-.PHONY : src/Util.i
-
-# target to preprocess a source file
-src/Util.cpp.i:
-	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Util.cpp.i
-	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Util.cpp.i
-.PHONY : src/Util.cpp.i
-
-src/Util.s: src/Util.cpp.s
-
-.PHONY : src/Util.s
-
-# target to generate assembly for a file
-src/Util.cpp.s:
-	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/src/Util.cpp.s
-	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/Util.cpp.s
-.PHONY : src/Util.cpp.s
-
 src/View.o: src/View.cpp.o
 
 .PHONY : src/View.o
@@ -430,6 +460,36 @@ test/AllTests.cpp.s:
 	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/test/AllTests.cpp.s
 .PHONY : test/AllTests.cpp.s
 
+vendor/FastNoise/FastNoise.o: vendor/FastNoise/FastNoise.cpp.o
+
+.PHONY : vendor/FastNoise/FastNoise.o
+
+# target to build an object file
+vendor/FastNoise/FastNoise.cpp.o:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/vendor/FastNoise/FastNoise.cpp.o
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/vendor/FastNoise/FastNoise.cpp.o
+.PHONY : vendor/FastNoise/FastNoise.cpp.o
+
+vendor/FastNoise/FastNoise.i: vendor/FastNoise/FastNoise.cpp.i
+
+.PHONY : vendor/FastNoise/FastNoise.i
+
+# target to preprocess a source file
+vendor/FastNoise/FastNoise.cpp.i:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/vendor/FastNoise/FastNoise.cpp.i
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/vendor/FastNoise/FastNoise.cpp.i
+.PHONY : vendor/FastNoise/FastNoise.cpp.i
+
+vendor/FastNoise/FastNoise.s: vendor/FastNoise/FastNoise.cpp.s
+
+.PHONY : vendor/FastNoise/FastNoise.s
+
+# target to generate assembly for a file
+vendor/FastNoise/FastNoise.cpp.s:
+	$(MAKE) -f CMakeFiles/imacwars.dir/build.make CMakeFiles/imacwars.dir/vendor/FastNoise/FastNoise.cpp.s
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/vendor/FastNoise/FastNoise.cpp.s
+.PHONY : vendor/FastNoise/FastNoise.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -446,9 +506,15 @@ help:
 	@echo "... src/Exceptions.o"
 	@echo "... src/Exceptions.i"
 	@echo "... src/Exceptions.s"
+	@echo "... src/Game.o"
+	@echo "... src/Game.i"
+	@echo "... src/Game.s"
 	@echo "... src/Main.o"
 	@echo "... src/Main.i"
 	@echo "... src/Main.s"
+	@echo "... src/Map.o"
+	@echo "... src/Map.i"
+	@echo "... src/Map.s"
 	@echo "... src/Model.o"
 	@echo "... src/Model.i"
 	@echo "... src/Model.s"
@@ -461,15 +527,15 @@ help:
 	@echo "... src/Unit.o"
 	@echo "... src/Unit.i"
 	@echo "... src/Unit.s"
-	@echo "... src/Util.o"
-	@echo "... src/Util.i"
-	@echo "... src/Util.s"
 	@echo "... src/View.o"
 	@echo "... src/View.i"
 	@echo "... src/View.s"
 	@echo "... test/AllTests.o"
 	@echo "... test/AllTests.i"
 	@echo "... test/AllTests.s"
+	@echo "... vendor/FastNoise/FastNoise.o"
+	@echo "... vendor/FastNoise/FastNoise.i"
+	@echo "... vendor/FastNoise/FastNoise.s"
 .PHONY : help
 
 

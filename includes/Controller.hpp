@@ -5,9 +5,9 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "Game.hpp"
-#include "Model.hpp"
-#include "View.hpp"
+#include "../includes/Game.hpp"
+#include "../includes/Model.hpp"
+#include "../includes/View.hpp"
 
 class View;
 

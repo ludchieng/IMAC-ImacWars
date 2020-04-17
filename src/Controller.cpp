@@ -2,11 +2,11 @@
  * Controller.cpp
  */
 
-#include "Controller.hpp"
+#include "../includes/Controller.hpp"
 
 Controller::Controller() {
-	v = new View();
 	m = new Model();
+	v = new View(m);
 	m_winner = NULL;
 	m_sUnit = NULL;
 }

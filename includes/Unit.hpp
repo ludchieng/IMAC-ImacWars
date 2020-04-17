@@ -6,9 +6,10 @@
 #define UNIT_HPP
 
 #include <stdlib.h>
+
+#include "../includes/Player.hpp"
+#include "../includes/Tile.hpp"
 #include "Exceptions.cpp"
-#include "Player.hpp"
-#include "Tile.hpp"
 
 class Tile;
 class Player;
