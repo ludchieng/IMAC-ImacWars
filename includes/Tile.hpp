@@ -15,6 +15,10 @@ class Unit;
 class Tile {
 
 public:
+	typedef enum LandType {
+		OCEAN, PLAIN, COAST, SHORE, FOREST, MOUNTAIN, PEAK
+	} LandType;
+
 	Tile(int posX, int posY);
 	~Tile();
 
@@ -22,6 +26,8 @@ public:
 	int getPosY() const { return m_posY; }
 	float getAltitude() const { return m_altitude; }
 	void setAltitude(float a) { m_altitude = a; }
+	LandType getLandType() const { return m_type; }
+	void setLandType(LandType t) { m_type = t; }
 	Unit *getUnit() const;
 	void setUnit(Unit *u) { m_unit = u; }
 	void delUnit() { m_unit = NULL; }
@@ -31,6 +37,7 @@ private:
 	int m_posX;
 	int m_posY;
 	float m_altitude;
+	LandType m_type;
 	Unit *m_unit;
 };
 

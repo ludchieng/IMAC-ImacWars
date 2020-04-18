@@ -7,6 +7,7 @@
 
 #include "../includes/Controller.hpp"
 #include "../includes/Model.hpp"
+#include "../includes/Color.hpp"
 
 class Controller;
 
@@ -17,6 +18,7 @@ public:
 	void render();
 	void renderMap();
 	void free();
+
 private:
 	Model *m;
 };

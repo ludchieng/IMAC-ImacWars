@@ -35,12 +35,6 @@ public:
         bool shouldHaveDoubleKO;     // Assert both units should have died
     } FightReport;
 
-    static const int MAP_ROWS_COUNT = 16;
-    static const int MAP_COLS_COUNT = 9;
-    static const int PLAYER_COUNT = 2;
-
-    vector<Player *> m_players;
-
     Model();
     ~Model();
 
@@ -59,6 +53,12 @@ public:
     void deleteUnit(Unit *u);
 
     void generateArmies(ArmySize at);
+
+    static const int ROWS_COUNT = 16;
+    static const int COLS_COUNT = 9;
+    static const int PLAYER_COUNT = 2;
+
+    vector<Player *> m_players;
 
 private:
     Map *m_map;

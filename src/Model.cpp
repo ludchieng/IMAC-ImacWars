@@ -33,7 +33,7 @@ Model::~Model() {
 }
 
 Unit* Model::getUnit(int x, int y) const {
-	if (x < 0 || y < 0 || x >= MAP_COLS_COUNT || y >= MAP_ROWS_COUNT) {
+	if (x < 0 || y < 0 || x >= m_map->getSizeX() || y >= m_map->getSizeY()) {
 		OutOfBound e;
 		throw e;
 	}
@@ -76,7 +76,7 @@ void Model::createUnit(Player *p, Tile *t, Unit *u) {
 }
 
 void Model::moveUnit(Unit *u, int x, int y) {
-	if (x < 0 || y < 0 || x >= MAP_COLS_COUNT || y >= MAP_ROWS_COUNT) {
+	if (x < 0 || y < 0 || x >= COLS_COUNT || y >= ROWS_COUNT) {
 		OutOfBound e;
 		throw e;
 	}

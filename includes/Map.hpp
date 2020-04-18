@@ -30,18 +30,24 @@ public:
 
     void generate();
     void generateAltitude();
-    
+
+    static const float LIMIT_OCEAN;
+    static const float LIMIT_COAST;
+    static const float LIMIT_SHORE;
+    static const float LIMIT_PLAIN;
+    static const float LIMIT_FOREST;
+    static const float LIMIT_MOUNTAIN;
+    static const float LIMIT_PEAK;
 
 private:
 
-    static const int MAP_ROWS_COUNT = 20;
-    static const int MAP_COLS_COUNT = 20;
+    static const int ROWS_COUNT = 20;
+    static const int COLS_COUNT = 20;
     static const int ZOOM = 5;
 
     vector<vector<Tile *>> m_tiles;
 
-    Entity *getEntity(int x, int y) const { return NULL; } //TODO
-
+    Tile::LandType getLandTypeFromAltitude(float alt);
 };
 
 #endif /* MAP_HPP */
