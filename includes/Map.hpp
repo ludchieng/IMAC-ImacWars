@@ -8,6 +8,7 @@
 #include <vector>
 #include <math.h>
 #include <time.h>
+#include <map>
 
 #include "../vendor/FastNoise/FastNoise.h"
 #include "../includes/Entity.hpp"
@@ -48,6 +49,9 @@ private:
     vector<vector<Tile *>> m_tiles;
 
     Tile::LandType getLandTypeFromAltitude(float alt);
+    bool isValidMap();
+    bool isValidAltitudeMap();
+    bool isValidConnectedTerrainMap();
 };
 
 #endif /* MAP_HPP */

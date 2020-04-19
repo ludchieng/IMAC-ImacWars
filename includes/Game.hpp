@@ -14,6 +14,7 @@
 
 #include "../includes/Controller.hpp"
 #include "../includes/View.hpp"
+#include "../includes/MVector.hpp"
 
 class Controller;
 
@@ -23,6 +24,8 @@ public:
     Game(bool fullscreen);
     ~Game();
 
+    void reshape();
+
     void startLoop();
     void handleEvents();
     void update();
@@ -31,6 +34,8 @@ public:
     void quit();
 
     bool isRunning() const { return m_isRunning; };
+    int getWindowWidth();
+    int getWindowHeight();
 
     static SDL_Renderer *renderer;
 
@@ -38,6 +43,8 @@ private:
     static const unsigned int W_WIDTH = 600;
     static const unsigned int W_HEIGHT = 600;
     static const char W_TITLE[];
+
+    static const unsigned int GL_VIEWPORT_HEIGHT = 20;
 
     static const Uint32 FRAMERATE = 60;
     static const float GL_VIEW_SIZE;
@@ -49,6 +56,11 @@ private:
     SDL_Window *m_window;
     SDL_GLContext m_gl;
     Controller *c;
+
+    MVector coordsSDLtoGL(MVector*);
+    MVector coordsSDLtoGL(int x, int y);
+    MVector coordsGLtoSDL(MVector*);
+    MVector coordsGLtoSDL(double x, double y);
 };
 
 #endif /* GAME_HPP */

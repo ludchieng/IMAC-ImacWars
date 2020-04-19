@@ -19,10 +19,10 @@ TEST(Color, Construct_OutOfRangeValues) {
 
 TEST(Color, Lerp) {
     Color c1({100, 50, 30, 10});
-    Color c2({200, 100, 40, 90});
+    Color c2({201, 101, 41, 91});
     Color c = Color::lerp(&c1, &c2, 0.4, 0.6, 0.5);
-    ASSERT_EQ(149, c.r);
-    ASSERT_EQ(74, c.g);
+    ASSERT_EQ(150, c.r);
+    ASSERT_EQ(75, c.g);
     ASSERT_EQ(35, c.b);
-    ASSERT_EQ(49, c.a);
+    ASSERT_EQ(50, c.a);
 }
