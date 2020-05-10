@@ -17,6 +17,7 @@ public:
 	~View();
 	void render();
 	void renderMap();
+	void renderAstar();
 	void free();
 
 private:

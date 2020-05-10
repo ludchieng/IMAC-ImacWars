@@ -46,7 +46,7 @@ private:
 
     static const unsigned int GL_VIEWPORT_HEIGHT = 20;
 
-    static const Uint32 FRAMERATE = 60;
+    static const Uint32 FRAMERATE = 1;
     static const float GL_VIEW_SIZE;
 
     float m_wRatio;

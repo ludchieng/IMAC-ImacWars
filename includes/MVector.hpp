@@ -18,6 +18,12 @@ public:
     void normalize();
     void mult(double n);
 
+    void add(MVector *v);
+    void sub(MVector *v);
+
+    static MVector add(MVector *a, MVector *b);
+    static MVector sub(MVector *a, MVector *b);
+
     double x;
     double y;
 

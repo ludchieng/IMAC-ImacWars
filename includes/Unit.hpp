@@ -9,7 +9,7 @@
 
 #include "../includes/Player.hpp"
 #include "../includes/Tile.hpp"
-#include "Exceptions.cpp"
+#include "../src/Exceptions.cpp"
 
 class Tile;
 class Player;
@@ -56,8 +56,7 @@ public:
 	void setRatk(int ratk) { m_ratk = ratk; }
 
 	bool isDead() const { return m_hp <= 0; }
-	bool canMoveOn(Tile *t) const { return distanceFrom(t) <= m_mp; }
-	bool canMoveOn(int x, int y) const { return distanceFrom(x, y) <= m_mp; }
+	bool canMoveOn(Tile *t) const;
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }

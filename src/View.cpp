@@ -14,13 +14,14 @@ View::~View() {
 
 void View::render() {
     renderMap();
+    renderAstar();
 }
 
 void View::renderMap() {
     float thrs[] = {.35, .45, .65, .8};
     Map *map = m->getMap();
-    for (int i = 0; i < map->getSizeY(); i++) {
-        for (int j = 0; j < map->getSizeX(); j++) {
+    for (int j = 0; j < map->getSizeY(); j++) {
+        for (int i = 0; i < map->getSizeX(); i++) {
             Tile *t = map->getTile(i, j);
             float alt = t->getAltitude();
             Color c;
@@ -62,9 +63,40 @@ void View::renderMap() {
                 break;
             }
             glColor3ub(c.r, c.g, c.b);
-            glRecti(j, i, j+1, i+1);
+            glRecti(i, j, i+1, j+1);
         }
     }
+}
+
+//TODO remove
+#include "../includes/Astar.hpp"
+
+void View::renderAstar() {
+    Map* map = m->getMap();
+    Tile* start;
+    Tile* target;
+    do {
+        start = map->getRandTile(true);
+        target = map->getRandTile(true);
+    } while(start == target);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    Player* p = new Player(1);
+    Unit* u = new Unit(1, p, Unit::Type::Infantry);
+    u->setTile(start);
+    Astar::Node *path = Astar::exec(map, start, target, u);
+    if (path != NULL) {
+        Astar::Node *curr = path;
+        do {
+            glColor4ub(0, 200, 200, 150);
+            glRecti((int) curr->pos->x, (int) curr->pos->y, (int) curr->pos->x+1, (int) curr->pos->y+1);
+            curr = curr->next;
+        } while(curr->next != NULL);
+    }
+    glColor4ub(255, 20, 255, 255);
+    glRecti(start->getPosX(), start->getPosY(), start->getPosX()+1, start->getPosY()+1);
+    glColor4ub(255, 255, 20, 255);
+    glRecti(target->getPosX(), target->getPosY(), target->getPosX()+1, target->getPosY()+1);
 }
 
 void View::free() {

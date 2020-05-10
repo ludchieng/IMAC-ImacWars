@@ -11,10 +11,12 @@
 #include <map>
 
 #include "../vendor/FastNoise/FastNoise.h"
+#include "../includes/MVector.hpp"
 #include "../includes/Entity.hpp"
 #include "../includes/FX.hpp"
 #include "../includes/Tile.hpp"
 #include "../includes/Unit.hpp"
+#include "../src/Exceptions.cpp"
 
 class Map {
 
@@ -25,10 +27,13 @@ public:
     int getSizeY() const { return m_tiles.size(); }
     int getSizeX() const { return m_tiles[0].size(); }
     Tile *getTile(int x, int y) const { return m_tiles[x][y]; }
+    Tile *getTile(MVector pos) const { return m_tiles[pos.x][pos.y]; }
     vector<vector<Tile *>> getTiles() const { return m_tiles; }
     Unit *getUnit(int x, int y) const { return NULL; } //TODO
     FX *getFX(int x, int y) const { return NULL; } //TODO
 
+    Tile *getRandTile() const;
+    Tile *getRandTile(bool practicableLand) const;
     void generate();
     void generateAltitude();
 

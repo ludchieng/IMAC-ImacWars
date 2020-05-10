@@ -136,3 +136,27 @@ public:
 };
 
 #endif /* ILLEGAL_ATTACK_FRIENDLY_FIRE */
+
+#ifndef COULD_NOT_GENERATE_MAP_WITHIN_GIVEN_ATTEMPTS
+#define COULD_NOT_GENERATE_MAP_WITHIN_GIVEN_ATTEMPTS
+
+class CouldNotGenerateMapWithinGivenAttempts : public exception {
+public:
+	const char *what() {
+		return "Could not generate map within given attempts";
+	}
+};
+
+#endif /* COULD_NOT_GENERATE_MAP_WITHIN_GIVEN_ATTEMPTS */
+
+#ifndef COULD_NOT_GET_RAND_TILE_WITHIN_GIVEN_ATTEMPTS
+#define COULD_NOT_GET_RAND_TILE_WITHIN_GIVEN_ATTEMPTS
+
+class CouldNotGetRandTileWithinGivenAttempts : public exception {
+public:
+	const char *what() {
+		return "Could not get random tile within given attempts";
+	}
+};
+
+#endif /* COULD_NOT_GET_RAND_TILE_WITHIN_GIVEN_ATTEMPTS */

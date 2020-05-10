@@ -109,3 +109,19 @@ void Unit::die() {
 	m_tile->delUnit();
 	m_tile = NULL;
 }
+
+bool Unit::canMoveOn(Tile *t) const {
+	if (!distanceFrom(t) <= m_mp)
+		return false;
+	
+	if (t->getLandType() == Tile::OCEAN)
+		return false;
+	if (t->getLandType() == Tile::COAST)
+		return false;
+	if (t->getLandType() == Tile::MOUNTAIN)
+		return false;
+	if (t->getLandType() == Tile::PEAK)
+		return false;
+
+	return true;
+}

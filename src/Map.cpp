@@ -4,13 +4,13 @@
 
 #include "../includes/Map.hpp"
 
-const float Map::LIMIT_OCEAN = .30;
-const float Map::LIMIT_COAST = .39;
-const float Map::LIMIT_SHORE = .49;
-const float Map::LIMIT_PLAIN = .70;
-const float Map::LIMIT_FOREST = .75;
-const float Map::LIMIT_MOUNTAIN = .81;
-const float Map::LIMIT_PEAK = .85;
+const float Map::LIMIT_OCEAN = .28;
+const float Map::LIMIT_COAST = .35;
+const float Map::LIMIT_SHORE = .45;
+const float Map::LIMIT_PLAIN = .65;
+const float Map::LIMIT_FOREST = .70;
+const float Map::LIMIT_MOUNTAIN = .82;
+const float Map::LIMIT_PEAK = .87;
 
 Map::Map() {
 	generate();
@@ -23,25 +23,59 @@ Map::~Map() {
 	}
 }
 
+Tile *Map::getRandTile() const {
+	srand((clock() * time(NULL)) % INT32_MAX);
+	int rX = rand() % COLS_COUNT;
+	srand((clock() * time(NULL)) % INT32_MAX);
+	int rY = rand() % ROWS_COUNT;
+	return getTile(rX, rY);
+}
+
+Tile *Map::getRandTile(bool practicableLand) const {
+	Tile* t;
+	for (int attempt = 0; attempt < 1000; attempt++) {
+		t = getRandTile();
+		if (practicableLand) {
+			switch (t->getLandType()) {
+				case Tile::LandType::SHORE:
+				case Tile::LandType::PLAIN:
+				case Tile::LandType::FOREST:
+					return t;
+			}
+		} else {
+			switch (t->getLandType()) {
+				case Tile::LandType::OCEAN:
+				case Tile::LandType::COAST:
+				case Tile::LandType::MOUNTAIN:
+				case Tile::LandType::PEAK:
+					return t;
+			}
+		}
+	}
+	throw new CouldNotGetRandTileWithinGivenAttempts;
+}
+
 void Map::generate() {
 	m_tiles = vector<vector<Tile *>>();
 
-	for (int y = 0; y < ROWS_COUNT; y++) {
+	for (int x = 0; x < COLS_COUNT; x++) {
 		m_tiles.push_back(vector<Tile *>());
-		for (int x = 0; x < COLS_COUNT; x++) {
+		for (int y = 0; y < ROWS_COUNT; y++) {
 			Tile *t = new Tile(x, y);
-			m_tiles[y].push_back(t);
+			m_tiles[x].push_back(t);
 		}
 	}
-	int attempts = 0;
-	do {
+	for (int attempt = 0; attempt < 1000; attempt++) {
 		generateAltitude();
-		attempts++;
-	} while(!isValidMap() && attempts < 1000);
+		if (isValidMap())
+			return;
+	}
+	throw new CouldNotGenerateMapWithinGivenAttempts;
 }
 
 void Map::generateAltitude() {
-	srand(time(NULL));
+	int seed = (clock() * time(NULL)) % INT32_MAX;
+	srand(seed);
 	FastNoise perlin;
 	perlin.SetNoiseType(FastNoise::SimplexFractal);
 	perlin.SetSeed(rand());
@@ -51,10 +85,10 @@ void Map::generateAltitude() {
 			alt = perlin.GetNoise(x * ZOOM, y * ZOOM);
 			alt /= 2;
 			alt += .5;
-			float am = 1.5;
-			alt = pow(pow(alt * 2, am) / 2, 1.0/am);
-			alt = alt - 0.5/(x+2) - 0.5/(y+2);
-			alt = alt + 0.5/(x-2-getSizeX()) + 0.5/(y-2-getSizeY());
+			float am = 1.35;
+			alt = pow(pow(alt * 2, am) / 2, 1.0/am) + 0.1;
+			alt = alt - 0.6/(x+3) - 0.6/(y+3);
+			alt = alt + 0.6/(x-3-getSizeX()) + 0.6/(y-3-getSizeY());
 			m_tiles[x][y]->setAltitude(alt);
 			m_tiles[x][y]->setLandType(getLandTypeFromAltitude(alt));
 		}
@@ -94,7 +128,7 @@ bool Map::isValidAltitudeMap() {
 	float waterRate = ltRate[Tile::LandType::OCEAN] + ltRate[Tile::LandType::COAST];
 	float practicableRate = ltRate[Tile::LandType::FOREST] + ltRate[Tile::LandType::PLAIN] + ltRate[Tile::LandType::SHORE];
 	float mountainousRate = ltRate[Tile::LandType::MOUNTAIN] + ltRate[Tile::LandType::PEAK];
-	/*
+	
 	printf("Ocean: %d%% | ", (int) (ltRate[Tile::LandType::OCEAN] * 100));
 	printf("Coast: %d%% | ", (int) (ltRate[Tile::LandType::COAST] * 100));
 	printf("Shore: %d%% | ", (int) (ltRate[Tile::LandType::SHORE] * 100));
@@ -105,12 +139,14 @@ bool Map::isValidAltitudeMap() {
 	printf("Water: %d%%              | ", (int) (waterRate * 100));
 	printf("Practicable: %d%%                     | ", (int) (practicableRate * 100));
 	printf("Mountainous: %d%%\n", (int) (mountainousRate * 100));
-	*/
+	
 	if (waterRate > 0.70)
+		return false;
+	if (waterRate < 0.22)
 		return false;
 	if (mountainousRate / practicableRate > 0.40)
 		return false;
-	if (practicableRate < 0.25)
+	if (practicableRate < 0.40)
 		return false;
 	return true;
 }

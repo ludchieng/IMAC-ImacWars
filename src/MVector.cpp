@@ -29,3 +29,26 @@ void MVector::mult(double n) {
     x *= n;
     y *= n;
 }
+
+void MVector::add(MVector *v) {
+    x += v->x;
+    y += v->y;
+}
+void MVector::sub(MVector *v) {
+    x -= v->x;
+    y -= v->y;
+}
+
+MVector MVector::add(MVector *a, MVector *b) {
+    MVector res;
+    res.x = a->x + b->x;
+    res.y = a->y + b->y;
+    return res;
+}
+
+MVector MVector::sub(MVector *a, MVector *b) {
+    MVector res;
+    res.x = a->x - b->x;
+    res.y = a->y - b->y;
+    return res;
+}

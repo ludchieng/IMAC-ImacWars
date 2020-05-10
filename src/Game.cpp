@@ -72,6 +72,8 @@ void Game::handleEvents() {
 				break;
 			case SDL_KEYDOWN:
 				printf("touche pressee (code = %d)\n", e.key.keysym.sym);
+				if (e.key.keysym.sym == 1073741902)
+					c = new Controller();
 				break;
 			default:
 				c->handle(&e);

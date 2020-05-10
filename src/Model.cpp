@@ -37,7 +37,7 @@ Unit* Model::getUnit(int x, int y) const {
 		OutOfBound e;
 		throw e;
 	}
-	return m_map->getTiles()[y][x]->getUnit();
+	return m_map->getTile(x, y)->getUnit();
 }
 
 Player* Model::nextTurn() {
@@ -80,19 +80,19 @@ void Model::moveUnit(Unit *u, int x, int y) {
 		OutOfBound e;
 		throw e;
 	}
-	if (!u->canMoveOn(x, y)) {
+	if (!u->canMoveOn(m_map->getTile(x, y))) {
 		IllegalMoveOutOfRange e;
 		throw e;
 	}
-	if (m_map->getTiles()[y][x]->hasUnit()) {
+	if (m_map->getTile(x, y)->hasUnit()) {
 		IllegalMoveOccupiedTile e;
 		throw e;
 	}
 	// Update unit and tiles
 	u->setMp(u->getMp() - u->distanceFrom(x, y));
-	m_map->getTiles()[y][x]->setUnit(u);
+	m_map->getTile(x, y)->setUnit(u);
 	u->getTile()->delUnit();
-	u->setTile(m_map->getTiles()[y][x]);
+	u->setTile(m_map->getTile(x, y));
 }
 
 Model::FightReport Model::attackUnit(Unit *a, Unit *t) {

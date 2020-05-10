@@ -12,7 +12,7 @@
 #include "../includes/Map.hpp"
 #include "../includes/Player.hpp"
 #include "../includes/Tile.hpp"
-#include "Exceptions.cpp"
+#include "../src/Exceptions.cpp"
 
 class Model {
 public:

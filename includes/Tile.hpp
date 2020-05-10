@@ -7,8 +7,9 @@
 
 #include <stdlib.h>
 
+#include "../includes/MVector.hpp"
 #include "../includes/Unit.hpp"
-#include "Exceptions.cpp"
+#include "../src/Exceptions.cpp"
 
 class Unit;
 
@@ -20,10 +21,11 @@ public:
 	} LandType;
 
 	Tile(int posX, int posY);
+	Tile(MVector pos);
 	~Tile();
 
-	int getPosX() const { return m_posX; }
-	int getPosY() const { return m_posY; }
+	int getPosX() const { return (int) m_pos.x; }
+	int getPosY() const { return (int) m_pos.y; }
 	float getAltitude() const { return m_altitude; }
 	void setAltitude(float a) { m_altitude = a; }
 	LandType getLandType() const { return m_type; }
@@ -34,8 +36,7 @@ public:
 	bool hasUnit() const { return m_unit != NULL; }
 
 private:
-	int m_posX;
-	int m_posY;
+	MVector m_pos;
 	float m_altitude;
 	LandType m_type;
 	Unit *m_unit;
