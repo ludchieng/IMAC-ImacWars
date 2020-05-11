@@ -7,7 +7,8 @@
 
 #include <stdlib.h>
 
-#include "../includes/MVector.hpp"
+#include "../includes/Vector2i.hpp"
+#include "../includes/LandType.hpp"
 #include "../includes/Unit.hpp"
 #include "../src/Exceptions.cpp"
 
@@ -16,16 +17,12 @@ class Unit;
 class Tile {
 
 public:
-	typedef enum LandType {
-		OCEAN, PLAIN, COAST, SHORE, FOREST, MOUNTAIN, PEAK
-	} LandType;
-
 	Tile(int posX, int posY);
-	Tile(MVector pos);
+	Tile(Vector2i pos);
 	~Tile();
 
-	int getPosX() const { return (int) m_pos.x; }
-	int getPosY() const { return (int) m_pos.y; }
+	int getPosX() const { return m_pos.x; }
+	int getPosY() const { return m_pos.y; }
 	float getAltitude() const { return m_altitude; }
 	void setAltitude(float a) { m_altitude = a; }
 	LandType getLandType() const { return m_type; }
@@ -36,7 +33,7 @@ public:
 	bool hasUnit() const { return m_unit != NULL; }
 
 private:
-	MVector m_pos;
+	Vector2i m_pos;
 	float m_altitude;
 	LandType m_type;
 	Unit *m_unit;

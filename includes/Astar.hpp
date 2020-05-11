@@ -8,10 +8,12 @@
 #include "../includes/Unit.hpp"
 #include "../includes/Map.hpp"
 #include "../includes/Tile.hpp"
-#include "../includes/MVector.hpp"
+#include "../includes/Vector2i.hpp"
 #include <vector>
 #include <list>
 #include <algorithm>
+
+class Map;
 
 class Astar {
 public:
@@ -21,7 +23,7 @@ public:
     ~Astar();
 
     static Node *exec(Map *map,Tile *start, Tile *target, Unit *unit);
-    static Node *exec(Map *map, MVector start, MVector target, Unit *unit);
+    static Node *exec(Map *map, Vector2i start, Vector2i target, Unit *unit);
 
 private:
 
@@ -33,7 +35,7 @@ private:
 
 class Astar::Node {
 public:
-    Node(MVector *pos, bool isWall);
+    Node(Vector2i *pos, bool isWall);
     Node(int x, int y, bool isWall);
     ~Node();
 
@@ -41,7 +43,7 @@ public:
     vector<Node*> getNeighbours() const;
     void copy(Node* n);
 
-    MVector *pos;
+    Vector2i *pos;
     bool isWall;
     float f, g, h;
     Node *prev;

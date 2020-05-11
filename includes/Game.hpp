@@ -14,7 +14,8 @@
 
 #include "../includes/Controller.hpp"
 #include "../includes/View.hpp"
-#include "../includes/MVector.hpp"
+#include "../includes/Vector2i.hpp"
+#include "../includes/Vector2f.hpp"
 
 class Controller;
 
@@ -46,7 +47,7 @@ private:
 
     static const unsigned int GL_VIEWPORT_HEIGHT = 20;
 
-    static const Uint32 FRAMERATE = 1;
+    static const Uint32 FRAMERATE = 60;
     static const float GL_VIEW_SIZE;
 
     float m_wRatio;
@@ -57,10 +58,10 @@ private:
     SDL_GLContext m_gl;
     Controller *c;
 
-    MVector coordsSDLtoGL(MVector*);
-    MVector coordsSDLtoGL(int x, int y);
-    MVector coordsGLtoSDL(MVector*);
-    MVector coordsGLtoSDL(double x, double y);
+    Vector2f coordsSDLtoGL(Vector2i*);
+    Vector2f coordsSDLtoGL(int x, int y);
+    Vector2i coordsGLtoSDL(Vector2f*);
+    Vector2i coordsGLtoSDL(double x, double y);
 };
 
 #endif /* GAME_HPP */

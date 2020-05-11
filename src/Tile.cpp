@@ -11,7 +11,7 @@ Tile::Tile(int posX, int posY) {
 	m_unit = NULL;
 }
 
-Tile::Tile(MVector pos) {
+Tile::Tile(Vector2i pos) {
 	m_pos = pos;
 	m_altitude = 0.0;
 	m_unit = NULL;

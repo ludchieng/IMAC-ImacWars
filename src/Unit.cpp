@@ -114,14 +114,26 @@ bool Unit::canMoveOn(Tile *t) const {
 	if (!distanceFrom(t) <= m_mp)
 		return false;
 	
-	if (t->getLandType() == Tile::OCEAN)
-		return false;
-	if (t->getLandType() == Tile::COAST)
-		return false;
-	if (t->getLandType() == Tile::MOUNTAIN)
-		return false;
-	if (t->getLandType() == Tile::PEAK)
+	if (!canStandOn(t))
 		return false;
 
 	return true;
+}
+
+bool Unit::canStandOn(Tile *t) const {
+	return canStandOn(t->getLandType());
+}
+
+bool Unit::canStandOn(LandType lt) const {
+	switch (lt) {
+		case LandType::SHORE:
+		case LandType::PLAIN:
+		case LandType::FOREST:
+			return true;
+		case LandType::OCEAN:
+		case LandType::COAST:
+		case LandType::MOUNTAIN:
+		case LandType::PEAK:
+			return false;
+	}
 }

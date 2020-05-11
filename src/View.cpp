@@ -26,37 +26,37 @@ void View::renderMap() {
             float alt = t->getAltitude();
             Color c;
             switch (t->getLandType()) {
-            case Tile::LandType::OCEAN:
+            case LandType::OCEAN:
                 c = Color::lerp(
                     new Color(20, 60, 160), new Color(20, 90, 190),
                     0.0, Map::LIMIT_OCEAN, alt);
                 break;
-            case Tile::LandType::COAST:
+            case LandType::COAST:
                 c = Color::lerp(
                     new Color(20, 90, 190), new Color(20, 140, 220),
                     Map::LIMIT_OCEAN, Map::LIMIT_COAST, alt);
                 break;
-            case Tile::LandType::SHORE:
+            case LandType::SHORE:
                 c = Color::lerp(
                     new Color(255, 230, 150), new Color(100, 140, 80),
                     Map::LIMIT_COAST, Map::LIMIT_PLAIN, alt);
                 break;
-            case Tile::LandType::PLAIN:
+            case LandType::PLAIN:
                 c = Color::lerp(
                     new Color(90, 140, 75), new Color(85, 135, 72),
                     Map::LIMIT_PLAIN, Map::LIMIT_FOREST, alt);
                 break;
-            case Tile::LandType::FOREST:
+            case LandType::FOREST:
                 c = Color::lerp(
                     new Color(65, 95, 85), new Color(70, 100, 90),
                     Map::LIMIT_FOREST, Map::LIMIT_MOUNTAIN, alt);
                 break;
-            case Tile::LandType::MOUNTAIN:
+            case LandType::MOUNTAIN:
                 c = Color::lerp(
                     new Color(180, 175, 177), new Color(215, 210, 210),
                     Map::LIMIT_MOUNTAIN, Map::LIMIT_PEAK, alt);
                 break;
-            case Tile::LandType::PEAK:
+            case LandType::PEAK:
                 c = Color::lerp(
                     new Color(220, 220, 225), new Color(255, 255, 255),
                     Map::LIMIT_PEAK, 1.0, alt);
@@ -89,7 +89,7 @@ void View::renderAstar() {
         Astar::Node *curr = path;
         do {
             glColor4ub(0, 200, 200, 150);
-            glRecti((int) curr->pos->x, (int) curr->pos->y, (int) curr->pos->x+1, (int) curr->pos->y+1);
+            glRecti(curr->pos->x, curr->pos->y, curr->pos->x+1, curr->pos->y+1);
             curr = curr->next;
         } while(curr->next != NULL);
     }

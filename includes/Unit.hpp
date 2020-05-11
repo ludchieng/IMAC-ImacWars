@@ -57,6 +57,8 @@ public:
 
 	bool isDead() const { return m_hp <= 0; }
 	bool canMoveOn(Tile *t) const;
+	bool canStandOn(Tile *t) const;
+	bool canStandOn(LandType lt) const;
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }

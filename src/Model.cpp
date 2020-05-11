@@ -12,7 +12,6 @@ Model::Model() {
 	for (int i = 0; i < PLAYER_COUNT; i++) {
 		Player *p = new Player(i);
 		m_players.push_back(p);
-
 		m_players[i]->m_units = vector<Unit *>();
 	}
 	m_playerTurn = m_players[0];

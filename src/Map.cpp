@@ -37,17 +37,17 @@ Tile *Map::getRandTile(bool practicableLand) const {
 		t = getRandTile();
 		if (practicableLand) {
 			switch (t->getLandType()) {
-				case Tile::LandType::SHORE:
-				case Tile::LandType::PLAIN:
-				case Tile::LandType::FOREST:
+				case LandType::SHORE:
+				case LandType::PLAIN:
+				case LandType::FOREST:
 					return t;
 			}
 		} else {
 			switch (t->getLandType()) {
-				case Tile::LandType::OCEAN:
-				case Tile::LandType::COAST:
-				case Tile::LandType::MOUNTAIN:
-				case Tile::LandType::PEAK:
+				case LandType::OCEAN:
+				case LandType::COAST:
+				case LandType::MOUNTAIN:
+				case LandType::PEAK:
 					return t;
 			}
 		}
@@ -67,6 +67,7 @@ void Map::generate() {
 	}
 	for (int attempt = 0; attempt < 1000; attempt++) {
 		generateAltitude();
+		generatePosPlayers1vs1();
 		if (isValidMap())
 			return;
 	}
@@ -105,17 +106,17 @@ bool Map::isValidConnectedTerrainMap() {
 }
 
 bool Map::isValidAltitudeMap() {
-	std::map<Tile::LandType, float> ltRate = {
-		{Tile::LandType::OCEAN, 0}, {Tile::LandType::COAST, 0},
-		{Tile::LandType::SHORE, 0}, {Tile::LandType::PLAIN, 0},
-		{Tile::LandType::FOREST, 0}, {Tile::LandType::MOUNTAIN, 0},
-		{Tile::LandType::PEAK, 0}
+	std::map<LandType, float> ltRate = {
+		{LandType::OCEAN, 0}, {LandType::COAST, 0},
+		{LandType::SHORE, 0}, {LandType::PLAIN, 0},
+		{LandType::FOREST, 0}, {LandType::MOUNTAIN, 0},
+		{LandType::PEAK, 0}
 	};
 	int totalCount = 0;
 	
 	for (int y = 0; y < getSizeY(); y++) {
 		for (int x = 0; x < getSizeX(); x++) {
-			Tile::LandType lt = m_tiles[x][y]->getLandType();
+			LandType lt = m_tiles[x][y]->getLandType();
             ltRate[lt]++;
 			totalCount++;
 		}
@@ -125,17 +126,17 @@ bool Map::isValidAltitudeMap() {
 		i->second /= totalCount;
 	}
 
-	float waterRate = ltRate[Tile::LandType::OCEAN] + ltRate[Tile::LandType::COAST];
-	float practicableRate = ltRate[Tile::LandType::FOREST] + ltRate[Tile::LandType::PLAIN] + ltRate[Tile::LandType::SHORE];
-	float mountainousRate = ltRate[Tile::LandType::MOUNTAIN] + ltRate[Tile::LandType::PEAK];
+	float waterRate = ltRate[LandType::OCEAN] + ltRate[LandType::COAST];
+	float practicableRate = ltRate[LandType::FOREST] + ltRate[LandType::PLAIN] + ltRate[LandType::SHORE];
+	float mountainousRate = ltRate[LandType::MOUNTAIN] + ltRate[LandType::PEAK];
 	
-	printf("Ocean: %d%% | ", (int) (ltRate[Tile::LandType::OCEAN] * 100));
-	printf("Coast: %d%% | ", (int) (ltRate[Tile::LandType::COAST] * 100));
-	printf("Shore: %d%% | ", (int) (ltRate[Tile::LandType::SHORE] * 100));
-	printf("Plain: %d%% | ", (int) (ltRate[Tile::LandType::PLAIN] * 100));
-	printf("Forest: %d%% | ", (int) (ltRate[Tile::LandType::FOREST] * 100));
-	printf("Mountain: %d%% | ", (int) (ltRate[Tile::LandType::MOUNTAIN] * 100));
-	printf("Peak: %d%%\n", (int) (ltRate[Tile::LandType::PEAK] * 100));
+	printf("Ocean: %d%% | ", (int) (ltRate[LandType::OCEAN] * 100));
+	printf("Coast: %d%% | ", (int) (ltRate[LandType::COAST] * 100));
+	printf("Shore: %d%% | ", (int) (ltRate[LandType::SHORE] * 100));
+	printf("Plain: %d%% | ", (int) (ltRate[LandType::PLAIN] * 100));
+	printf("Forest: %d%% | ", (int) (ltRate[LandType::FOREST] * 100));
+	printf("Mountain: %d%% | ", (int) (ltRate[LandType::MOUNTAIN] * 100));
+	printf("Peak: %d%%\n", (int) (ltRate[LandType::PEAK] * 100));
 	printf("Water: %d%%              | ", (int) (waterRate * 100));
 	printf("Practicable: %d%%                     | ", (int) (practicableRate * 100));
 	printf("Mountainous: %d%%\n", (int) (mountainousRate * 100));
@@ -151,18 +152,27 @@ bool Map::isValidAltitudeMap() {
 	return true;
 }
 
-Tile::LandType Map::getLandTypeFromAltitude(float alt) {
+LandType Map::getLandTypeFromAltitude(float alt) {
 	if (alt < LIMIT_OCEAN)
-		return Tile::LandType::OCEAN;
+		return LandType::OCEAN;
 	if (alt < LIMIT_COAST)
-		return Tile::LandType::COAST;
+		return LandType::COAST;
 	if (alt < LIMIT_SHORE)
-		return Tile::LandType::SHORE;
+		return LandType::SHORE;
 	if (alt < LIMIT_PLAIN)
-		return Tile::LandType::PLAIN;
+		return LandType::PLAIN;
 	if (alt < LIMIT_FOREST)
-		return Tile::LandType::FOREST;
+		return LandType::FOREST;
 	if (alt < LIMIT_MOUNTAIN)
-		return Tile::LandType::MOUNTAIN;
-	return Tile::LandType::PEAK;
+		return LandType::MOUNTAIN;
+	return LandType::PEAK;
+}
+
+void Map::generatePosPlayers1vs1() {
+	//TODO
+	/*Tile *t1 = getRandTile(true);
+	Tile *t2;
+	do {
+		t2 = getRandTile(true);
+	} while (Astar::exec(this, t1, t2, ));*/
 }

@@ -4,7 +4,7 @@
 
 #include "../includes/Astar.hpp"
 
-Astar::Node *Astar::exec(Map *map, MVector tStart, MVector tTarget, Unit *unit) {
+Astar::Node *Astar::exec(Map *map, Vector2i tStart, Vector2i tTarget, Unit *unit) {
     return exec(map, map->getTile(tStart), map->getTile(tTarget), unit);
 }
 
@@ -15,10 +15,8 @@ Astar::Node *Astar::exec(Map *map, Tile *tStart, Tile *tTarget, Unit *unit) {
         vector<Node*> v(map->getSizeX());
         grid[j] = v;
         for (int i = 0; i < map->getSizeX(); i++) {
-            Tile::LandType lt = map->getTile(i, j)->getLandType();
-            //TODO
-            bool isWall = !(lt == Tile::LandType::PLAIN || lt == Tile::LandType::SHORE || lt == Tile::LandType::FOREST);
-            //bool isWall = unit->canMoveOn(map->getTile(i, j)) /!\;
+            LandType lt = map->getTile(i, j)->getLandType();
+            bool isWall = !unit->canStandOn(map->getTile(i, j));
             grid[j][i] = new Node(i, j, isWall);
         }
     }
@@ -74,7 +72,7 @@ Astar::Node *Astar::exec(Map *map, Tile *tStart, Tile *tTarget, Unit *unit) {
 }
 
 float Astar::computeHeuristics(Node *a, Node *b) {
-    return (float) MVector::sub(a->pos, b->pos).mag();
+    return (float) Vector2i::sub(a->pos, b->pos).mag();
 }
 
 Astar::Node *Astar::reconstructPath(Node *target) {
@@ -93,12 +91,12 @@ Astar::Node *Astar::reconstructPath(Node *target) {
 }
 
 
-Astar::Node::Node(MVector *pos, bool isWall) {
+Astar::Node::Node(Vector2i *pos, bool isWall) {
     Node(pos->x, pos->y, isWall);
 }
 
 Astar::Node::Node(int x, int y, bool isWall) {
-    this->pos = new MVector(x, y);
+    this->pos = new Vector2i(x, y);
     this->isWall = isWall;
     this->f = 0.;
     this->g = 0.;
