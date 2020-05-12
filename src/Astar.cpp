@@ -9,6 +9,9 @@ Astar::Node *Astar::exec(Map *map, Vector2i tStart, Vector2i tTarget, Unit *unit
 }
 
 Astar::Node *Astar::exec(Map *map, Tile *tStart, Tile *tTarget, Unit *unit) {
+    if (tStart == tTarget)
+        return NULL;
+
     vector<vector<Node*>> grid(map->getSizeX());
     
     for (int j = 0; j < map->getSizeY(); j++) {

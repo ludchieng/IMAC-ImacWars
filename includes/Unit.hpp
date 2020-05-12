@@ -17,23 +17,11 @@ class Player;
 class Unit {
 
 public:
-	enum Type {
-		Infantry, Artillery, Tank
-	};
-
-	Unit(int id, Player *player);
-	Unit(int id, Player *player, Type type);
-	Unit(int id, Player *player, Type type,
-			 int hp, int hpMax,
-			 int mp, int mpMax,
-			 int ratk, int atkcost,
-			 int atk, int def);
+	Unit(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
 	~Unit();
 
 	int getId() const { return m_id; }
 	void setId(int id) { m_id = id; }
-	Type getType() const { return m_type; }
-	void setType(Type type) { m_type = type; }
 	int getAtk() const { return m_atk; }
 	void setAtk(int atk) { m_atk = atk; }
 	int getAtkCost() const { return m_atkcost; }
@@ -57,8 +45,6 @@ public:
 
 	bool isDead() const { return m_hp <= 0; }
 	bool canMoveOn(Tile *t) const;
-	bool canStandOn(Tile *t) const;
-	bool canStandOn(LandType lt) const;
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }
@@ -68,9 +54,11 @@ public:
 	int distanceFrom(int x, int y) const;
 	void die();
 
-private:
+	static bool canStandOn(Tile* t);
+	static bool canStandOn(LandType lt);
+
+protected:
 	int m_id;
-	Type m_type;
 	Player *m_player;
 	Tile *m_tile;
 	int m_hp;
@@ -82,5 +70,9 @@ private:
 	int m_atk;
 	int m_def;
 };
+
+#include "../includes/Infantry.hpp"
+#include "../includes/Artillery.hpp"
+#include "../includes/Tank.hpp"
 
 #endif /* UNIT_HPP */

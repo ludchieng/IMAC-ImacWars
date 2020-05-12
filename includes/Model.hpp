@@ -58,7 +58,7 @@ public:
     static const int COLS_COUNT = 9;
     static const int PLAYER_COUNT = 2;
 
-    vector<Player *> m_players;
+    vector<Player*> m_players;
 
 private:
     Map *m_map;

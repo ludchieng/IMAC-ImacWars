@@ -22,16 +22,17 @@
 class Map {
 
 public:
-    Map();
+    Map(int playersCount);
     ~Map();
 
     int getSizeY() const { return m_tiles.size(); }
     int getSizeX() const { return m_tiles[0].size(); }
     Tile *getTile(int x, int y) const { return m_tiles[x][y]; }
     Tile *getTile(Vector2i pos) const { return m_tiles[pos.x][pos.y]; }
-    vector<vector<Tile *>> getTiles() const { return m_tiles; }
+    vector<vector<Tile*>> getTiles() const { return m_tiles; }
     Unit *getUnit(int x, int y) const { return NULL; } //TODO
     FX *getFX(int x, int y) const { return NULL; } //TODO
+    Tile *getPosPlayer(int i) { return posPlayers[i]; }
 
     Tile *getRandTile() const;
     Tile *getRandTile(bool practicableLand) const;
@@ -51,10 +52,10 @@ private:
     static const int ROWS_COUNT = 20;
     static const int COLS_COUNT = 20;
     static const int ZOOM = 5;
+    static const int PLAYERS_SPAWN_MIN_DIST = 12;
 
-    vector<vector<Tile *>> m_tiles;
-    //TODO
-    //vector<Vector2i> posPlayers;
+    vector<vector<Tile*>> m_tiles;
+    vector<Tile*> posPlayers;
 
     LandType getLandTypeFromAltitude(float alt);
     void generatePosPlayers1vs1();

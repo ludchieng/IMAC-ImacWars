@@ -15,7 +15,7 @@
 #include "../includes/Controller.hpp"
 #include "../includes/View.hpp"
 #include "../includes/Vector2i.hpp"
-#include "../includes/Vector2f.hpp"
+#include "../includes/Vector2d.hpp"
 
 class Controller;
 
@@ -58,9 +58,9 @@ private:
     SDL_GLContext m_gl;
     Controller *c;
 
-    Vector2f coordsSDLtoGL(Vector2i*);
-    Vector2f coordsSDLtoGL(int x, int y);
-    Vector2i coordsGLtoSDL(Vector2f*);
+    Vector2d coordsSDLtoGL(Vector2i*);
+    Vector2d coordsSDLtoGL(int x, int y);
+    Vector2i coordsGLtoSDL(Vector2d*);
     Vector2i coordsGLtoSDL(double x, double y);
 };
 

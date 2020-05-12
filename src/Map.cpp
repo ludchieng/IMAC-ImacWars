@@ -12,12 +12,13 @@ const float Map::LIMIT_FOREST = .70;
 const float Map::LIMIT_MOUNTAIN = .82;
 const float Map::LIMIT_PEAK = .87;
 
-Map::Map() {
+Map::Map(int playersCount) {
+	posPlayers.reserve(playersCount);
 	generate();
 }
 
 Map::~Map() {
-	for (vector<Tile *> row : m_tiles) {
+	for (vector<Tile*> row : m_tiles) {
 		for (Tile *t : row)
 			delete t;
 	}
@@ -56,10 +57,10 @@ Tile *Map::getRandTile(bool practicableLand) const {
 }
 
 void Map::generate() {
-	m_tiles = vector<vector<Tile *>>();
+	m_tiles = vector<vector<Tile*>>();
 
 	for (int x = 0; x < COLS_COUNT; x++) {
-		m_tiles.push_back(vector<Tile *>());
+		m_tiles.push_back(vector<Tile*>());
 		for (int y = 0; y < ROWS_COUNT; y++) {
 			Tile *t = new Tile(x, y);
 			m_tiles[x].push_back(t);
@@ -68,7 +69,7 @@ void Map::generate() {
 	for (int attempt = 0; attempt < 1000; attempt++) {
 		generateAltitude();
 		generatePosPlayers1vs1();
-		if (isValidMap())
+		if (isValidAltitudeMap())
 			return;
 	}
 	throw new CouldNotGenerateMapWithinGivenAttempts;
@@ -96,15 +97,6 @@ void Map::generateAltitude() {
 	}
 }
 
-bool Map::isValidMap() {
-	return isValidAltitudeMap() && isValidConnectedTerrainMap();
-}
-
-bool Map::isValidConnectedTerrainMap() {
-	//TODO
-	return true;
-}
-
 bool Map::isValidAltitudeMap() {
 	std::map<LandType, float> ltRate = {
 		{LandType::OCEAN, 0}, {LandType::COAST, 0},
@@ -129,7 +121,7 @@ bool Map::isValidAltitudeMap() {
 	float waterRate = ltRate[LandType::OCEAN] + ltRate[LandType::COAST];
 	float practicableRate = ltRate[LandType::FOREST] + ltRate[LandType::PLAIN] + ltRate[LandType::SHORE];
 	float mountainousRate = ltRate[LandType::MOUNTAIN] + ltRate[LandType::PEAK];
-	
+	/*
 	printf("Ocean: %d%% | ", (int) (ltRate[LandType::OCEAN] * 100));
 	printf("Coast: %d%% | ", (int) (ltRate[LandType::COAST] * 100));
 	printf("Shore: %d%% | ", (int) (ltRate[LandType::SHORE] * 100));
@@ -140,7 +132,7 @@ bool Map::isValidAltitudeMap() {
 	printf("Water: %d%%              | ", (int) (waterRate * 100));
 	printf("Practicable: %d%%                     | ", (int) (practicableRate * 100));
 	printf("Mountainous: %d%%\n", (int) (mountainousRate * 100));
-	
+	*/
 	if (waterRate > 0.70)
 		return false;
 	if (waterRate < 0.22)
@@ -169,10 +161,27 @@ LandType Map::getLandTypeFromAltitude(float alt) {
 }
 
 void Map::generatePosPlayers1vs1() {
-	//TODO
-	/*Tile *t1 = getRandTile(true);
-	Tile *t2;
+	Tile *t1, *t2;
+	int dist, margin, attempts = 0;
 	do {
-		t2 = getRandTile(true);
-	} while (Astar::exec(this, t1, t2, ));*/
+		margin = 10;
+		t1 = getRandTile(true);
+		do {
+			dist = 0;
+			t2 = getRandTile(true);
+			Astar::Node *path = Astar::exec(this, t1, t2, new Infantry(0, new Player(0)));
+			if (path != NULL) {
+				do {
+					path = path->next;
+					dist++;
+				} while (path->next != NULL);
+			}
+			if (dist >= PLAYERS_SPAWN_MIN_DIST + --margin) {
+				posPlayers[0] = t1;
+				posPlayers[1] = t2;
+				return;
+			}
+		} while (dist < PLAYERS_SPAWN_MIN_DIST + margin && margin > 0);
+	} while (attempts++ < 1000);
+	throw new CouldNotGeneratePosPlayersWithinGivenAttempts();
 }

@@ -73,16 +73,12 @@ void View::renderMap() {
 
 void View::renderAstar() {
     Map* map = m->getMap();
-    Tile* start;
-    Tile* target;
-    do {
-        start = map->getRandTile(true);
-        target = map->getRandTile(true);
-    } while(start == target);
+    Tile* start = map->getPosPlayer(0);
+    Tile* target = map->getPosPlayer(1);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     Player* p = new Player(1);
-    Unit* u = new Unit(1, p, Unit::Type::Infantry);
+    Unit* u = new Infantry(1, p);
     u->setTile(start);
     Astar::Node *path = Astar::exec(map, start, target, u);
     if (path != NULL) {

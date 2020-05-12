@@ -98,8 +98,8 @@ void Game::endLoop() {
 	Uint32 elapsedTime = SDL_GetTicks() - m_startTime;
 	if(elapsedTime < 1000 / FRAMERATE) 
 		SDL_Delay(1000 / FRAMERATE - elapsedTime);
-	else
-		printf("Cannot follow framerate\n");
+	/*else
+		printf("Cannot follow framerate\n");*/
 }
 
 void Game::quit() {
@@ -120,23 +120,23 @@ int Game::getWindowHeight() {
 	return h;
 }
 
-Vector2f Game::coordsSDLtoGL(int x, int y) {
+Vector2d Game::coordsSDLtoGL(int x, int y) {
 	return Game::coordsSDLtoGL(new Vector2i(x, y));
 }
 
-Vector2f Game::coordsSDLtoGL(Vector2i* v) {
-	Vector2f res(0, 0);
-	res.x = v->x / getWindowWidth();
-	res.y = v->y / getWindowHeight();
+Vector2d Game::coordsSDLtoGL(Vector2i* v) {
+	Vector2d res(0, 0);
+	res.x = v->x / (double) getWindowWidth();
+	res.y = v->y / (double) getWindowHeight();
 	res.mult(GL_VIEWPORT_HEIGHT);
 	return res;
 }
 
 Vector2i Game::coordsGLtoSDL(double x, double y) {
-	return Game::coordsGLtoSDL(new Vector2f(x, y));
+	return Game::coordsGLtoSDL(new Vector2d(x, y));
 }
 
-Vector2i Game::coordsGLtoSDL(Vector2f* v) {
+Vector2i Game::coordsGLtoSDL(Vector2d* v) {
 	Vector2i res(0, 0);
 	res.x = v->x * getWindowWidth();
 	res.y = v->y * getWindowHeight();

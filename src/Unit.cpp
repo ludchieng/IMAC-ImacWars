@@ -4,72 +4,23 @@
 
 #include "../includes/Unit.hpp"
 
-Unit::Unit(int id, Player *player) {
+
+Unit::Unit(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def) {
 	m_id = id;
-	m_type = Type::Infantry;
 	m_player = player;
 	m_tile = NULL;
-	m_hpMax = 100;
-	m_hp = m_hpMax;
-	m_mpMax = 4;
-	m_mp = m_mpMax;
-	m_atkcost = 2;
-	m_ratk = 2;
-	m_atk = 25;
-	m_def = 15;
-}
-
-Unit::~Unit() {
-	
-}
-
-Unit::Unit(int id, Player *player, Type type) {
-	m_id = id;
-	m_type = type;
-	m_player = player;
-	m_tile = NULL;
-	switch (type) {
-	case Type::Infantry:
-		m_hpMax = 100;
-		m_mpMax = 4;
-		m_ratk = 1;
-		m_atkcost = 2;
-		m_atk = 35;
-		m_def = 45;
-		break;
-	case Type::Artillery:
-		m_hpMax = 100;
-		m_mpMax = 2;
-		m_ratk = 3;
-		m_atkcost = 2;
-		m_atk = 50;
-		m_def = 30;
-		break;
-	case Type::Tank:
-		m_hpMax = 100;
-		m_mpMax = 1;
-		m_ratk = 2;
-		m_atkcost = 1;
-		m_atk = 65;
-		m_def = 65;
-	}
-	m_hp = m_hpMax;
-	m_mp = m_mpMax;
-}
-
-Unit::Unit(int id, Player *player, Type type, int hp, int hpMax, int mp, int mpMax, int ratk, int atkcost, int atk, int def) {
-	m_id = id;
-	m_type = type;
-	m_player = player;
-	m_tile = NULL;
-	m_hp = hp;
+	m_hp = hpMax;
 	m_hpMax = hpMax;
-	m_mp = mp;
+	m_mp = mpMax;
 	m_mpMax = mpMax;
 	m_ratk = ratk;
 	m_atkcost = atkcost;
 	m_atk = atk;
 	m_def = def;
+}
+
+Unit::~Unit() {
+	
 }
 
 void Unit::takeDamage(int dmg) {
@@ -120,11 +71,11 @@ bool Unit::canMoveOn(Tile *t) const {
 	return true;
 }
 
-bool Unit::canStandOn(Tile *t) const {
-	return canStandOn(t->getLandType());
+bool Unit::canStandOn(Tile *t) {
+	return Unit::canStandOn(t->getLandType());
 }
 
-bool Unit::canStandOn(LandType lt) const {
+bool Unit::canStandOn(LandType lt) {
 	switch (lt) {
 		case LandType::SHORE:
 		case LandType::PLAIN:

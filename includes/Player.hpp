@@ -15,7 +15,7 @@ class Unit;
 class Player {
 
 public:
-    vector<Unit *> m_units;
+    vector<Unit*> m_units;
 
     Player(int id);
     ~Player();
