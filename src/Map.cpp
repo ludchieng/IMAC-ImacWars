@@ -12,8 +12,10 @@ const float Map::LIMIT_FOREST = .70;
 const float Map::LIMIT_MOUNTAIN = .82;
 const float Map::LIMIT_PEAK = .87;
 
-Map::Map(int playersCount) {
-	posPlayers.reserve(playersCount);
+Map::Map(int playersCount, int sizeX, int sizeY) {
+	m_spawns.reserve(playersCount);
+	SIZE_X = sizeX;
+	SIZE_Y = sizeY;
 	generate();
 }
 
@@ -25,28 +27,49 @@ Map::~Map() {
 }
 
 Tile *Map::getRandTile() const {
+	return getRandTile(0);
+}
+
+Tile *Map::getRandTile(int distFromBorders) const {
 	srand((clock() * time(NULL)) % INT32_MAX);
-	int rX = rand() % SIZE_X;
+	int rX = rand() % (SIZE_X - 2*distFromBorders) + distFromBorders;
 	srand((clock() * time(NULL)) % INT32_MAX);
-	int rY = rand() % SIZE_Y;
+	int rY = rand() % (SIZE_Y - 2*distFromBorders) + distFromBorders;
 	return getTile(rX, rY);
 }
 
-Tile *Map::getRandTile(int landTypesFlags) const {
+Tile *Map::getRandTile(Land::Type ltf) const {
+	return getRandTile(0, ltf);
+}
+
+Tile *Map::getRandTile(int distFromBorders, Land::Type ltf) const {
 	Tile* res;
 	for (int attempt = 0; attempt < 1000; attempt++) {
-		res = getRandTile();
-		if (landTypesFlags & res->getLandType())
+		res = getRandTile(distFromBorders);
+		if (ltf & res->getLandType())
 			return res;
 	}
 	throw new CouldNotGetRandTileWithinGivenAttempts;
 }
 
-Tile *Map::getRandTileNear(Tile *t, int dist, int landTypesFlags) const {
+Tile *Map::getRandTileNear(Tile *t, int dist, Land::Type ltf) const {
 	Tile* res;
-	for (int attempt = 0; attempt < 1000; attempt++) {
-		res = getRandTile(landTypesFlags);
-		Tile::Path p = findPath(t, res, landTypesFlags);
+	for (int atpt1 = 0; atpt1 < 200; atpt1++) {
+		
+		for (int atpt2 = 0; atpt2 < 20; atpt2++) {
+			srand((clock() * time(NULL)) % INT32_MAX);
+			int rX = rand() % (2*dist+1) + t->getPosX() - dist;
+			srand((clock() * time(NULL)) % INT32_MAX);
+			int rY = rand() % (2*dist+1) + t->getPosY() - dist;
+
+			if (rX < SIZE_X && rX >= 0 && rY < SIZE_Y && rY >= 0) {
+				res = getTile(rX, rY);
+				if (ltf & res->getLandType())
+					break;
+			}
+		}
+
+		Tile::Path p = findPath(t, res, ltf);
 		if (p.size > 0 && p.size <= dist)
 			return res;
 	}
@@ -65,7 +88,7 @@ void Map::generate() {
 	}
 	for (int attempt = 0; attempt < 1000; attempt++) {
 		generateAltitude();
-		generatePosPlayers1vs1();
+		generateSpawns1vs1();
 		if (isValidAltitudeMap())
 			return;
 	}
@@ -95,29 +118,29 @@ void Map::generateAltitude() {
 }
 
 bool Map::isValidAltitudeMap() {
-	std::map<LandType, float> ltRate = {
-		{LandType::OCEAN, 0}, {LandType::COAST, 0},
-		{LandType::SHORE, 0}, {LandType::PLAIN, 0},
-		{LandType::FOREST, 0}, {LandType::MOUNTAIN, 0},
-		{LandType::PEAK, 0}
+	std::map<Land::Type, float> ltRate = {
+		{Land::Type::OCEAN, 0}, {Land::Type::COAST, 0},
+		{Land::Type::SHORE, 0}, {Land::Type::PLAIN, 0},
+		{Land::Type::FOREST, 0}, {Land::Type::MOUNTAIN, 0},
+		{Land::Type::PEAK, 0}
 	};
 	int totalCount = 0;
 	
 	for (int y = 0; y < getSizeY(); y++) {
 		for (int x = 0; x < getSizeX(); x++) {
-			LandType lt = m_tiles[x][y]->getLandType();
+			Land::Type lt = m_tiles[x][y]->getLandType();
             ltRate[lt]++;
 			totalCount++;
 		}
 	}
 
-	for (auto i=ltRate.begin(); i!=ltRate.end(); ++i) {
+	for (auto i=ltRate.begin(); i!=ltRate.end(); ++i)
 		i->second /= totalCount;
-	}
 
-	float waterRate = ltRate[LandType::OCEAN] + ltRate[LandType::COAST];
-	float practicableRate = ltRate[LandType::FOREST] + ltRate[LandType::PLAIN] + ltRate[LandType::SHORE];
-	float mountainousRate = ltRate[LandType::MOUNTAIN] + ltRate[LandType::PEAK];
+	float waterRate = ltRate[Land::Type::OCEAN] + ltRate[Land::Type::COAST];
+	float practicableRate = ltRate[Land::Type::FOREST] + ltRate[Land::Type::PLAIN] + ltRate[Land::Type::SHORE];
+	float mountainousRate = ltRate[Land::Type::MOUNTAIN] + ltRate[Land::Type::PEAK];
+
 	if (waterRate > 0.70)
 		return false;
 	if (waterRate < 0.22)
@@ -129,75 +152,82 @@ bool Map::isValidAltitudeMap() {
 	return true;
 }
 
-LandType Map::getLandTypeFromAltitude(float alt) {
+Land::Type Map::getLandTypeFromAltitude(float alt) {
 	if (alt < LIMIT_OCEAN)
-		return LandType::OCEAN;
+		return Land::Type::OCEAN;
 	if (alt < LIMIT_COAST)
-		return LandType::COAST;
+		return Land::Type::COAST;
 	if (alt < LIMIT_SHORE)
-		return LandType::SHORE;
+		return Land::Type::SHORE;
 	if (alt < LIMIT_PLAIN)
-		return LandType::PLAIN;
+		return Land::Type::PLAIN;
 	if (alt < LIMIT_FOREST)
-		return LandType::FOREST;
+		return Land::Type::FOREST;
 	if (alt < LIMIT_MOUNTAIN)
-		return LandType::MOUNTAIN;
-	return LandType::PEAK;
+		return Land::Type::MOUNTAIN;
+	return Land::Type::PEAK;
 }
 
-void Map::generatePosPlayers1vs1() {
+void Map::generateSpawns1vs1() {
 	Tile *t1, *t2;
 	Tile::Path path;
-	int ltf = LandType::PLAIN | LandType::SHORE | LandType::FOREST;
+
 	for (int attempts = 0; attempts < 1000; attempts++) {
 		int margin = 10;
-		t1 = getRandTile(ltf);
 		do {
-			t2 = getRandTile(ltf);;
-			path = findPath(t1, t2, ltf);
+			t1 = getRandTile(1, Land::TYPE_FIELD);
+			t2 = getRandTile(1, Land::TYPE_FIELD);
+			path = findPath(t1, t2, Land::TYPE_FIELD);
 			if (path.size >= PLAYERS_SPAWN_MIN_DIST + --margin) {
-				posPlayers[0] = t1;
-				posPlayers[1] = t2;
+				m_spawns[0] = t1;
+				m_spawns[1] = t2;
 				return;
 			}
 		} while (path.size < PLAYERS_SPAWN_MIN_DIST + margin && margin > 0);
 	}
-	throw new CouldNotGeneratePosPlayersWithinGivenAttempts();
+	throw new CouldNotGenerateSpawnsWithinGivenAttempts();
 }
 
-Tile::Path Map::findPath(Tile *start, Tile *target, int landTypesFlags) const {
+Tile::Path Map::findPath(Tile *start, Tile *target, Land::Type ltf) const {
 	Tile::Path path;
 	if (start == target)
 		return path;
 
+	// Create A* grid
     vector<vector<Astar::Node*>> grid(SIZE_X);
-    
-    for (int j = 0; j < SIZE_Y; j++) {
-        vector<Astar::Node*> v(SIZE_X);
-        grid[j] = v;
-        for (int i = 0; i < SIZE_X; i++) {
-            bool isWall = !(landTypesFlags & getTile(i, j)->getLandType());
-            grid[j][i] = new Astar::Node(i, j, isWall);
-        }
-    }
+	for (int i = 0; i < SIZE_X; i++) {
+        vector<Astar::Node*> col(SIZE_Y);
+        grid[i] = col;
+	}
 
-    for (vector<Astar::Node*> v : grid) {
-        for (Astar::Node* n : v) {
-			if (n->pos->x > 0)
-				n->left = grid[n->pos->y][n->pos->x-1];
-			if (n->pos->y > 0)
-				n->top = grid[n->pos->y-1][n->pos->x];
-			if (n->pos->x < grid[0].size()-1)
-				n->right = grid[n->pos->y][n->pos->x+1];
-			if (n->pos->y < grid.size()-1)
-				n->bottom = grid[n->pos->y+1][n->pos->x];
+	// Fill grid with nodes
+	for (int i = 0; i < SIZE_X; i++) {
+		for (int j = 0; j < SIZE_Y; j++) {
+            bool isWall = !(ltf & getTile(i, j)->getLandType());
+            grid[i][j] = new Astar::Node(i, j, isWall);
 		}
 	}
 
-	Astar::Node *astar = Astar::exec(grid,
-			grid[start->getPosY()][start->getPosX()],
-			grid[target->getPosY()][target->getPosX()]);
+	// Link Nodes
+    for (vector<Astar::Node*> v : grid) {
+        for (Astar::Node* n : v) {
+			if (n->pos->x > 0)
+				n->left = grid[n->pos->x-1][n->pos->y];
+			if (n->pos->y > 0)
+				n->top = grid[n->pos->x][n->pos->y-1];
+			if (n->pos->x < grid[0].size()-1)
+				n->right = grid[n->pos->x+1][n->pos->y];
+			if (n->pos->y < grid.size()-1)
+				n->bottom = grid[n->pos->x][n->pos->y+1];
+		}
+	}
 
+	// Perform pathfinding
+	Astar::Node *astar = Astar::exec(grid,
+			grid[start->getPosX()][start->getPosY()],
+			grid[target->getPosX()][target->getPosY()]);
+
+	// Convert A* result to Tile::Path
 	if (astar != NULL) {
 		do {
 			path.add(getTile(astar->pos->x, astar->pos->y));

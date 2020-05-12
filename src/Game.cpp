@@ -71,7 +71,6 @@ void Game::handleEvents() {
 				printf("(%d, %d)\n", (int) Game::coordsSDLtoGL(e.button.x, e.button.y).x, (int) Game::coordsSDLtoGL(e.button.x, e.button.y).y);
 				break;
 			case SDL_KEYDOWN:
-				printf("touche pressee (code = %d)\n", e.key.keysym.sym);
 				if (e.key.keysym.sym == 1073741902)
 					c = new Controller();
 				break;

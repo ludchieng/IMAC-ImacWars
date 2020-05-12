@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 #include "../includes/Vector2i.hpp"
-#include "../includes/LandType.hpp"
+#include "../includes/Land.hpp"
 #include "../includes/Unit.hpp"
 #include "../src/Exceptions.cpp"
 
@@ -28,8 +28,8 @@ public:
 	int getPosY() const { return m_pos.y; }
 	float getAltitude() const { return m_altitude; }
 	void setAltitude(float a) { m_altitude = a; }
-	LandType getLandType() const { return m_type; }
-	void setLandType(LandType t) { m_type = t; }
+	Land::Type getLandType() const { return m_type; }
+	void setLandType(Land::Type t) { m_type = t; }
 	Unit *getUnit() const;
 	void setUnit(Unit *u) { m_unit = u; }
 	void delUnit() { m_unit = NULL; }
@@ -38,7 +38,7 @@ public:
 private:
 	Vector2i m_pos;
 	float m_altitude;
-	LandType m_type;
+	Land::Type m_type;
 	Unit *m_unit;
 };
 

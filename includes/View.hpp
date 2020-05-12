@@ -18,6 +18,7 @@ public:
 	void render();
 	void renderMap();
 	void renderAstar();
+	void renderUnits();
 	void free();
 
 private:

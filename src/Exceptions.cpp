@@ -161,14 +161,14 @@ public:
 
 #endif /* COULD_NOT_GET_RAND_TILE_WITHIN_GIVEN_ATTEMPTS */
 
-#ifndef COULD_NOT_GENERATE_POS_PLAYERS_WITHIN_GIVEN_ATTEMPTS
-#define COULD_NOT_GENERATE_POS_PLAYERS_WITHIN_GIVEN_ATTEMPTS
+#ifndef COULD_NOT_GENERATE_SPAWNS_WITHIN_GIVEN_ATTEMPTS
+#define COULD_NOT_GENERATE_SPAWNS_WITHIN_GIVEN_ATTEMPTS
 
-class CouldNotGeneratePosPlayersWithinGivenAttempts : public exception {
+class CouldNotGenerateSpawnsWithinGivenAttempts : public exception {
 public:
 	const char *what() {
-		return "Could not generate pos players within given attempts";
+		return "Could not generate spawns within given attempts";
 	}
 };
 
-#endif /* COULD_NOT_GENERATE_POS_PLAYERS_WITHIN_GIVEN_ATTEMPTS */
+#endif /* COULD_NOT_GENERATE_SPAWNS_WITHIN_GIVEN_ATTEMPTS */

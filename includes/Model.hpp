@@ -16,11 +16,6 @@
 
 class Model {
 public:
-    typedef enum ArmySize {
-        CREW, FACE_TO_FACE, SECTION, BATTERY,
-        COMPANY, BATTALION, REGIMENT, DIVISION
-    } ArmySize;
-
     typedef struct FightReport {
         Unit *assailant;
         Unit *target;
@@ -41,6 +36,7 @@ public:
     Map *getMap() { return m_map; }
     Unit* getUnit(int x, int y) const;
 
+    vector<Player*> getPlayers() const { return m_players; }
     Player* getPlayerTurn() const { return m_playerTurn; }
     void setPlayerTurn(Player *p) { m_playerTurn = p; }
 
@@ -50,19 +46,16 @@ public:
     void createUnit(Player *p, Tile *t, Unit *u);
     void moveUnit(Unit *u, int x, int y);
     FightReport attackUnit(Unit *assailant, Unit *target);
-    void deleteUnit(Unit *u);
+    void delUnit(Unit *u);
 
-    void generateArmies(ArmySize at);
-
-    static const int SIZE_Y = 16;
-    static const int SIZE_X = 9;
+    static const int SIZE_Y = 20;
+    static const int SIZE_X = 20;
     static const int PLAYER_COUNT = 2;
-
-    vector<Player*> m_players;
 
 private:
     Map *m_map;
     Player *m_playerTurn;
+    vector<Player*> m_players;
 };
 
 #endif /* MODEL_HPP */

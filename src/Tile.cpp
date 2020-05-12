@@ -22,9 +22,7 @@ Tile::~Tile() {
 }
 
 Unit *Tile::getUnit() const {
-	if (m_unit == NULL) {
-		NoSuchUnit e;
-		throw e;
-	}
+	if (m_unit == NULL)
+		throw new NoSuchUnit();
 	return m_unit;
 }

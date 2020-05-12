@@ -5,8 +5,7 @@
 #include "../includes/Unit.hpp"
 
 
-Unit::Unit(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def) {
-	m_id = id;
+Unit::Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def) {
 	m_player = player;
 	m_tile = NULL;
 	m_hp = hpMax;
@@ -75,16 +74,16 @@ bool Unit::canStandOn(Tile *t) {
 	return Unit::canStandOn(t->getLandType());
 }
 
-bool Unit::canStandOn(LandType lt) {
+bool Unit::canStandOn(Land::Type lt) {
 	switch (lt) {
-		case LandType::SHORE:
-		case LandType::PLAIN:
-		case LandType::FOREST:
+		case Land::Type::SHORE:
+		case Land::Type::PLAIN:
+		case Land::Type::FOREST:
 			return true;
-		case LandType::OCEAN:
-		case LandType::COAST:
-		case LandType::MOUNTAIN:
-		case LandType::PEAK:
+		case Land::Type::OCEAN:
+		case Land::Type::COAST:
+		case Land::Type::MOUNTAIN:
+		case Land::Type::PEAK:
 			return false;
 	}
 }

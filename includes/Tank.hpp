@@ -10,8 +10,8 @@
 class Tank : public Unit {
 
 public:
-    Tank(int id, Player *player);
-    Tank(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
+    Tank(Player *player);
+    Tank(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
 	~Tank();
 
 private:

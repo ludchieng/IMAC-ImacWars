@@ -6,6 +6,7 @@
 
 Player::Player(int id) {
 	m_id = id;
+	m_units = vector<Unit*>();
 }
 
 Player::~Player() {

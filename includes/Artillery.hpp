@@ -10,8 +10,8 @@
 class Artillery : public Unit {
 
 public:
-    Artillery(int id, Player *player);
-    Artillery(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
+    Artillery(Player *player);
+    Artillery(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
 	~Artillery();
 	
 private:

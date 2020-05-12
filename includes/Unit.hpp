@@ -17,11 +17,9 @@ class Player;
 class Unit {
 
 public:
-	Unit(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
+	Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
 	~Unit();
 
-	int getId() const { return m_id; }
-	void setId(int id) { m_id = id; }
 	int getAtk() const { return m_atk; }
 	void setAtk(int atk) { m_atk = atk; }
 	int getAtkCost() const { return m_atkcost; }
@@ -55,10 +53,9 @@ public:
 	void die();
 
 	static bool canStandOn(Tile* t);
-	static bool canStandOn(LandType lt);
+	static bool canStandOn(Land::Type lt);
 
 protected:
-	int m_id;
 	Player *m_player;
 	Tile *m_tile;
 	int m_hp;

@@ -10,12 +10,12 @@
 class Infantry : public Unit {
 
 public:
-    Infantry(int id, Player *player);
-    Infantry(int id, Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
+    Infantry(Player *player);
+    Infantry(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
 	~Infantry();
 
 	bool canStandOn(Tile *t) const;
-	bool canStandOn(LandType lt) const;
+	bool canStandOn(Land::Type lt) const;
 
 private:
 

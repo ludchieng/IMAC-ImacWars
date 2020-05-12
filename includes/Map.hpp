@@ -22,7 +22,7 @@
 class Map {
 
 public:
-    Map(int playersCount);
+    Map(int playersCount, int sizeX, int sizeY);
     ~Map();
 
     int getSizeY() const { return m_tiles.size(); }
@@ -32,15 +32,17 @@ public:
     vector<vector<Tile*>> getTiles() const { return m_tiles; }
     Unit *getUnit(int x, int y) const { return NULL; } //TODO
     FX *getFX(int x, int y) const { return NULL; } //TODO
-    Tile *getPosPlayer(int i) { return posPlayers[i]; }
+    Tile *getSpawn(int i) { return m_spawns[i]; }
 
     Tile *getRandTile() const;
-    Tile *getRandTile(int landTypesFlags) const;
-    Tile *getRandTileNear(Tile *t, int dist, int landTypesFlags) const;
+    Tile *getRandTile(int distFromBorders) const;
+    Tile *getRandTile(Land::Type lt) const;
+    Tile *getRandTile(int distFromBorders, Land::Type lt) const;
+    Tile *getRandTileNear(Tile *t, int dist, Land::Type lt) const;
     void generate();
     void generateAltitude();
 
-    Tile::Path findPath(Tile *start, Tile *target, int landTypesFlags) const;
+    Tile::Path findPath(Tile *start, Tile *target, Land::Type lt) const;
 
     static const float LIMIT_OCEAN;
     static const float LIMIT_COAST;
@@ -52,16 +54,16 @@ public:
 
 private:
 
-    static const int SIZE_Y = 20;
-    static const int SIZE_X = 20;
+    int SIZE_X;
+    int SIZE_Y;
     static const int ZOOM = 5;
     static const int PLAYERS_SPAWN_MIN_DIST = 12;
 
     vector<vector<Tile*>> m_tiles;
-    vector<Tile*> posPlayers;
+    vector<Tile*> m_spawns;
 
-    LandType getLandTypeFromAltitude(float alt);
-    void generatePosPlayers1vs1();
+    Land::Type getLandTypeFromAltitude(float alt);
+    void generateSpawns1vs1();
     bool isValidMap();
     bool isValidAltitudeMap();
     bool isValidConnectedTerrainMap();

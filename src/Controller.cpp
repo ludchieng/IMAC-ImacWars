@@ -31,7 +31,7 @@ void Controller::update() {
 }
 
 bool Controller::checkWinner() {
-	vector<Player*> potentialWinners = m->m_players;
+	vector<Player*> potentialWinners = m->getPlayers();
 	for (unsigned int i = 0; i < potentialWinners.size();) {
 		if (potentialWinners[i]->hasActiveUnits() == 0) {
 			potentialWinners.erase(std::remove(potentialWinners.begin(), potentialWinners.end(), potentialWinners[i]), potentialWinners.end());
