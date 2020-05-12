@@ -4,36 +4,12 @@
 
 #include "../includes/Astar.hpp"
 
-Astar::Node *Astar::exec(Map *map, Vector2i tStart, Vector2i tTarget, Unit *unit) {
-    return exec(map, map->getTile(tStart), map->getTile(tTarget), unit);
-}
-
-Astar::Node *Astar::exec(Map *map, Tile *tStart, Tile *tTarget, Unit *unit) {
-    if (tStart == tTarget)
-        return NULL;
-
-    vector<vector<Node*>> grid(map->getSizeX());
-    
-    for (int j = 0; j < map->getSizeY(); j++) {
-        vector<Node*> v(map->getSizeX());
-        grid[j] = v;
-        for (int i = 0; i < map->getSizeX(); i++) {
-            LandType lt = map->getTile(i, j)->getLandType();
-            bool isWall = !unit->canStandOn(map->getTile(i, j));
-            grid[j][i] = new Node(i, j, isWall);
-        }
-    }
-    for (vector<Node*> v : grid)
-        for (Node* n : v)
-            n->setNeighbours(grid);
-
-    Node *nStart = grid[tStart->getPosY()][tStart->getPosX()];
-    Node *nTarget = grid[tTarget->getPosY()][tTarget->getPosX()];
-
+Astar::Node *Astar::exec(vector<vector<Node*>> &grid,  Node *nStart, Node *nTarget) {
     list<Node*> active;
     list<Node*> visited;
     active.push_back(nStart);
     Node *curr;
+
     while (active.size() > 0) {
         curr = active.front();
         for (Node* n : active)
@@ -89,7 +65,6 @@ Astar::Node *Astar::reconstructPath(Node *target) {
         cursor = cursor->prev;
     } while (cursor->prev != NULL);
     cursor->next = next;
-    Node *curr = cursor;
     return cursor;
 }
 
@@ -114,17 +89,6 @@ Astar::Node::Node(int x, int y, bool isWall) {
 
 Astar::Node::~Node() {
 
-}
-
-void Astar::Node::setNeighbours(vector<vector<Node*>>& grid) {
-    if (pos->x > 0)
-        this->left = grid[pos->y][pos->x-1];
-    if (pos->y > 0)
-        this->top = grid[pos->y-1][pos->x];
-    if (pos->x < grid[0].size()-1)
-        this->right = grid[pos->y][pos->x+1];
-    if (pos->y < grid.size()-1)
-        this->bottom = grid[pos->y+1][pos->x];
 }
 
 vector<Astar::Node*> Astar::Node::getNeighbours() const {

@@ -35,9 +35,12 @@ public:
     Tile *getPosPlayer(int i) { return posPlayers[i]; }
 
     Tile *getRandTile() const;
-    Tile *getRandTile(bool practicableLand) const;
+    Tile *getRandTile(int landTypesFlags) const;
+    Tile *getRandTileNear(Tile *t, int dist, int landTypesFlags) const;
     void generate();
     void generateAltitude();
+
+    Tile::Path findPath(Tile *start, Tile *target, int landTypesFlags) const;
 
     static const float LIMIT_OCEAN;
     static const float LIMIT_COAST;
@@ -49,8 +52,8 @@ public:
 
 private:
 
-    static const int ROWS_COUNT = 20;
-    static const int COLS_COUNT = 20;
+    static const int SIZE_Y = 20;
+    static const int SIZE_X = 20;
     static const int ZOOM = 5;
     static const int PLAYERS_SPAWN_MIN_DIST = 12;
 

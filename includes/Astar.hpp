@@ -5,13 +5,11 @@
 #ifndef ASTAR_HPP
 #define ASTAR_HPP
 
-#include "../includes/Unit.hpp"
-#include "../includes/Map.hpp"
-#include "../includes/Tile.hpp"
 #include "../includes/Vector2i.hpp"
 #include <vector>
 #include <list>
 #include <algorithm>
+using namespace std;
 
 class Map;
 
@@ -22,11 +20,9 @@ public:
     Astar();
     ~Astar();
 
-    static Node *exec(Map *map,Tile *start, Tile *target, Unit *unit);
-    static Node *exec(Map *map, Vector2i start, Vector2i target, Unit *unit);
+    static Node *exec(vector<vector<Node*>> &grid, Node *start, Node *target);
 
 private:
-
     static float computeHeuristics(Node *a, Node *b);
     static Node *reconstructPath(Node *target);
 
@@ -39,7 +35,6 @@ public:
     Node(int x, int y, bool isWall);
     ~Node();
 
-    void setNeighbours(vector<vector<Node*>>& grid);
     vector<Node*> getNeighbours() const;
     void copy(Node* n);
 

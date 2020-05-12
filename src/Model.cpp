@@ -76,7 +76,7 @@ void Model::createUnit(Player *p, Tile *t, Unit *u) {
 }
 
 void Model::moveUnit(Unit *u, int x, int y) {
-	if (x < 0 || y < 0 || x >= COLS_COUNT || y >= ROWS_COUNT) {
+	if (x < 0 || y < 0 || x >= SIZE_X || y >= SIZE_Y) {
 		OutOfBound e;
 		throw e;
 	}

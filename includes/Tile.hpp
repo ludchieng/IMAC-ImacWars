@@ -17,10 +17,13 @@ class Unit;
 class Tile {
 
 public:
+	class Path;
+
 	Tile(int posX, int posY);
 	Tile(Vector2i pos);
 	~Tile();
 
+	Vector2i getPos() const { return m_pos; }
 	int getPosX() const { return m_pos.x; }
 	int getPosY() const { return m_pos.y; }
 	float getAltitude() const { return m_altitude; }
@@ -37,6 +40,21 @@ private:
 	float m_altitude;
 	LandType m_type;
 	Unit *m_unit;
+};
+
+class Tile::Path {
+public:
+	Tile **tiles;
+	int size;
+
+	Path()
+		: tiles(NULL), size(0) {}
+
+	void add(Tile *t) {
+		size++;
+		tiles = (Tile**) realloc(tiles, sizeof(Tile*) * size);
+		tiles[size-1] = t;
+	}
 };
 
 #endif /* TILE_HPP */

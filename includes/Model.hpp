@@ -54,8 +54,8 @@ public:
 
     void generateArmies(ArmySize at);
 
-    static const int ROWS_COUNT = 16;
-    static const int COLS_COUNT = 9;
+    static const int SIZE_Y = 16;
+    static const int SIZE_X = 9;
     static const int PLAYER_COUNT = 2;
 
     vector<Player*> m_players;
