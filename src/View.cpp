@@ -6,7 +6,7 @@
 
 View::View(Model *m) {
     this->m = m;
-    TexManager::load(&m_glTex);
+    this->tex = new Texture();
 }
 
 View::~View() {
@@ -14,13 +14,15 @@ View::~View() {
 }
 
 void View::render() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     renderMap();
-    renderAstar();
     renderUnits();
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
 }
 
 void View::renderMap() {
-    glPushMatrix();
     float thrs[] = {.35, .45, .65, .8};
     Map *map = m->getMap();
     for (int j = 0; j < map->getSizeY(); j++) {
@@ -69,16 +71,12 @@ void View::renderMap() {
             glRecti(i, j, i+1, j+1);
         }
     }
-    glPopMatrix();
 }
 
 //TODO remove
-#include "../includes/Astar.hpp"
+/*#include "../includes/Astar.hpp"
 
 void View::renderAstar() {
-    glPushMatrix();
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
     Map *map = m->getMap();
     Tile *start = map->getSpawn(0);
     Tile *target = map->getSpawn(1);
@@ -94,35 +92,17 @@ void View::renderAstar() {
     }
     glColor4ub(255, 20, 255, 255);
     glRecti(start->getPosX(), start->getPosY(), start->getPosX()+1, start->getPosY()+1);
-    /*for (int i = 0; i < 3; i++) {
-        Tile *t = map->getRandTileNear(start, 2, Land::TYPE_FIELD);
-        glColor4ub(255, 20, 255, 150);
-        glRecti(t->getPosX(), t->getPosY(), t->getPosX()+1, t->getPosY()+1);
-    }*/
-    
     glColor4ub(255, 255, 20, 255);
     glRecti(target->getPosX(), target->getPosY(), target->getPosX()+1, target->getPosY()+1);
-    /*for (int i = 0; i < 3; i++) {
-        Tile *t = map->getRandTileNear(target, 2, Land::TYPE_FIELD);
-        glColor4ub(255, 255, 20, 150);
-        glRecti(t->getPosX(), t->getPosY(), t->getPosX()+1, t->getPosY()+1);
-    }*/
-    glDisable(GL_BLEND);
-    glPopMatrix();
-}
+}*/
 
 void View::renderUnits() {
-    glPushMatrix();
     glColor3ub(255, 255, 255);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
     for (Player *p : m->getPlayers()) {
         for (Unit *u : p->getUnits()) {
             Vector2i pos = u->getTile()->getPos();
-            //glRecti(pos.x, pos.y, pos.x + 1, pos.y + 1);
-            
-            glBindTexture(GL_TEXTURE_2D, m_glTex[1]);
+            glBindTexture(GL_TEXTURE_2D, tex->unit(u));
             glPushMatrix();
                 glTranslatef(pos.x, pos.y, 0.);
                 glBegin(GL_QUADS);
@@ -136,13 +116,9 @@ void View::renderUnits() {
                     glVertex2f(1,0);
                 glEnd();
             glPopMatrix();
-
         }
     }
     glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
-    glPopMatrix();
 }
 
 void View::free() {

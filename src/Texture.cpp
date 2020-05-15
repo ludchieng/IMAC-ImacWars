@@ -1,10 +1,17 @@
 /**
- * TexManager.cpp
+ * Texture.cpp
  */
 
-#include "../includes/TexManager.hpp"
+#include "../includes/Texture.hpp"
 
-int TexManager::loadTex(const char *file) {
+Texture::Texture() {
+	m_infantry.push_back(Texture::loadTex("assets/unit-blue-1-east.png"));
+	m_infantry.push_back(Texture::loadTex("assets/unit-blue-1-west.png"));
+	m_infantry.push_back(Texture::loadTex("assets/unit-red-1-east.png"));
+	m_infantry.push_back(Texture::loadTex("assets/unit-red-1-west.png"));
+}
+
+int Texture::loadTex(const char *file) {
 	SDL_Surface *surf = IMG_Load(file);
 	if (surf == NULL) {
 		fprintf(stderr, "Failed to load texture at %s\n", file);
@@ -35,12 +42,7 @@ int TexManager::loadTex(const char *file) {
 	return idTex;
 }
 
-void TexManager::load(vector<int> *glTextures) {
-	const char *files[] = {
-		"assets/unit-blue-1-east.png",
-		"assets/unit-red-1-west.png"
-	};
-	for (int i = 0; i < 2; i++) {
-		glTextures->push_back(TexManager::loadTex(files[i]));
-	}
+int Texture::unit(Unit *u) {
+	int idPlayer = u->getPlayer()->getId();
+	return m_infantry[idPlayer*2];
 }

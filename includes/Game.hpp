@@ -41,8 +41,8 @@ public:
     static SDL_Renderer *renderer;
 
 private:
-    static const unsigned int W_WIDTH = 600;
-    static const unsigned int W_HEIGHT = 600;
+    static const unsigned int W_WIDTH = 900;
+    static const unsigned int W_HEIGHT = 900;
     static const char W_TITLE[];
 
     static const unsigned int GL_VIEWPORT_HEIGHT = 20;

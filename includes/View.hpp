@@ -5,11 +5,12 @@
 #ifndef VIEW_HPP
 #define VIEW_HPP
 
-#include "../includes/TexManager.hpp"
+#include "../includes/Texture.hpp"
 #include "../includes/Controller.hpp"
 #include "../includes/Model.hpp"
 #include "../includes/Color.hpp"
 
+class Texture;
 class Controller;
 
 class View {
@@ -24,7 +25,7 @@ public:
 
 private:
 	Model *m;
-	vector<int> m_glTex;
+	Texture *tex;
 };
 
 #endif /* VIEW_HPP*/

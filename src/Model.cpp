@@ -24,6 +24,7 @@ Model::Model() {
 					new Artillery(p), new Tank(p),
 				};
 				int margin = 0;
+				// Create unit spawns
 				for (int unitCount = 0; unitCount < 6; ) {
 					Tile *t = m_map->getRandTileNear(p->getSpawn(), 2 + margin/10, Land::TYPE_FIELD);
 					if (!t->hasUnit())

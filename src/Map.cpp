@@ -175,8 +175,8 @@ void Map::generateSpawns1vs1() {
 	for (int attempts = 0; attempts < 1000; attempts++) {
 		int margin = 10;
 		do {
-			t1 = getRandTile(1, Land::TYPE_FIELD);
-			t2 = getRandTile(1, Land::TYPE_FIELD);
+			t1 = getRandTile(3, Land::TYPE_FIELD);
+			t2 = getRandTile(3, Land::TYPE_FIELD);
 			path = findPath(t1, t2, Land::TYPE_FIELD);
 			if (path.size >= PLAYERS_SPAWN_MIN_DIST + --margin) {
 				m_spawns[0] = t1;
