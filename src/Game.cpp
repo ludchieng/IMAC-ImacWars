@@ -5,19 +5,16 @@
 #include "../includes/Game.hpp"
 
 const char Game::W_TITLE[] = "Imac Wars";
-const float Game::GL_VIEW_SIZE = 200.;
+//const float Game::GL_VIEW_SIZE = 200.;
 SDL_Renderer *Game::renderer = NULL;
 
 Game::Game(bool fullscreen) {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) 
-		exit(600);
+	SDL_Init(SDL_INIT_VIDEO);
+	renderer = SDL_CreateRenderer(m_window, -1, 0);
 
 	int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-	if (fullscreen) {
+	if (fullscreen)
 		flags |= SDL_WINDOW_FULLSCREEN;
-	}
-
-	renderer = SDL_CreateRenderer(m_window, -1, 0);
 	
 	m_window = SDL_CreateWindow(W_TITLE, 1000, //TODO replace SDL_WINDOWPOS_CENTERED
 		SDL_WINDOWPOS_CENTERED, W_WIDTH, W_HEIGHT, flags);
@@ -73,6 +70,8 @@ void Game::handleEvents() {
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
 					c = new Controller();
+				if (e.key.keysym.sym == SDLK_q)
+					m_isRunning = false;
 				break;
 			default:
 				c->handle(&e);

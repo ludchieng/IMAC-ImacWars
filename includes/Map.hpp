@@ -12,7 +12,6 @@
 
 #include "../vendor/FastNoise/FastNoise.h"
 #include "../includes/Vector2i.hpp"
-#include "../includes/Entity.hpp"
 #include "../includes/FX.hpp"
 #include "../includes/Tile.hpp"
 #include "../includes/Unit.hpp"

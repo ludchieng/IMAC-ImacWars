@@ -5,6 +5,7 @@
 #ifndef VIEW_HPP
 #define VIEW_HPP
 
+#include "../includes/TexManager.hpp"
 #include "../includes/Controller.hpp"
 #include "../includes/Model.hpp"
 #include "../includes/Color.hpp"
@@ -23,6 +24,7 @@ public:
 
 private:
 	Model *m;
+	vector<int> m_glTex;
 };
 
 #endif /* VIEW_HPP*/

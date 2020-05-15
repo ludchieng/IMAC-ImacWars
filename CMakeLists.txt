@@ -33,17 +33,17 @@ endif(SRC_FILES)
 target_link_libraries("${EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES})
 
 # Tests files
-set(TEST_EXECUTABLE_NAME "tests")
+#set(TEST_EXECUTABLE_NAME "tests")
 
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+#find_package(GTest REQUIRED)
+#include_directories(${GTEST_INCLUDE_DIRS})
 
-file(GLOB TEST_FILES "test/*.cpp")
+#file(GLOB TEST_FILES "test/*.cpp")
 file(GLOB MAIN_SRC "src/Main.cpp") 
 list(REMOVE_ITEM SRC_FILES ${MAIN_SRC}) # Don't include Main.cpp from src
 
-add_executable("${TEST_EXECUTABLE_NAME}" ${TEST_FILES} ${SRC_FILES} ${VENDOR_FILES})
-target_link_libraries("${TEST_EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES} gtest pthread)
+#add_executable("${TEST_EXECUTABLE_NAME}" ${TEST_FILES} ${SRC_FILES} ${VENDOR_FILES})
+#target_link_libraries("${TEST_EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES} gtest pthread)
 
 include_directories(BEFORE ".")
 include_directories(BEFORE "src/")

@@ -1,0 +1,70 @@
+/*
+ * Entity.cpp
+ */
+
+#include "../includes/Entity.hpp"
+
+Entity::Entity() {
+    m_SDLsurf = NULL;
+    m_SDLtex = NULL;
+    m_tile = NULL;
+}
+
+Entity::Entity(const char *file) {
+    m_SDLsurf = TexManager::loadSurf(file);
+    m_SDLtex = TexManager::loadTex(m_SDLsurf);
+    m_tile = NULL;
+}
+
+Entity::Entity(const char *file, Tile *t) {
+    m_SDLsurf = TexManager::loadSurf(file);
+    m_SDLtex = TexManager::loadTex(m_SDLsurf);
+    m_tile = t;
+}
+
+Entity::~Entity() {
+
+}
+
+void Entity::update() {
+    
+}
+
+void Entity::render() {
+    GLenum format;
+    switch (m_SDLsurf->format->BitsPerPixel) {
+    case 1:
+        format = GL_RED;
+        break;
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+        break;
+    default:
+        fprintf(stderr, "Unknown image format\n");
+        exit(EXIT_FAILURE);
+    }
+    GLuint idTex;
+    glGenTextures(1, &idTex);
+    glBindTexture(GL_TEXTURE_2D, idTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_SDLsurf->w,m_SDLsurf->h,
+        0, format, GL_UNSIGNED_BYTE, m_SDLsurf->pixels);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glPushMatrix();
+        glTranslatef(m_tile->getPosX(), m_tile->getPosY(), 0.);
+        glBegin(GL_QUADS);
+            glTexCoord2i(0,0);
+            glVertex2f(m_tile->getPosX(), m_tile->getPosY());
+            glTexCoord2i(0,1);
+            glVertex2f(m_tile->getPosX(), m_tile->getPosY() + 1);
+            glTexCoord2i(1,1);
+            glVertex2f(m_tile->getPosX() + 1, m_tile->getPosY() + 1);
+            glTexCoord2i(1,0);
+            glVertex2f(m_tile->getPosX() + 1, m_tile->getPosY());
+        glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, idTex);
+}

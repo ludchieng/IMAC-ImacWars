@@ -6,6 +6,7 @@
 
 View::View(Model *m) {
     this->m = m;
+    TexManager::load(&m_glTex);
 }
 
 View::~View() {
@@ -19,6 +20,7 @@ void View::render() {
 }
 
 void View::renderMap() {
+    glPushMatrix();
     float thrs[] = {.35, .45, .65, .8};
     Map *map = m->getMap();
     for (int j = 0; j < map->getSizeY(); j++) {
@@ -67,17 +69,19 @@ void View::renderMap() {
             glRecti(i, j, i+1, j+1);
         }
     }
+    glPopMatrix();
 }
 
 //TODO remove
 #include "../includes/Astar.hpp"
 
 void View::renderAstar() {
+    glPushMatrix();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     Map *map = m->getMap();
     Tile *start = map->getSpawn(0);
     Tile *target = map->getSpawn(1);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
     Player *p = new Player(1);
     Unit *u = new Infantry(p);
     u->setTile(start);
@@ -103,16 +107,42 @@ void View::renderAstar() {
         glColor4ub(255, 255, 20, 150);
         glRecti(t->getPosX(), t->getPosY(), t->getPosX()+1, t->getPosY()+1);
     }*/
+    glDisable(GL_BLEND);
+    glPopMatrix();
 }
 
 void View::renderUnits() {
-    glColor4ub(255, 0, 100, 150);
+    glPushMatrix();
+    glColor3ub(255, 255, 255);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_TEXTURE_2D);
     for (Player *p : m->getPlayers()) {
         for (Unit *u : p->getUnits()) {
             Vector2i pos = u->getTile()->getPos();
-            glRecti(pos.x, pos.y, pos.x+1, pos.y+1);
+            //glRecti(pos.x, pos.y, pos.x + 1, pos.y + 1);
+            
+            glBindTexture(GL_TEXTURE_2D, m_glTex[1]);
+            glPushMatrix();
+                glTranslatef(pos.x, pos.y, 0.);
+                glBegin(GL_QUADS);
+                    glTexCoord2i(0,0);
+                    glVertex2f(0,0);
+                    glTexCoord2i(0,1);
+                    glVertex2f(0,1);
+                    glTexCoord2i(1,1);
+                    glVertex2f(1,1);
+                    glTexCoord2i(1,0);
+                    glVertex2f(1,0);
+                glEnd();
+            glPopMatrix();
+
         }
     }
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+    glPopMatrix();
 }
 
 void View::free() {
