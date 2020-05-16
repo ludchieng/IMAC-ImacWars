@@ -42,19 +42,16 @@ private:
 	Unit *m_unit;
 };
 
+
 class Tile::Path {
 public:
 	Tile **tiles;
 	int size;
 
-	Path()
-		: tiles(NULL), size(0) {}
+	Path();
+	~Path();
 
-	void add(Tile *t) {
-		size++;
-		tiles = (Tile**) realloc(tiles, sizeof(Tile*) * size);
-		tiles[size-1] = t;
-	}
+	void add(Tile *t);
 };
 
 #endif /* TILE_HPP */

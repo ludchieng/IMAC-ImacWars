@@ -18,11 +18,19 @@ Controller::~Controller() {
 
 void Controller::handle(SDL_Event *e) {
 	switch (e->type) {
-	case SDL_MOUSEBUTTONUP:
-		break;
-	
 	default:
 		break;
+	}
+}
+
+void Controller::handleClick(SDL_Event *e, double x, double y) {
+	int xi = (int) (x >= 0.) ? x : x-1;
+	int yi = (int) (y >= 0.) ? y : y-1;
+	Tile *t = m->getMap()->getTile(xi, yi);
+	try {
+		Unit *u = m->selectUnit(xi, yi, m->getPlayerTurn());
+	} catch (exception *e) {
+		printf("%s\n", e->what());
 	}
 }
 

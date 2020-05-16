@@ -22,8 +22,10 @@ public:
     ~Controller();
 
     void handle(SDL_Event *e);
+    void handleClick(SDL_Event *e, double x, double y);
     void update();
     bool checkWinner();
+private:
 };
 
 #endif /* CONTROLLER_HPP */

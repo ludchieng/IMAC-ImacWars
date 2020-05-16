@@ -69,7 +69,7 @@ void Game::handleEvents() {
 			case SDL_MOUSEBUTTONUP:
 				printf("clic en (%d, %d) -> ", e.button.x, e.button.y);
 				printf("(%f, %f)\n", Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
-				c->handle(&e);
+				c->handleClick(&e, Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
