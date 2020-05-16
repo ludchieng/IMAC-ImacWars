@@ -4,8 +4,8 @@
 
 #include "../includes/Controller.hpp"
 
-Controller::Controller() {
-	m = new Model();
+Controller::Controller(int mapSize) {
+	m = new Model(mapSize);
 	v = new View(m);
 	m_winner = NULL;
 	m_sUnit = NULL;
@@ -31,17 +31,17 @@ void Controller::update() {
 }
 
 bool Controller::checkWinner() {
-	vector<Player*> potentialWinners = m->getPlayers();
-	for (unsigned int i = 0; i < potentialWinners.size();) {
-		if (potentialWinners[i]->hasActiveUnits() == 0) {
-			potentialWinners.erase(std::remove(potentialWinners.begin(), potentialWinners.end(), potentialWinners[i]), potentialWinners.end());
+	vector<Player*> players = m->getPlayers();
+	for (unsigned int i = 0; i < players.size();) {
+		if (players[i]->hasActiveUnits() == 0) {
+			players.erase(std::remove(players.begin(), players.end(), players[i]), players.end());
 		}
 		else {
 			i++;
 		}
 	}
-	if (potentialWinners.size() == 1) {
-		m_winner = potentialWinners[0];
+	if (players.size() == 1) {
+		m_winner = players[0];
 		return true;
 	}
 	return false;

@@ -30,7 +30,7 @@ public:
         bool shouldHaveDoubleKO;     // Assert both units should have died
     } FightReport;
 
-    Model();
+    Model(int mapSize);
     ~Model();
 
     Map *getMap() { return m_map; }
@@ -48,14 +48,13 @@ public:
     FightReport attackUnit(Unit *assailant, Unit *target);
     void delUnit(Unit *u);
 
-    static const int SIZE_Y = 20;
-    static const int SIZE_X = 20;
     static const int PLAYER_COUNT = 2;
 
 private:
     Map *m_map;
     Player *m_playerTurn;
     vector<Player*> m_players;
+    int SIZE;
 };
 
 #endif /* MODEL_HPP */

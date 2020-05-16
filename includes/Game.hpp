@@ -45,7 +45,7 @@ private:
     static const unsigned int W_HEIGHT = 900;
     static const char W_TITLE[];
 
-    static const unsigned int GL_VIEWPORT_HEIGHT = 20;
+    static const unsigned int MAP_SIZE = 16;
 
     static const Uint32 FRAMERATE = 60;
     static const float GL_VIEW_SIZE;

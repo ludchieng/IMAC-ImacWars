@@ -5,17 +5,17 @@
 #include "../includes/Map.hpp"
 
 const float Map::LIMIT_OCEAN = .28;
-const float Map::LIMIT_COAST = .35;
-const float Map::LIMIT_SHORE = .45;
+const float Map::LIMIT_COAST = .30;
+const float Map::LIMIT_SHORE = .40;
 const float Map::LIMIT_PLAIN = .65;
-const float Map::LIMIT_FOREST = .70;
-const float Map::LIMIT_MOUNTAIN = .82;
-const float Map::LIMIT_PEAK = .87;
+const float Map::LIMIT_FOREST = .75;
+const float Map::LIMIT_MOUNTAIN = .85;
+const float Map::LIMIT_PEAK = .95;
 
-Map::Map(int playersCount, int sizeX, int sizeY) {
+Map::Map(int playersCount, int size) {
 	m_spawns.reserve(playersCount);
-	SIZE_X = sizeX;
-	SIZE_Y = sizeY;
+	SIZE_X = size;
+	SIZE_Y = size;
 	generate();
 }
 
@@ -80,10 +80,10 @@ void Map::generate() {
 	m_tiles = vector<vector<Tile*>>();
 
 	for (int x = 0; x < SIZE_X; x++) {
-		m_tiles.push_back(vector<Tile*>());
+		m_tiles.push_back(vector<Tile*>(SIZE_Y));
 		for (int y = 0; y < SIZE_Y; y++) {
 			Tile *t = new Tile(x, y);
-			m_tiles[x].push_back(t);
+			m_tiles[x][y] = t;
 		}
 	}
 	for (int attempt = 0; attempt < 1000; attempt++) {
@@ -98,19 +98,26 @@ void Map::generate() {
 void Map::generateAltitude() {
 	int seed = (clock() * time(NULL)) % INT32_MAX;
 	srand(seed);
-	FastNoise perlin;
-	perlin.SetNoiseType(FastNoise::SimplexFractal);
-	perlin.SetSeed(rand());
+	FastNoise perlin1;
+	FastNoise perlin2;
+	perlin1.SetNoiseType(FastNoise::SimplexFractal);
+	perlin1.SetSeed(rand());
+	perlin2.SetNoiseType(FastNoise::SimplexFractal);
+	perlin2.SetSeed(rand());
 	float alt;
-	for (int y = 0; y < getSizeY(); y++) {
-		for (int x = 0; x < getSizeX(); x++) {
-			alt = perlin.GetNoise(x * ZOOM, y * ZOOM);
+	for (int y = 0; y < SIZE_Y; y++) {
+		for (int x = 0; x < SIZE_X; x++) {
+			alt = perlin1.GetNoise(x * ZOOM, y * ZOOM);
+			alt += perlin2.GetNoise(x * ZOOM * 1.3, y * ZOOM * 1.3);
+			alt = (alt > 1) ? .99 : alt;
+			alt = (alt < -1) ? -.99 : alt;
 			alt /= 2;
 			alt += .5;
-			float am = 1.35;
+			float am = 2;
 			alt = pow(pow(alt * 2, am) / 2, 1.0/am) + 0.1;
 			alt = alt - 0.6/(x+3) - 0.6/(y+3);
-			alt = alt + 0.6/(x-3-getSizeX()) + 0.6/(y-3-getSizeY());
+			alt = alt + 0.6/(x-3-SIZE_X) + 0.6/(y-3-SIZE_Y);
+
 			m_tiles[x][y]->setAltitude(alt);
 			m_tiles[x][y]->setLandType(getLandTypeFromAltitude(alt));
 		}
@@ -126,8 +133,8 @@ bool Map::isValidAltitudeMap() {
 	};
 	int totalCount = 0;
 	
-	for (int y = 0; y < getSizeY(); y++) {
-		for (int x = 0; x < getSizeX(); x++) {
+	for (int y = 0; y < SIZE_Y; y++) {
+		for (int x = 0; x < SIZE_X; x++) {
 			Land::Type lt = m_tiles[x][y]->getLandType();
             ltRate[lt]++;
 			totalCount++;
@@ -173,10 +180,11 @@ void Map::generateSpawns1vs1() {
 	Tile::Path path;
 
 	for (int attempts = 0; attempts < 1000; attempts++) {
-		int margin = 10;
+		int margin = PLAYERS_SPAWN_MIN_DIST_MARGIN;
+		int distFromBorders = PLAYERS_SPAWN_MIN_DIST_FROM_BORDERS;
 		do {
-			t1 = getRandTile(3, Land::TYPE_FIELD);
-			t2 = getRandTile(3, Land::TYPE_FIELD);
+			t1 = getRandTile(distFromBorders, Land::TYPE_FIELD);
+			t2 = getRandTile(distFromBorders, Land::TYPE_FIELD);
 			path = findPath(t1, t2, Land::TYPE_FIELD);
 			if (path.size >= PLAYERS_SPAWN_MIN_DIST + --margin) {
 				m_spawns[0] = t1;

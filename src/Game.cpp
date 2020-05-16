@@ -30,7 +30,7 @@ Game::Game(bool fullscreen) {
 
 	reshape();
 
-	c = new Controller();
+	c = new Controller(MAP_SIZE);
 	m_isRunning = true;
 }
 
@@ -45,7 +45,10 @@ void Game::reshape() {
 	glViewport(0., 0., w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0., GL_VIEWPORT_HEIGHT, GL_VIEWPORT_HEIGHT, 0.);
+	Vector2i sdlSize(w,h);
+	Vector2d topLeft = coordsSDLtoGL(0, 0);
+	Vector2d bottomRight = coordsSDLtoGL(sdlSize.x, sdlSize.y);
+	gluOrtho2D(topLeft.x, bottomRight.x, bottomRight.y, topLeft.y);
 }
 
 void Game::startLoop() {
@@ -65,11 +68,12 @@ void Game::handleEvents() {
 				break;
 			case SDL_MOUSEBUTTONUP:
 				printf("clic en (%d, %d) -> ", e.button.x, e.button.y);
-				printf("(%d, %d)\n", (int) Game::coordsSDLtoGL(e.button.x, e.button.y).x, (int) Game::coordsSDLtoGL(e.button.x, e.button.y).y);
+				printf("(%f, %f)\n", Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
+				c->handle(&e);
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
-					c = new Controller();
+					c = new Controller(MAP_SIZE);
 				if (e.key.keysym.sym == SDLK_q)
 					m_isRunning = false;
 				break;
@@ -124,9 +128,14 @@ Vector2d Game::coordsSDLtoGL(int x, int y) {
 
 Vector2d Game::coordsSDLtoGL(Vector2i* v) {
 	Vector2d res(0, 0);
-	res.x = v->x / (double) getWindowWidth();
-	res.y = v->y / (double) getWindowHeight();
-	res.mult(GL_VIEWPORT_HEIGHT);
+	int sdlW = getWindowWidth();
+	int sdlH = getWindowHeight();
+	double ratio = sdlW / (double) sdlH;
+	double glW = MAP_SIZE * ratio;
+	double glH = MAP_SIZE;
+	double glOffsetX = (glW - glH) / 2;
+	res.x = v->x * glW / sdlW - glOffsetX;
+	res.y = v->y * glH / sdlH;
 	return res;
 }
 
@@ -136,8 +145,13 @@ Vector2i Game::coordsGLtoSDL(double x, double y) {
 
 Vector2i Game::coordsGLtoSDL(Vector2d* v) {
 	Vector2i res(0, 0);
-	res.x = v->x * getWindowWidth();
-	res.y = v->y * getWindowHeight();
-	res.mult(1/GL_VIEWPORT_HEIGHT);
+	int sdlW = getWindowWidth();
+	int sdlH = getWindowHeight();
+	double ratio = sdlW / (double) sdlH;
+	double glW = MAP_SIZE / ratio;
+	double glH = MAP_SIZE;
+	double sdlOffsetX = (sdlW - sdlH) / 2;
+	res.x = v->x * sdlW / glW + sdlOffsetX;
+	res.y = v->y * sdlH / glW;
 	return res;
 }

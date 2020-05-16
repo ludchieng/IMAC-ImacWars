@@ -18,7 +18,7 @@ public:
     Player *m_winner;
     Unit *m_sUnit; // selected Unit
 
-    Controller();
+    Controller(int mapSize);
     ~Controller();
 
     void handle(SDL_Event *e);

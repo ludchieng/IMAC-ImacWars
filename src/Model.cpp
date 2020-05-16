@@ -4,11 +4,12 @@
 
 #include "../includes/Model.hpp"
 
-Model::Model() {
+Model::Model(int mapSize) {
+	SIZE = mapSize;
 	bool isSuccess = false;
 	do {
 		try {
-			m_map = new Map(PLAYER_COUNT, SIZE_X, SIZE_Y);
+			m_map = new Map(PLAYER_COUNT, SIZE);
 			m_players = vector<Player*>(PLAYER_COUNT);
 
 			// Create player
@@ -36,7 +37,8 @@ Model::Model() {
 			m_playerTurn = m_players[0];
 			isSuccess = true;
 
-		} catch (const exception& e) {
+		} catch (exception *e) {
+			printf("Map generation failed. Restarting...\n");
 			isSuccess = false;
 		}
 	} while (!isSuccess);
@@ -51,7 +53,7 @@ Model::~Model() {
 }
 
 Unit* Model::getUnit(int x, int y) const {
-	if (x < 0 || y < 0 || x >= SIZE_X || y >= SIZE_Y)
+	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
 		throw new OutOfBound();
 	return m_map->getTile(x, y)->getUnit();
 }
@@ -90,7 +92,7 @@ void Model::createUnit(Player *p, Tile *t, Unit *u) {
 }
 
 void Model::moveUnit(Unit *u, int x, int y) {
-	if (x < 0 || y < 0 || x >= SIZE_X || y >= SIZE_Y)
+	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
 		throw new OutOfBound();
 	
 	if (!u->canMoveOn(m_map->getTile(x, y)))

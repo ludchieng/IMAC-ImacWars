@@ -21,7 +21,7 @@
 class Map {
 
 public:
-    Map(int playersCount, int sizeX, int sizeY);
+    Map(int playersCount, int size);
     ~Map();
 
     int getSizeY() const { return m_tiles.size(); }
@@ -56,7 +56,9 @@ private:
     int SIZE_X;
     int SIZE_Y;
     static const int ZOOM = 5;
-    static const int PLAYERS_SPAWN_MIN_DIST = 14;
+    static const int PLAYERS_SPAWN_MIN_DIST = 10;
+    static const int PLAYERS_SPAWN_MIN_DIST_MARGIN = 8;
+    static const int PLAYERS_SPAWN_MIN_DIST_FROM_BORDERS = 2;
 
     vector<vector<Tile*>> m_tiles;
     vector<Tile*> m_spawns;
