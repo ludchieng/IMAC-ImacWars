@@ -18,6 +18,7 @@ public:
     };
     
     static const Land::Type TYPE_FIELD = (Land::Type) (Land::Type::PLAIN | Land::Type::SHORE | Land::Type::FOREST);
+    static const Land::Type TYPE_ALL = (Land::Type) (Land::Type::PLAIN | Land::Type::OCEAN | Land::Type::COAST | Land::Type::SHORE | Land::Type::FOREST | Land::Type::MOUNTAIN | Land::Type::PEAK);
 };
 
 #endif /* LAND_HPP */

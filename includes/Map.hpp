@@ -29,6 +29,12 @@ public:
     Tile *getTile(int x, int y) const { return m_tiles[x][y]; }
     Tile *getTile(Vector2i pos) const { return m_tiles[pos.x][pos.y]; }
     vector<vector<Tile*>> getTiles() const { return m_tiles; }
+    vector<vector<Tile*>> getTilesPortion(int x, int y, int maxDist) const;
+    vector<vector<Tile*>> getTilesPortion(Tile *t, int maxDist) const;
+    list<Tile*> getTilesArea(int x, int y, int maxDist) const;
+    list<Tile*> getTilesArea(Tile *t, int maxDist) const;
+    list<Tile*> getTilesArea(Tile *t, int maxDist, Land::Type ltf) const;
+    list<Tile*> getTilesArea(Tile *t, int maxDist, Land::Type ltf, bool disallowOccupiedTiles) const;
     Unit *getUnit(int x, int y) const { return NULL; } //TODO
     FX *getFX(int x, int y) const { return NULL; } //TODO
     Tile *getSpawn(int i) { return m_spawns[i]; }
@@ -42,6 +48,7 @@ public:
     void generateAltitude();
 
     Tile::Path findPath(Tile *start, Tile *target, Land::Type lt) const;
+    Tile::Path findPath(Tile *start, Tile *target, Land::Type lt, int maxDist, bool unitIsWall) const;
 
     static const float LIMIT_OCEAN;
     static const float LIMIT_COAST;

@@ -33,16 +33,23 @@ public:
     Model(int mapSize);
     ~Model();
 
+    void update();
+    void nextTurn();
+
     Map *getMap() { return m_map; }
     Unit* getUnit(int x, int y) const;
 
     vector<Player*> getPlayers() const { return m_players; }
+    Unit *getSelectedUnit() const { return m_selectedUnit; }
+    bool hasSelectedUnit() const { return m_selectedUnit != NULL; }
+    list<Tile*> *getSelectedUnitPossibleMoves() { return &m_selectedUnitPossibleMoves; }
     Player* getPlayerTurn() const { return m_playerTurn; }
     void setPlayerTurn(Player *p) { m_playerTurn = p; }
 
-    Player* nextTurn();
+    bool isEndTurn() const;
 
     Unit* selectUnit(int x, int y, Player *p);
+    void deselectUnit();
     void createUnit(Player *p, Tile *t, Unit *u);
     void moveUnit(Unit *u, int x, int y);
     FightReport attackUnit(Unit *assailant, Unit *target);
@@ -53,6 +60,8 @@ public:
 private:
     Map *m_map;
     Player *m_playerTurn;
+    Unit *m_selectedUnit;
+    list<Tile*> m_selectedUnitPossibleMoves;
     vector<Player*> m_players;
     int SIZE;
 };

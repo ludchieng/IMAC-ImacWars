@@ -6,6 +6,7 @@
 #define UNIT_HPP
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../includes/Player.hpp"
 #include "../includes/Tile.hpp"
@@ -41,6 +42,9 @@ public:
 	int getRatk() const { return m_ratk; }
 	void setRatk(int ratk) { m_ratk = ratk; }
 
+	int distanceFrom(Tile *t) const;
+	int distanceFrom(int x, int y) const;
+
 	bool isDead() const { return m_hp <= 0; }
 	bool canMoveOn(Tile *t) const;
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
@@ -48,12 +52,11 @@ public:
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }
 
 	void takeDamage(int v);
-	int distanceFrom(Tile *t) const;
-	int distanceFrom(int x, int y) const;
 	void die();
 
 	static bool canStandOn(Tile* t);
 	static bool canStandOn(Land::Type lt);
+	static Land::Type getAllowedLandTypes();
 
 protected:
 	Player *m_player;

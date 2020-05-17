@@ -85,7 +85,7 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-	
+	c->update();
 }
 
 void Game::render() {

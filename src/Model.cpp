@@ -7,6 +7,7 @@
 Model::Model(int mapSize) {
 	SIZE = mapSize;
 	bool isSuccess = false;
+	m_selectedUnit = NULL;
 	do {
 		try {
 			m_map = new Map(PLAYER_COUNT, SIZE);
@@ -46,22 +47,25 @@ Model::Model(int mapSize) {
 
 Model::~Model() {
 	for (Player *p : m_players) {
-		for (Unit *u : p->getUnits())
+		for (Unit *u : *(p->getUnits()))
 			delete u;
 		delete p;
 	}
 }
 
-Unit* Model::getUnit(int x, int y) const {
-	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
-		throw new OutOfBound();
-	return m_map->getTile(x, y)->getUnit();
+void Model::update() {
+	if (isEndTurn()) {
+		nextTurn();
+	}
 }
 
-Player* Model::nextTurn() {
+void Model::nextTurn() {
+	printf("NEXT TURN!\n");
+	m_selectedUnit = NULL;
+
 	// Reset units for next turn
 	for (Player *p : m_players)
-		for (Unit *u : p->getUnits())
+		for (Unit *u : *(p->getUnits()))
 			u->setMp(u->getMpMax());
 
 	// Get to next player's turn
@@ -75,14 +79,37 @@ Player* Model::nextTurn() {
 			m_playerTurn = m_players[0];
 		}
 	}
-	return m_playerTurn;
+}
+
+Unit* Model::getUnit(int x, int y) const {
+	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
+		throw new OutOfBound();
+	return m_map->getTile(x, y)->getUnit();
+}
+
+bool Model::isEndTurn() const {
+	if (m_playerTurn != NULL) {
+		vector<Unit*> *units = m_playerTurn->getUnits();
+		for (Unit *u : *units) {
+			if (u->getMp() > 0)
+				return false;
+		}
+		return true;
+	}
 }
 
 Unit* Model::selectUnit(int x, int y, Player *p) {
 	Unit *u = getUnit(x, y);
 	if (u->getPlayer() != p)
 		throw new IllegalUnitSelection();
+	m_selectedUnit = u;
+	m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
 	return u;
+}
+
+void Model::deselectUnit() {
+	m_selectedUnit = NULL;
+	m_selectedUnitPossibleMoves.clear();
 }
 
 void Model::createUnit(Player *p, Tile *t, Unit *u) {
@@ -106,6 +133,10 @@ void Model::moveUnit(Unit *u, int x, int y) {
 	m_map->getTile(x, y)->setUnit(u);
 	u->getTile()->delUnit();
 	u->setTile(m_map->getTile(x, y));
+	if (u->getMp() <= 0)
+		deselectUnit();
+	else
+		m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
 }
 
 Model::FightReport Model::attackUnit(Unit *a, Unit *t) {

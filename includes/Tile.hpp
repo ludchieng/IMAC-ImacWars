@@ -35,6 +35,9 @@ public:
 	void delUnit() { m_unit = NULL; }
 	bool hasUnit() const { return m_unit != NULL; }
 
+	int distanceFrom(Tile *t) const;
+	int distanceFrom(int x, int y) const;
+
 private:
 	Vector2i m_pos;
 	float m_altitude;

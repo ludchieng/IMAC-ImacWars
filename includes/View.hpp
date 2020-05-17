@@ -19,6 +19,7 @@ public:
 	~View();
 	void render();
 	void renderMap();
+	void renderMapUI();
 	void renderAstar();
 	void renderUnits();
 	void free();

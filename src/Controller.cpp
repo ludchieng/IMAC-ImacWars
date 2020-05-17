@@ -28,14 +28,19 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 	int yi = (int) (y >= 0.) ? y : y-1;
 	Tile *t = m->getMap()->getTile(xi, yi);
 	try {
-		Unit *u = m->selectUnit(xi, yi, m->getPlayerTurn());
+		if (t->hasUnit()) {
+			m->selectUnit(xi, yi, m->getPlayerTurn());
+		} else {
+			Unit *u = m->getSelectedUnit();
+			m->moveUnit(u, xi, yi);
+		}
 	} catch (exception *e) {
 		printf("%s\n", e->what());
 	}
 }
 
 void Controller::update() {
-	
+	m->update();
 }
 
 bool Controller::checkWinner() {

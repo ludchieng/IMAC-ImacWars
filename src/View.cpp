@@ -17,6 +17,7 @@ void View::render() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     renderMap();
+    renderMapUI();
     renderUnits();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
@@ -73,6 +74,20 @@ void View::renderMap() {
     }
 }
 
+void View::renderMapUI() {
+    if (m->hasSelectedUnit()) {
+        Unit *u = m->getSelectedUnit();
+        list<Tile*> *pMoves = m->getSelectedUnitPossibleMoves();
+        for (Tile *t : *pMoves) {
+            glPushMatrix();
+            glColor4ub(100, 205, 255, 100);
+            glTranslatef(t->getPosX(), t->getPosY(), 0.);
+            glRecti(0, 0, 1, 1);
+            glPopMatrix();
+        }
+    }
+}
+
 //TODO remove
 /*#include "../includes/Astar.hpp"
 
@@ -100,7 +115,7 @@ void View::renderUnits() {
     glColor3ub(255, 255, 255);
     glEnable(GL_TEXTURE_2D);
     for (Player *p : m->getPlayers()) {
-        for (Unit *u : p->getUnits()) {
+        for (Unit *u : *(p->getUnits())) {
             Vector2i pos = u->getTile()->getPos();
             glBindTexture(GL_TEXTURE_2D, tex->unit(u));
             glPushMatrix();

@@ -17,7 +17,6 @@ class Tile;
 class Player {
 
 public:
-    vector<Unit*> m_units;
 
     Player(int id);
     ~Player();
@@ -25,7 +24,7 @@ public:
     bool hasActiveUnits() const;
     int getId() const { return m_id; }
 
-    vector<Unit*> getUnits() const { return m_units; }
+    vector<Unit*> *getUnits() { return &m_units; }
     void SetUnit(int i, Unit *u) { m_units[i] = u; }
     void addUnit(Unit *u) { m_units.push_back(u); }
     void delUnit(Unit *u) { m_units.erase(std::remove(m_units.begin(), m_units.end(), u), m_units.end()); }
@@ -35,6 +34,7 @@ public:
 private:
     int m_id;
     Tile *m_spawn;
+    vector<Unit*> m_units;
 };
 
 #endif /* PLAYER_HPP */

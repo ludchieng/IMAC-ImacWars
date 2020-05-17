@@ -26,6 +26,68 @@ Map::~Map() {
 	}
 }
 
+vector<vector<Tile*>> Map::getTilesPortion(int x, int y, int maxDist) const {
+	if (x < 0 || y < 0 || x >= SIZE_X || y >= SIZE_Y)
+		throw new OutOfBound();
+	return getTilesPortion(getTile(x, y), maxDist);
+}
+
+vector<vector<Tile*>> Map::getTilesPortion(Tile *t, int maxDist) const {
+	int minX = t->getPosX() - maxDist;
+	int minY = t->getPosY() - maxDist;
+	int maxX = t->getPosX() + maxDist;
+	int maxY = t->getPosY() + maxDist;
+	minX = (minX < 0) ? 0 : minX;
+	maxX = (maxX > SIZE_X-1) ? SIZE_X-1 : maxX;
+	minY = (minY < 0) ? 0 : minY;
+	maxY = (maxY > SIZE_Y-1) ? SIZE_Y-1 : maxY;
+	int sizeX = maxX - minX + 1;
+	int sizeY = maxY - minY + 1;
+	vector<vector<Tile*>> res(sizeX);
+	for (int i = 0; i < sizeX; i++) {
+		vector<Tile*> tmp(sizeY);
+		res[i] = tmp;
+		for (int j = 0; j < sizeY; j++) {
+			res[i][j] = getTile(i + minX, j + minY);
+		}
+	}
+	return res;
+}
+
+list<Tile*> Map::getTilesArea(int x, int y, int maxDist) const {
+	if (x < 0 || y < 0 || x >= SIZE_X || y >= SIZE_Y)
+		throw new OutOfBound();
+	return getTilesArea(getTile(x, y), maxDist);
+}
+
+list<Tile*> Map::getTilesArea(Tile *t, int maxDist) const {
+	return getTilesArea(t, maxDist, Land::TYPE_ALL);
+}
+
+list<Tile*> Map::getTilesArea(Tile *t, int maxDist, Land::Type ltf) const {
+	return getTilesArea(t, maxDist, ltf, false);
+}
+
+list<Tile*> Map::getTilesArea(Tile *t, int maxDist, Land::Type ltf, bool disallowOccupiedTiles) const {
+	list<Tile*> res;
+	vector<vector<Tile*>> p = getTilesPortion(t, maxDist);
+	Tile * topLeft = p[0][0];
+	Tile * bottomRight = p[p.size()-1][p[0].size()-1];
+	int minX = topLeft->getPosX();
+	int maxX = bottomRight->getPosX();
+	int minY = topLeft->getPosY();
+	int maxY = bottomRight->getPosY();
+	for (int i = minX; i <= maxX; i++) {
+		for (int j = minY; j <= maxY; j++) {
+			Tile *tmp = getTile(i,j);
+			Tile::Path path = findPath(t, tmp, ltf, maxDist, disallowOccupiedTiles);
+			if (path.size != 0 && path.size <= maxDist)
+				res.push_back(tmp);
+		}
+	}
+	return res;
+}
+
 Tile *Map::getRandTile() const {
 	return getRandTile(0);
 }
@@ -197,6 +259,10 @@ void Map::generateSpawns1vs1() {
 }
 
 Tile::Path Map::findPath(Tile *start, Tile *target, Land::Type ltf) const {
+	return findPath(start, target, ltf, 0, false);
+}
+
+Tile::Path Map::findPath(Tile *start, Tile *target, Land::Type ltf, int maxDist, bool unitIsWall) const {
 	Tile::Path path;
 	if (start == target)
 		return path;
@@ -211,7 +277,10 @@ Tile::Path Map::findPath(Tile *start, Tile *target, Land::Type ltf) const {
 	// Fill grid with nodes
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-            bool isWall = !(ltf & getTile(i, j)->getLandType());
+			Tile * t = getTile(i,j);
+            bool isWall = !(ltf & t->getLandType());
+			isWall |= (unitIsWall && t->hasUnit());
+			isWall |= (maxDist != 0 && start->distanceFrom(t) > maxDist);
             grid[i][j] = new Astar::Node(i, j, isWall);
 		}
 	}

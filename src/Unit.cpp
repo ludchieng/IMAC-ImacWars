@@ -19,7 +19,16 @@ Unit::Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk,
 }
 
 Unit::~Unit() {
-	
+
+}
+
+
+int Unit::distanceFrom(Tile *t) const {
+	m_tile->distanceFrom(t);
+}
+
+int Unit::distanceFrom(int x, int y) const {
+	return m_tile->distanceFrom(x, y);
 }
 
 void Unit::takeDamage(int dmg) {
@@ -27,30 +36,6 @@ void Unit::takeDamage(int dmg) {
 	if (m_hp <= 0) {
 		die();
 	}
-}
-
-int Unit::distanceFrom(Tile *t) const {
-	int dx = t->getPosX() - m_tile->getPosX();
-	int dy = t->getPosY() - m_tile->getPosY();
-	if (dx < 0) {
-		dx = -dx;
-	}
-	if (dy < 0) {
-		dy = -dy;
-	}
-	return dx + dy;
-}
-
-int Unit::distanceFrom(int x, int y) const {
-	int dx = x - m_tile->getPosX();
-	int dy = y - m_tile->getPosY();
-	if (dx < 0) {
-		dx = -dx;
-	}
-	if (dy < 0) {
-		dy = -dy;
-	}
-	return dx + dy;
 }
 
 void Unit::die() {
@@ -61,7 +46,7 @@ void Unit::die() {
 }
 
 bool Unit::canMoveOn(Tile *t) const {
-	if (!distanceFrom(t) <= m_mp)
+	if (!(distanceFrom(t) <= m_mp))
 		return false;
 	
 	if (!canStandOn(t))
@@ -75,15 +60,9 @@ bool Unit::canStandOn(Tile *t) {
 }
 
 bool Unit::canStandOn(Land::Type lt) {
-	switch (lt) {
-		case Land::Type::SHORE:
-		case Land::Type::PLAIN:
-		case Land::Type::FOREST:
-			return true;
-		case Land::Type::OCEAN:
-		case Land::Type::COAST:
-		case Land::Type::MOUNTAIN:
-		case Land::Type::PEAK:
-			return false;
-	}
+	return lt & getAllowedLandTypes();
+}
+
+Land::Type Unit::getAllowedLandTypes() {
+	return Land::TYPE_FIELD;
 }
