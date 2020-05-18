@@ -10,6 +10,7 @@ SDL_Renderer *Game::renderer = NULL;
 
 Game::Game(bool fullscreen) {
 	SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
 	renderer = SDL_CreateRenderer(m_window, -1, 0);
 
 	int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;

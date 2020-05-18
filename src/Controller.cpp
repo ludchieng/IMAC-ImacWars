@@ -30,7 +30,7 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 	try {
 		if (t->hasUnit()) {
 			m->selectUnit(xi, yi, m->getPlayerTurn());
-		} else {
+		} else if (m->hasSelectedUnit()) {
 			Unit *u = m->getSelectedUnit();
 			m->moveUnit(u, xi, yi);
 		}

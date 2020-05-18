@@ -5,12 +5,12 @@
 #ifndef VIEW_HPP
 #define VIEW_HPP
 
-#include "../includes/Texture.hpp"
+#include "../includes/TextureManager.hpp"
 #include "../includes/Controller.hpp"
 #include "../includes/Model.hpp"
 #include "../includes/Color.hpp"
 
-class Texture;
+class TextureManager;
 class Controller;
 
 class View {
@@ -26,7 +26,7 @@ public:
 
 private:
 	Model *m;
-	Texture *tex;
+	TextureManager *tex;
 };
 
 #endif /* VIEW_HPP*/

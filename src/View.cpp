@@ -6,7 +6,7 @@
 
 View::View(Model *m) {
     this->m = m;
-    this->tex = new Texture();
+    this->tex = new TextureManager();
 }
 
 View::~View() {
@@ -19,6 +19,7 @@ void View::render() {
     renderMap();
     renderMapUI();
     renderUnits();
+    tex->text("80HP", 5, 5.2);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
 }

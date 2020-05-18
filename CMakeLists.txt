@@ -15,6 +15,9 @@ include_directories(${SDL2_INCLUDE_DIRS})
 PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 include_directories(${SDL2IMAGE_INCLUDE_DIRS})
 
+PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+include_directories(${SDL2TTF_INCLUDE_DIRS})
+
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
@@ -30,7 +33,7 @@ file(GLOB VENDOR_FILES
 if(SRC_FILES)
     add_executable("${EXECUTABLE_NAME}" ${SRC_FILES} ${VENDOR_FILES}) 
 endif(SRC_FILES)
-target_link_libraries("${EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries("${EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${OPENGL_LIBRARIES})
 
 # Tests files
 #set(TEST_EXECUTABLE_NAME "tests")
@@ -43,7 +46,7 @@ file(GLOB MAIN_SRC "src/Main.cpp")
 list(REMOVE_ITEM SRC_FILES ${MAIN_SRC}) # Don't include Main.cpp from src
 
 #add_executable("${TEST_EXECUTABLE_NAME}" ${TEST_FILES} ${SRC_FILES} ${VENDOR_FILES})
-#target_link_libraries("${TEST_EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES} gtest pthread)
+#target_link_libraries("${TEST_EXECUTABLE_NAME}" ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${OPENGL_LIBRARIES} gtest pthread)
 
 include_directories(BEFORE ".")
 include_directories(BEFORE "src/")
