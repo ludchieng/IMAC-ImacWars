@@ -30,7 +30,7 @@ public:
         bool shouldHaveDoubleKO;     // Assert both units should have died
     } FightReport;
 
-    Model(int mapSize);
+    Model(bool againstComputer, int mapSize);
     ~Model();
 
     void update();
@@ -38,7 +38,7 @@ public:
 
     Map *getMap() { return m_map; }
     Unit* getUnit(int x, int y) const;
-
+    bool isAgainstComputer() const { return m_againstComputer; }
     vector<Player*> getPlayers() const { return m_players; }
     Unit *getSelectedUnit() const { return m_selectedUnit; }
     bool hasSelectedUnit() const { return m_selectedUnit != NULL; }
@@ -48,6 +48,7 @@ public:
 
     bool isEndTurn() const;
 
+    void updateSelectedUnitPossibleMoves();
     Unit* selectUnit(int x, int y, Player *p);
     void deselectUnit();
     void createUnit(Player *p, Tile *t, Unit *u);
@@ -58,6 +59,7 @@ public:
     static const int PLAYER_COUNT = 2;
 
 private:
+    bool m_againstComputer;
     Map *m_map;
     Player *m_playerTurn;
     Unit *m_selectedUnit;

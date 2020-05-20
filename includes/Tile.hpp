@@ -30,7 +30,7 @@ public:
 	void setAltitude(float a) { m_altitude = a; }
 	Land::Type getLandType() const { return m_type; }
 	void setLandType(Land::Type t) { m_type = t; }
-	Unit *getUnit() const;
+	Unit *getUnit() const { return m_unit; };
 	void setUnit(Unit *u) { m_unit = u; }
 	void delUnit() { m_unit = NULL; }
 	bool hasUnit() const { return m_unit != NULL; }

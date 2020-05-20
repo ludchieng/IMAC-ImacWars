@@ -20,12 +20,6 @@ Tile::Tile(Vector2i pos) {
 Tile::~Tile() {
 }
 
-Unit *Tile::getUnit() const {
-	if (m_unit == NULL)
-		throw new NoSuchUnit();
-	return m_unit;
-}
-
 Tile::Path::Path()
 	: tiles(NULL), size(0) {
 }

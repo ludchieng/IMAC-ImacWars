@@ -4,8 +4,8 @@
 
 #include "../includes/Controller.hpp"
 
-Controller::Controller(int mapSize) {
-	m = new Model(mapSize);
+Controller::Controller(bool againstComputer, int mapSize) {
+	m = new Model(againstComputer, mapSize);
 	v = new View(m);
 	m_winner = NULL;
 	m_sUnit = NULL;
@@ -28,11 +28,25 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 	int yi = (int) (y >= 0.) ? y : y-1;
 	Tile *t = m->getMap()->getTile(xi, yi);
 	try {
-		if (t->hasUnit()) {
-			m->selectUnit(xi, yi, m->getPlayerTurn());
-		} else if (m->hasSelectedUnit()) {
-			Unit *u = m->getSelectedUnit();
-			m->moveUnit(u, xi, yi);
+		if (!m->hasSelectedUnit()) {
+			if (t->hasUnit())
+				m->selectUnit(xi, yi, m->getPlayerTurn());
+			
+		} else {
+			Unit *su = m->getSelectedUnit();
+			Unit *tu = t->getUnit();
+			Model::FightReport fr;
+			if (!t->hasUnit())
+				m->moveUnit(su, xi, yi);
+			else if (su == tu)
+				m->deselectUnit();
+			else if (tu->getPlayer() == su->getPlayer())
+				m->selectUnit(xi, yi, m->getPlayerTurn());
+			else if (tu->getPlayer() != su->getPlayer()) {
+				fr = m->attackUnit(su, tu);
+				printf("%d %d %d %d %d %d %d %d %d\n", fr.dmgOnAssailantBase, fr.dmgOnTargetBase,
+					fr.varT, fr.varA, fr.bonus, fr.dmgOnAssailantEffective, fr.dmgOnTargetEffective, fr.couldFightBack, fr.shouldHaveDoubleKO);
+			}
 		}
 	} catch (exception *e) {
 		printf("%s\n", e->what());

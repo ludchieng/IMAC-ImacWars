@@ -4,10 +4,11 @@
 
 #include "../includes/Model.hpp"
 
-Model::Model(int mapSize) {
+Model::Model(bool againstComputer, int mapSize) {
 	SIZE = mapSize;
 	bool isSuccess = false;
 	m_selectedUnit = NULL;
+	m_againstComputer = againstComputer;
 	do {
 		try {
 			m_map = new Map(PLAYER_COUNT, SIZE);
@@ -89,7 +90,7 @@ Unit* Model::getUnit(int x, int y) const {
 
 bool Model::isEndTurn() const {
 	if (m_playerTurn != NULL) {
-		vector<Unit*> *units = m_playerTurn->getUnits();
+		list<Unit*> *units = m_playerTurn->getUnits();
 		for (Unit *u : *units) {
 			if (u->getMp() > 0)
 				return false;
@@ -98,18 +99,26 @@ bool Model::isEndTurn() const {
 	}
 }
 
+void Model::updateSelectedUnitPossibleMoves() {
+	Unit *u = m_selectedUnit;
+	if (u == NULL)
+		m_selectedUnitPossibleMoves.clear();
+	else
+		m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
+}
+
 Unit* Model::selectUnit(int x, int y, Player *p) {
 	Unit *u = getUnit(x, y);
 	if (u->getPlayer() != p)
 		throw new IllegalUnitSelection();
 	m_selectedUnit = u;
-	m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
+	updateSelectedUnitPossibleMoves();
 	return u;
 }
 
 void Model::deselectUnit() {
 	m_selectedUnit = NULL;
-	m_selectedUnitPossibleMoves.clear();
+	updateSelectedUnitPossibleMoves();
 }
 
 void Model::createUnit(Player *p, Tile *t, Unit *u) {
@@ -136,7 +145,7 @@ void Model::moveUnit(Unit *u, int x, int y) {
 	if (u->getMp() <= 0)
 		deselectUnit();
 	else
-		m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
+		updateSelectedUnitPossibleMoves();
 }
 
 Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
@@ -198,14 +207,20 @@ Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
 		if (tHpAfterFight < aHpAfterFight) {
 			t->takeDamage(dmgOnTarget);
 			a->takeDamage(dmgOnAssailant = a->getHp() - remainingHP);
-		}
-		else {
+		} else {
 			t->takeDamage(dmgOnTarget = t->getHp() - remainingHP);
 			a->takeDamage(dmgOnAssailant);
 		}
 	}
 	fr.dmgOnTargetEffective = dmgOnTarget;
 	fr.dmgOnAssailantEffective = dmgOnAssailant;
+	if (a->getMp() <= 0)
+		deselectUnit();
+	if (a->isDead())
+		delUnit(a);
+	if (t->isDead())
+		delUnit(t);
+	updateSelectedUnitPossibleMoves();
 	return fr;
 }
 

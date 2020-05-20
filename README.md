@@ -10,11 +10,11 @@ A short C++ project made for programming courses.
 
 ### Dependencies
 
-**SDL2**, **SDL2_Image** & **OpenGL**, for the graphics (install with `sudo apt-get install libsdl2-dev libsdl2-image-dev`).
+**SDL2**, **SDL2_Image**, **SDL2_ttf** & **OpenGL**, for the graphics (install with `sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev`).
 
 **CMake**, to build the project (install with `sudo apt-get install cmake`).
 
-**GTest**, to run the unit tests.
+**GTest**, only if you want to run the unit tests.
   - Download the source files with `sudo apt-get install libgtest-dev`,
   - Go to `/usr/src/gtest`,
   - Build GTest using CMake with `cmake CMakeLists.txt`, `make`

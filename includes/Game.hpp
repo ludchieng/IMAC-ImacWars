@@ -12,6 +12,7 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 
 #include "../includes/Controller.hpp"
 #include "../includes/View.hpp"
@@ -23,7 +24,7 @@ class Controller;
 class Game {
 
 public:
-    Game(bool fullscreen);
+    Game(bool againstComputer, bool fullscreen);
     ~Game();
 
     void reshape();
@@ -42,7 +43,7 @@ public:
     static SDL_Renderer *renderer;
 
 private:
-    static const unsigned int W_WIDTH = 900;
+    static const unsigned int W_WIDTH = 1300;
     static const unsigned int W_HEIGHT = 900;
     static const char W_TITLE[];
 

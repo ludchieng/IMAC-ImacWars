@@ -71,7 +71,7 @@ void TextureManager::text(const char* text, double x, double y) const {
 }
 
 void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
-	float ratio = surf->w / surf ->h;
+	float ratio = surf->w / (float) surf ->h;
 
 	GLuint idTex;
 	glGenTextures(1, &idTex);

@@ -5,7 +5,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include <vector>
+#include <list>
 #include <algorithm>
 
 #include "../includes/Unit.hpp"
@@ -24,17 +24,16 @@ public:
     bool hasActiveUnits() const;
     int getId() const { return m_id; }
 
-    vector<Unit*> *getUnits() { return &m_units; }
-    void SetUnit(int i, Unit *u) { m_units[i] = u; }
+    list<Unit*> *getUnits() { return &m_units; }
     void addUnit(Unit *u) { m_units.push_back(u); }
-    void delUnit(Unit *u) { m_units.erase(std::remove(m_units.begin(), m_units.end(), u), m_units.end()); }
+    void delUnit(Unit *u) { m_units.remove(u); }
     Tile *getSpawn() const { return m_spawn; }
     void setSpawn(Tile *t) { m_spawn = t; }
 
 private:
     int m_id;
     Tile *m_spawn;
-    vector<Unit*> m_units;
+    list<Unit*> m_units;
 };
 
 #endif /* PLAYER_HPP */

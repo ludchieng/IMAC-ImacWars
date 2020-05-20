@@ -41,8 +41,6 @@ void Unit::takeDamage(int dmg) {
 void Unit::die() {
 	m_hp = 0;
 	m_mp = 0;
-	m_tile->delUnit();
-	m_tile = NULL;
 }
 
 bool Unit::canMoveOn(Tile *t) const {

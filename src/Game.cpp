@@ -8,7 +8,7 @@ const char Game::W_TITLE[] = "Imac Wars";
 //const float Game::GL_VIEW_SIZE = 200.;
 SDL_Renderer *Game::renderer = NULL;
 
-Game::Game(bool fullscreen) {
+Game::Game(bool againstComputer, bool fullscreen) {
 	SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 	renderer = SDL_CreateRenderer(m_window, -1, 0);
@@ -31,7 +31,7 @@ Game::Game(bool fullscreen) {
 
 	reshape();
 
-	c = new Controller(MAP_SIZE);
+	c = new Controller(againstComputer, MAP_SIZE);
 	m_isRunning = true;
 }
 
@@ -74,9 +74,11 @@ void Game::handleEvents() {
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
-					c = new Controller(MAP_SIZE);
+					c = new Controller(true, MAP_SIZE);
 				if (e.key.keysym.sym == SDLK_q)
 					m_isRunning = false;
+				if (e.key.keysym.sym == SDLK_n)
+					c->m->nextTurn();
 				break;
 			default:
 				c->handle(&e);

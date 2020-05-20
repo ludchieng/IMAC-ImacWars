@@ -14,14 +14,15 @@ View::~View() {
 }
 
 void View::render() {
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     renderMap();
     renderMapUI();
     renderUnits();
-    tex->text("80HP", 5, 5.2);
-    glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void View::renderMap() {
@@ -113,24 +114,27 @@ void View::renderAstar() {
 }*/
 
 void View::renderUnits() {
-    glColor3ub(255, 255, 255);
-    glEnable(GL_TEXTURE_2D);
     for (Player *p : m->getPlayers()) {
         for (Unit *u : *(p->getUnits())) {
             Vector2i pos = u->getTile()->getPos();
             glBindTexture(GL_TEXTURE_2D, tex->unit(u));
             glPushMatrix();
                 glTranslatef(pos.x, pos.y, 0.);
-                glBegin(GL_QUADS);
-                    glTexCoord2i(0,0);
-                    glVertex2f(0,0);
-                    glTexCoord2i(0,1);
-                    glVertex2f(0,1);
-                    glTexCoord2i(1,1);
-                    glVertex2f(1,1);
-                    glTexCoord2i(1,0);
-                    glVertex2f(1,0);
-                glEnd();
+                glPushMatrix();
+                    glTranslatef(.5, .5, 0.);
+                    glScalef(1.1, 1.1, 1.);
+                    glBegin(GL_QUADS);
+                        glTexCoord2i(0, 0);
+                        glVertex2f(-.5, -.5);
+                        glTexCoord2i(0, 1);
+                        glVertex2f(-.5, 0.5);
+                        glTexCoord2i(1, 1);
+                        glVertex2f(0.5, 0.5);
+                        glTexCoord2i(1, 0);
+                        glVertex2f(0.5, -.5);
+                    glEnd();
+                glPopMatrix();
+                tex->text(to_string(u->getHp()).c_str(), 0, 0);
             glPopMatrix();
         }
     }
