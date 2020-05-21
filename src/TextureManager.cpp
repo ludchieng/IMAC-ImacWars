@@ -5,9 +5,10 @@
 #include "../includes/TextureManager.hpp"
 
 TextureManager::TextureManager() {
+	m_font = NULL;
 	m_fontFile = "assets/fonts/BalsamiqSans-Bold.ttf";
-	font(m_fontFile);
 	m_fontSize = .5;
+	font(m_fontFile);
 	fontColor3i(255, 255, 255);
 	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
 	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
@@ -59,7 +60,8 @@ void TextureManager::fontColor3i(int r, int g, int b) {
 }
 
 void TextureManager::font(const char* file) {
-	TTF_CloseFont(m_font);
+	if (m_font != NULL)
+		TTF_CloseFont(m_font);
     TTF_Font *tmp = TTF_OpenFont(file, 48);
     if (tmp == NULL) {
         fprintf(stderr, "Failed to load font at %s", file);
