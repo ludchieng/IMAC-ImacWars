@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../includes/Entity.hpp"
 #include "../includes/Player.hpp"
 #include "../includes/Tile.hpp"
 #include "../src/Exceptions.cpp"
@@ -15,7 +16,7 @@
 class Tile;
 class Player;
 
-class Unit {
+class Unit : public Entity {
 
 public:
 	Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
@@ -38,7 +39,7 @@ public:
 	Player *getPlayer() const { return m_player; }
 	void setPlayer(Player *player) { m_player = player; }
 	Tile *getTile() const { return m_tile; }
-	void setTile(Tile *tile) { m_tile = tile; }
+	void setTile(Tile *tile);
 	int getRatk() const { return m_ratk; }
 	void setRatk(int ratk) { m_ratk = ratk; }
 
@@ -51,6 +52,7 @@ public:
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }
 
+	void move(Tile *t);
 	void takeDamage(int v);
 	void die();
 

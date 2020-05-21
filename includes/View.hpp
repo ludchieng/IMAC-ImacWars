@@ -22,7 +22,6 @@ public:
 	void renderMapUI();
 	void renderAstar();
 	void renderUnits();
-	void free();
 
 private:
 	Model *m;

@@ -116,10 +116,9 @@ void View::renderAstar() {
 void View::renderUnits() {
     for (Player *p : m->getPlayers()) {
         for (Unit *u : *(p->getUnits())) {
-            Vector2i pos = u->getTile()->getPos();
             glBindTexture(GL_TEXTURE_2D, tex->unit(u));
             glPushMatrix();
-                glTranslatef(pos.x, pos.y, 0.);
+                glTranslatef(u->pos.x, u->pos.y, 0.);
                 glPushMatrix();
                     glTranslatef(.5, .5, 0.);
                     glScalef(1.1, 1.1, 1.);
@@ -139,8 +138,4 @@ void View::renderUnits() {
         }
     }
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void View::free() {
-
 }

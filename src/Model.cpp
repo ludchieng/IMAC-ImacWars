@@ -138,10 +138,7 @@ void Model::moveUnit(Unit *u, int x, int y) {
 		throw new IllegalMoveOccupiedTile();
 		
 	// Update unit and tiles
-	u->setMp(u->getMp() - u->distanceFrom(x, y));
-	m_map->getTile(x, y)->setUnit(u);
-	u->getTile()->delUnit();
-	u->setTile(m_map->getTile(x, y));
+	u->move(m_map->getTile(x, y));
 	if (u->getMp() <= 0)
 		deselectUnit();
 	else

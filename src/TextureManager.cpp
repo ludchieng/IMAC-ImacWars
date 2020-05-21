@@ -15,6 +15,10 @@ TextureManager::TextureManager() {
 	m_infantry.push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
 }
 
+TextureManager::~TextureManager() {
+	// Delete all textures
+}
+
 int TextureManager::loadTex(const char *file) {
 	SDL_Surface *surf = IMG_Load(file);
 	if (surf == NULL) {
@@ -43,6 +47,7 @@ int TextureManager::loadTex(const char *file) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf->w,surf->h,
 		0, format, GL_UNSIGNED_BYTE, surf->pixels);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	SDL_FreeSurface(surf);
 	return idTex;
 }
 
@@ -54,6 +59,7 @@ void TextureManager::fontColor3i(int r, int g, int b) {
 }
 
 void TextureManager::font(const char* file) {
+	TTF_CloseFont(m_font);
     TTF_Font *tmp = TTF_OpenFont(file, 48);
     if (tmp == NULL) {
         fprintf(stderr, "Failed to load font at %s", file);
@@ -79,9 +85,6 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf->w,surf->h,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, surf->pixels);
-	glBindTexture(GL_TEXTURE_2D, 0);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, idTex);
     glPushMatrix();
 		glTranslatef(x, y, 0.);
         glBegin(GL_QUADS);
@@ -96,6 +99,8 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
         glEnd();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &idTex);
+	SDL_FreeSurface(surf);
 }
 
 int TextureManager::unit(Unit *u) const {
