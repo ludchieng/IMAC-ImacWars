@@ -38,14 +38,14 @@ As this is a turn-based game, each player may choose a unit (and only one) to ac
 
 There are three types of unit:
 
-- **Infantry:** `4MP` | `1RATK`. Fast and agile but low damage and low range of fire (RATK).
-- **Artillery:** `2MP` | `3RATK`. Slow but high range of fire
-- **Tank:** `1MP` | `2RATK`. Very slow but high damage.
+- **Duck:** `4MP` | `1RATK`. Fast and agile but low damage and low range of fire (RATK).
+- **Bee:** `2MP` | `3RATK`. Slow but high range of fire
+- **Hippo:** `1MP` | `2RATK`. Very slow but high damage.
 
 Attack costs differ depending on the type of unit:
-- **Infantry:** ` AtkCost: 2MP`
-- **Artillery:** ` AtkCost: 2MP`
-- **Tank:** ` AtkCost: 1MP`
+- **Duck:** ` AtkCost: 2MP`
+- **Bee:** ` AtkCost: 2MP`
+- **Hippo:** ` AtkCost: 1MP`
 
 The power of a unit is defined as the addition of its attack points (ATK) and its defense points (DEF).
 

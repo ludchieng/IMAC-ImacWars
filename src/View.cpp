@@ -98,7 +98,7 @@ void View::renderAstar() {
     Tile *start = map->getSpawn(0);
     Tile *target = map->getSpawn(1);
     Player *p = new Player(1);
-    Unit *u = new Infantry(p);
+    Unit *u = new Duck(p);
     u->setTile(start);
     Tile::Path path = map->findPath(start, target, Land::TYPE_FIELD);
     for (int i = 0; i < path.size; i++) {

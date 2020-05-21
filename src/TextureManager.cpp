@@ -9,10 +9,10 @@ TextureManager::TextureManager() {
 	font(m_fontFile);
 	m_fontSize = .5;
 	fontColor3i(255, 255, 255);
-	m_infantry.push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
-	m_infantry.push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
-	m_infantry.push_back(TextureManager::loadTex("assets/unit-red-1-east.png"));
-	m_infantry.push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
+	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
+	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
+	m_duck.push_back(TextureManager::loadTex("assets/unit-red-1-east.png"));
+	m_duck.push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
 }
 
 TextureManager::~TextureManager() {
@@ -105,5 +105,5 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
 
 int TextureManager::unit(Unit *u) const {
 	int idPlayer = u->getPlayer()->getId();
-	return m_infantry[idPlayer*2];
+	return m_duck[idPlayer*2];
 }

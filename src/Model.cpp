@@ -22,9 +22,9 @@ Model::Model(bool againstComputer, int mapSize) {
 
 				// Create player units
 				Unit *army[] = {
-					new Infantry(p), new Infantry(p),
-					new Infantry(p), new Artillery(p),
-					new Artillery(p), new Tank(p),
+					new Duck(p), new Duck(p),
+					new Duck(p), new Bee(p),
+					new Bee(p), new Hippo(p),
 				};
 				int margin = 0;
 				// Create unit spawns

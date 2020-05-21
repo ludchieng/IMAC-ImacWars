@@ -73,8 +73,8 @@ protected:
 	int m_def;
 };
 
-#include "../includes/Infantry.hpp"
-#include "../includes/Artillery.hpp"
-#include "../includes/Tank.hpp"
+#include "../includes/Duck.hpp"
+#include "../includes/Bee.hpp"
+#include "../includes/Hippo.hpp"
 
 #endif /* UNIT_HPP */

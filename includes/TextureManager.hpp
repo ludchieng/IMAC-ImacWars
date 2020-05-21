@@ -30,9 +30,9 @@ private:
     float m_fontSize;
     SDL_Color m_fontColor;
     SDL_Color m_fontColorShadow;
-    vector<int> m_infantry;
-    vector<int> m_artillery;
-    vector<int> m_tank;
+    vector<int> m_duck;
+    vector<int> m_bee;
+    vector<int> m_hippo;
     int loadTex(const char *file);
     void drawText(SDL_Surface* surf, double x, double y) const;
 
