@@ -99,12 +99,40 @@ bool Model::isEndTurn() const {
 	}
 }
 
+bool Model::unitCanMoveOn(Unit *u, Tile *t) const {
+	if (!(u->distanceFrom(t) <= u->getMp()))
+		return false;
+	if (!u->canStandOn(t))
+		return false;
+	Tile::Path p = m_map->findPath(u->getTile(), t, u->getAllowedLandTypes(), u->getMpMax(), true);
+	return p.size != 0;
+}
+
 void Model::updateSelectedUnitPossibleMoves() {
-	Unit *u = m_selectedUnit;
-	if (u == NULL)
-		m_selectedUnitPossibleMoves.clear();
-	else
-		m_selectedUnitPossibleMoves = m_map->getTilesArea(u->getTile(), u->getMp(), u->getAllowedLandTypes(), true);
+	Unit *su = m_selectedUnit;
+	m_selectedUnitPossibleMoves.clear();
+	if (su != NULL)
+		m_selectedUnitPossibleMoves = m_map->getTilesArea(su->getTile(), su->getMp(), su->getAllowedLandTypes(), true);
+}
+
+void Model::updateSelectedUnitPossibleAttacks() {
+	Unit *su = m_selectedUnit;
+	m_selectedUnitPossibleAttacks.clear();
+	if (su != NULL) {
+		Tile *sut = su->getTile();
+		int ratk = su->getRatk();
+		vector<vector<Tile*>> portion = m_map->getTilesPortion(sut, ratk);
+		for (vector<Tile*> col : portion) {
+			for (Tile *t : col) {
+				if (t->hasUnit()) {
+					Unit *tu = t->getUnit();
+					if (tu->getPlayer() != su->getPlayer() && su->canAttack(tu)) {
+						m_selectedUnitPossibleAttacks.push_back(t);
+					}
+				}
+			}
+		}
+	}
 }
 
 Unit* Model::selectUnit(int x, int y, Player *p) {
@@ -113,12 +141,14 @@ Unit* Model::selectUnit(int x, int y, Player *p) {
 		throw new IllegalUnitSelection();
 	m_selectedUnit = u;
 	updateSelectedUnitPossibleMoves();
+	updateSelectedUnitPossibleAttacks();
 	return u;
 }
 
 void Model::deselectUnit() {
 	m_selectedUnit = NULL;
 	updateSelectedUnitPossibleMoves();
+	updateSelectedUnitPossibleAttacks();
 }
 
 void Model::createUnit(Player *p, Tile *t, Unit *u) {
@@ -131,7 +161,7 @@ void Model::moveUnit(Unit *u, int x, int y) {
 	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
 		throw new OutOfBound();
 	
-	if (!u->canMoveOn(m_map->getTile(x, y)))
+	if (!unitCanMoveOn(u, m_map->getTile(x, y)))
 		throw new IllegalMoveOutOfRange();
 		
 	if (m_map->getTile(x, y)->hasUnit())
@@ -141,8 +171,10 @@ void Model::moveUnit(Unit *u, int x, int y) {
 	u->move(m_map->getTile(x, y));
 	if (u->getMp() <= 0)
 		deselectUnit();
-	else
+	else {
 		updateSelectedUnitPossibleMoves();
+		updateSelectedUnitPossibleAttacks();
+	}
 }
 
 Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
@@ -218,6 +250,7 @@ Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
 	if (t->isDead())
 		delUnit(t);
 	updateSelectedUnitPossibleMoves();
+	updateSelectedUnitPossibleAttacks();
 	return fr;
 }
 

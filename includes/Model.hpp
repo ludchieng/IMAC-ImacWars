@@ -43,12 +43,15 @@ public:
     Unit *getSelectedUnit() const { return m_selectedUnit; }
     bool hasSelectedUnit() const { return m_selectedUnit != NULL; }
     list<Tile*> *getSelectedUnitPossibleMoves() { return &m_selectedUnitPossibleMoves; }
+    list<Tile*> *getSelectedUnitPossibleAttacks() { return &m_selectedUnitPossibleAttacks; }
     Player* getPlayerTurn() const { return m_playerTurn; }
     void setPlayerTurn(Player *p) { m_playerTurn = p; }
 
     bool isEndTurn() const;
+    bool unitCanMoveOn(Unit *u, Tile *t) const;
 
     void updateSelectedUnitPossibleMoves();
+    void updateSelectedUnitPossibleAttacks();
     Unit* selectUnit(int x, int y, Player *p);
     void deselectUnit();
     void createUnit(Player *p, Tile *t, Unit *u);
@@ -64,6 +67,7 @@ private:
     Player *m_playerTurn;
     Unit *m_selectedUnit;
     list<Tile*> m_selectedUnitPossibleMoves;
+    list<Tile*> m_selectedUnitPossibleAttacks;
     vector<Player*> m_players;
     int SIZE;
 };

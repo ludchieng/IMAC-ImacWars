@@ -19,10 +19,15 @@ public:
     void setFrame(long int f) { m_frame = f; }
 
     void fontColor3i(int r, int g, int b);
+    void fontOpacity(int o) { m_fontOpacity = o; }
     void fontSize(float size) { m_fontSize = size; };
     void font(const char* file);
 
     void text(const char* text, double x, double y) const;
+	void square(double x, double y);
+	void square(double x, double y, int r, int g, int b);
+	void square(double x, double y, int r, int g, int b, int a);
+	void square(double x, double y, int idTex, float scale);
 
     int unit(Unit *u) const;
     int tile(Tile *t) const;
@@ -37,6 +42,7 @@ private:
     float m_fontSize;
     SDL_Color m_fontColor;
     SDL_Color m_fontColorShadow;
+    int m_fontOpacity;
     long int m_frame = 0;
     vector<int> m_duck[2];
     vector<int> m_bee[2];

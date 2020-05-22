@@ -23,6 +23,7 @@ public:
 
     static Vector2d add(Vector2d *a, Vector2d *b);
     static Vector2d sub(Vector2d *a, Vector2d *b);
+    static Vector2d mult(Vector2d *a, double n);
 
     double x;
     double y;

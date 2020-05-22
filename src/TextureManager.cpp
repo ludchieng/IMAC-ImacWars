@@ -8,6 +8,7 @@ TextureManager::TextureManager() {
 	m_font = NULL;
 	m_fontFile = "assets/fonts/BalsamiqSans-Bold.ttf";
 	m_fontSize = .5;
+	m_fontOpacity = 255;
 	font(m_fontFile);
 	fontColor3i(255, 255, 255);
 	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
@@ -115,11 +116,12 @@ void TextureManager::text(const char* text, double x, double y) const {
 
 void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
 	float ratio = surf->w / (float) surf ->h;
-
 	GLuint idTex;
 	glGenTextures(1, &idTex);
 	glBindTexture(GL_TEXTURE_2D, idTex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+	glColor4ub(255, 255, 255, m_fontOpacity);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf->w,surf->h,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, surf->pixels);
     glPushMatrix();
@@ -138,6 +140,48 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
     glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &idTex);
 	SDL_FreeSurface(surf);
+}
+
+void TextureManager::square(double x, double y) {
+    glPushMatrix();
+    glTranslatef(x, y, 0.);
+    glRecti(0, 0, 1, 1);
+    glPopMatrix();
+}
+
+void TextureManager::square(double x, double y, int r, int g, int b) {
+    square(x, y, r, g, b, 255);
+}
+
+void TextureManager::square(double x, double y, int r, int g, int b, int a) {
+    glPushMatrix();
+    glColor4ub(r, g, b, a);
+    glTranslatef(x, y, 0.);
+    glRecti(0, 0, 1, 1);
+    glPopMatrix();
+}
+
+
+void TextureManager::square(double x, double y, int idTex, float scale) {
+    if (idTex == 0)
+        return;
+    glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, idTex);
+        glTranslated(x, y, 0);
+		glTranslatef(.5, .5, 0.);
+		glScalef(scale, scale, 1.);
+		glBegin(GL_QUADS);
+			glTexCoord2i(0, 0);
+			glVertex2f(-.5, -.5);
+			glTexCoord2i(0, 1);
+			glVertex2f(-.5, 0.5);
+			glTexCoord2i(1, 1);
+			glVertex2f(0.5, 0.5);
+			glTexCoord2i(1, 0);
+			glVertex2f(0.5, -.5);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
 }
 
 int TextureManager::unit(Unit *u) const {

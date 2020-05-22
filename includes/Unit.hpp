@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../includes/Entity.hpp"
 #include "../includes/Player.hpp"
 #include "../includes/Tile.hpp"
 #include "../src/Exceptions.cpp"
@@ -16,7 +15,7 @@
 class Tile;
 class Player;
 
-class Unit : public Entity {
+class Unit {
 
 public:
 	Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
@@ -47,7 +46,6 @@ public:
 	int distanceFrom(int x, int y) const;
 
 	bool isDead() const { return m_hp <= 0; }
-	bool canMoveOn(Tile *t) const;
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }

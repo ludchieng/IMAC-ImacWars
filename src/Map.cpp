@@ -184,7 +184,7 @@ void Map::generateAltitude() {
 			alt = alt - 0.6/(x+3) - 0.6/(y+3);
 			alt = alt + 0.6/(x-3-SIZE_X) + 0.6/(y-3-SIZE_Y);
 			alt = (alt < LIMIT_SHORE || alt > LIMIT_PLAIN) ? alt : alt + (.1 + perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) * .1);
-			alt = (alt < LIMIT_PLAIN || alt > LIMIT_FOREST) ? alt : (perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) > 0.3) ? LIMIT_PLAIN : alt;
+			alt = (alt < LIMIT_PLAIN || alt > LIMIT_FOREST) ? alt : (perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) > 0.3) ? LIMIT_PLAIN + 0.1 * perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) : alt;
 			alt = (alt <= LIMIT_FOREST) ? alt : alt - (.05 + perlin3.GetNoise(x * ZOOM * 2, y * ZOOM * 2) * .1);
 
 			m_tiles[x][y]->setAltitude(alt);
@@ -219,7 +219,7 @@ bool Map::isValidAltitudeMap() {
 
 	if (waterRate > 0.60)
 		return false;
-	if (waterRate < 0.22)
+	if (waterRate < 0.15)
 		return false;
 	if (mountainousRate / practicableRate > 0.40)
 		return false;

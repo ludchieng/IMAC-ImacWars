@@ -6,8 +6,11 @@
 #define CONTROLLER_HPP
 
 #include "../includes/Game.hpp"
+#include "../includes/Entity.hpp"
 #include "../includes/Model.hpp"
 #include "../includes/View.hpp"
+#include "../includes/Vector2i.hpp"
+#include "../includes/Vector2d.hpp"
 
 class View;
 

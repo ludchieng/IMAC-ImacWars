@@ -69,8 +69,6 @@ void Game::handleEvents() {
 				m_isRunning = false;
 				break;
 			case SDL_MOUSEBUTTONUP:
-				printf("clic en (%d, %d) -> ", e.button.x, e.button.y);
-				printf("(%f, %f)\n", Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
 				posGL = Game::coordsSDLtoGL(e.button.x, e.button.y);
 				c->handleClick(&e, posGL.x, posGL.y);
 				break;

@@ -58,6 +58,8 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 					fr = m->attackUnit(su, tu);
 					printf("%d %d %d %d %d %d %d %d %d\n", fr.dmgOnAssailantBase, fr.dmgOnTargetBase,
 						fr.varT, fr.varA, fr.bonus, fr.dmgOnAssailantEffective, fr.dmgOnTargetEffective, fr.couldFightBack, fr.shouldHaveDoubleKO);
+					
+					v->addEntity(new Entity(xi, yi, "OUCH", 40));
 				}
 			}
 		}
@@ -68,6 +70,14 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 
 void Controller::update() {
 	m->update();
+	list<Entity*> toDelete;
+    for (Entity *e : *v->getEntities()) {
+		if (!e->update())
+			toDelete.push_back(e);
+	}
+    for (Entity *e : toDelete) {
+		v->delEntity(e);
+	}
 }
 
 void Controller::render(long int counter) {

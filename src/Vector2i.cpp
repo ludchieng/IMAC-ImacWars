@@ -52,3 +52,10 @@ Vector2i Vector2i::sub(Vector2i *a, Vector2i *b) {
     res.y = a->y - b->y;
     return res;
 }
+
+Vector2i Vector2i::mult(Vector2i *a, double n) {
+    Vector2i res;
+    res.x = a->x * n;
+    res.y = a->y * n;
+    return res;
+}

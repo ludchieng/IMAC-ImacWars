@@ -5,8 +5,7 @@
 #include "../includes/Unit.hpp"
 
 
-Unit::Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def)
-	: Entity() {
+Unit::Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def) {
 	m_player = player;
 	m_tile = NULL;
 	m_hp = hpMax;
@@ -25,8 +24,6 @@ Unit::~Unit() {
 
 void Unit::setTile(Tile *t) {
 	m_tile = t;
-	pos.x = t->getPosX();
-	pos.y = t->getPosY();
 }
 
 int Unit::distanceFrom(Tile *t) const {
@@ -54,16 +51,6 @@ void Unit::takeDamage(int dmg) {
 void Unit::die() {
 	m_hp = 0;
 	m_mp = 0;
-}
-
-bool Unit::canMoveOn(Tile *t) const {
-	if (!(distanceFrom(t) <= m_mp))
-		return false;
-	
-	if (!canStandOn(t))
-		return false;
-
-	return true;
 }
 
 bool Unit::canStandOn(Tile *t) {

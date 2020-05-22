@@ -23,6 +23,7 @@ public:
 
     static Vector2i add(Vector2i *a, Vector2i *b);
     static Vector2i sub(Vector2i *a, Vector2i *b);
+    static Vector2i mult(Vector2i *a, double n);
 
     int x;
     int y;
