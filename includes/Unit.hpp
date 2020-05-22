@@ -51,6 +51,9 @@ public:
 	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
 	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
 	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }
+	bool canAttack(Unit *u) const { return canHit(u) && m_mp >= m_atkcost; }
+	bool canAttack(Tile *t) const { return canHit(t) && m_mp >= m_atkcost; }
+	bool canAttack(int x, int y) const { return canHit(x, y) && m_mp >= m_atkcost; }
 
 	void move(Tile *t);
 	void takeDamage(int v);

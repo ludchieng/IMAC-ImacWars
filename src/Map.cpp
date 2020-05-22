@@ -4,11 +4,11 @@
 
 #include "../includes/Map.hpp"
 
-const float Map::LIMIT_OCEAN = .28;
-const float Map::LIMIT_COAST = .30;
+const float Map::LIMIT_OCEAN = .25;
+const float Map::LIMIT_COAST = .28;
 const float Map::LIMIT_SHORE = .40;
 const float Map::LIMIT_PLAIN = .65;
-const float Map::LIMIT_FOREST = .75;
+const float Map::LIMIT_FOREST = .72;
 const float Map::LIMIT_MOUNTAIN = .85;
 const float Map::LIMIT_PEAK = .95;
 
@@ -162,23 +162,30 @@ void Map::generateAltitude() {
 	srand(seed);
 	FastNoise perlin1;
 	FastNoise perlin2;
+	FastNoise perlin3;
 	perlin1.SetNoiseType(FastNoise::SimplexFractal);
 	perlin1.SetSeed(rand());
 	perlin2.SetNoiseType(FastNoise::SimplexFractal);
 	perlin2.SetSeed(rand());
+	perlin3.SetNoiseType(FastNoise::SimplexFractal);
+	perlin3.SetSeed(rand());
 	float alt;
 	for (int y = 0; y < SIZE_Y; y++) {
 		for (int x = 0; x < SIZE_X; x++) {
+			// Oui bon c'est un peu le bordel mais on fait comme on peut hein
 			alt = perlin1.GetNoise(x * ZOOM, y * ZOOM);
-			alt += perlin2.GetNoise(x * ZOOM * 1.3, y * ZOOM * 1.3);
+			alt += perlin2.GetNoise(x * ZOOM * 1.3, y * ZOOM * 1.3) * 9/10 + 0.1;
 			alt = (alt > 1) ? .99 : alt;
 			alt = (alt < -1) ? -.99 : alt;
 			alt /= 2;
-			alt += .5;
-			float am = 2;
-			alt = pow(pow(alt * 2, am) / 2, 1.0/am) + 0.1;
+			alt += 0.5;
+			float am = 1.8;
+			alt = pow(pow(alt * 2, am) / 2, 1.0/am) + 0.0;
 			alt = alt - 0.6/(x+3) - 0.6/(y+3);
 			alt = alt + 0.6/(x-3-SIZE_X) + 0.6/(y-3-SIZE_Y);
+			alt = (alt < LIMIT_SHORE || alt > LIMIT_PLAIN) ? alt : alt + (.1 + perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) * .1);
+			alt = (alt < LIMIT_PLAIN || alt > LIMIT_FOREST) ? alt : (perlin3.GetNoise(x * ZOOM * 1.8, y * ZOOM * 1.8) > 0.3) ? LIMIT_PLAIN : alt;
+			alt = (alt <= LIMIT_FOREST) ? alt : alt - (.05 + perlin3.GetNoise(x * ZOOM * 2, y * ZOOM * 2) * .1);
 
 			m_tiles[x][y]->setAltitude(alt);
 			m_tiles[x][y]->setLandType(getLandTypeFromAltitude(alt));
@@ -210,13 +217,15 @@ bool Map::isValidAltitudeMap() {
 	float practicableRate = ltRate[Land::Type::FOREST] + ltRate[Land::Type::PLAIN] + ltRate[Land::Type::SHORE];
 	float mountainousRate = ltRate[Land::Type::MOUNTAIN] + ltRate[Land::Type::PEAK];
 
-	if (waterRate > 0.70)
+	if (waterRate > 0.60)
 		return false;
 	if (waterRate < 0.22)
 		return false;
 	if (mountainousRate / practicableRate > 0.40)
 		return false;
 	if (practicableRate < 0.40)
+		return false;
+	if (ltRate[Land::Type::FOREST] < 0.15)
 		return false;
 	return true;
 }

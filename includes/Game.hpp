@@ -40,6 +40,8 @@ public:
     int getWindowWidth();
     int getWindowHeight();
 
+    long int counter = 0;
+
     static SDL_Renderer *renderer;
 
 private:
@@ -49,7 +51,7 @@ private:
 
     static const unsigned int MAP_SIZE = 16;
 
-    static const Uint32 FRAMERATE = 60;
+    static const int LOOPRATE = 60;
     static const float GL_VIEW_SIZE;
 
     float m_wRatio;

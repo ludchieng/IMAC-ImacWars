@@ -13,7 +13,7 @@ View::~View() {
 
 }
 
-void View::render() {
+void View::render(long int counter) {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -23,6 +23,8 @@ void View::render() {
     renderUnits();
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+    if (counter % FRAME_LENGTH == 0)
+        tex->setFrame(m_frame++);
 }
 
 void View::renderMap() {
@@ -51,27 +53,32 @@ void View::renderMap() {
                 break;
             case Land::Type::PLAIN:
                 c = Color::lerp(
-                    new Color(90, 140, 75), new Color(85, 135, 72),
+                    new Color(85, 135, 72), new Color(80, 130, 62),
                     Map::LIMIT_PLAIN, Map::LIMIT_FOREST, alt);
                 break;
             case Land::Type::FOREST:
                 c = Color::lerp(
-                    new Color(65, 95, 85), new Color(70, 100, 90),
+                    new Color(75, 130, 62), new Color(70, 140, 90),
                     Map::LIMIT_FOREST, Map::LIMIT_MOUNTAIN, alt);
                 break;
             case Land::Type::MOUNTAIN:
                 c = Color::lerp(
-                    new Color(180, 175, 177), new Color(215, 210, 210),
+                    new Color(110, 140, 90), new Color(110, 140, 90),
                     Map::LIMIT_MOUNTAIN, Map::LIMIT_PEAK, alt);
                 break;
             case Land::Type::PEAK:
                 c = Color::lerp(
-                    new Color(220, 220, 225), new Color(255, 255, 255),
+                    new Color(110, 140, 90), new Color(130, 150, 100),
                     Map::LIMIT_PEAK, 1.0, alt);
                 break;
             }
-            glColor3ub(c.r, c.g, c.b);
-            glRecti(i, j, i+1, j+1);
+            drawSquare(i, j, c.r, c.g, c.b);
+        }
+    }
+    for (int j = 0; j < map->getSizeY(); j++) {
+        for (int i = 0; i < map->getSizeX(); i++) {
+            Tile *t = map->getTile(i, j);
+            drawSquare(i, j, tex->tile(t), 2.);
         }
     }
 }
@@ -81,11 +88,7 @@ void View::renderMapUI() {
         Unit *u = m->getSelectedUnit();
         list<Tile*> *pMoves = m->getSelectedUnitPossibleMoves();
         for (Tile *t : *pMoves) {
-            glPushMatrix();
-            glColor4ub(100, 205, 255, 100);
-            glTranslatef(t->getPosX(), t->getPosY(), 0.);
-            glRecti(0, 0, 1, 1);
-            glPopMatrix();
+            drawSquare(t->getPosX(), t->getPosY(), tex->cursorMoves(), 2.);
         }
     }
 }
@@ -116,26 +119,70 @@ void View::renderAstar() {
 void View::renderUnits() {
     for (Player *p : m->getPlayers()) {
         for (Unit *u : *(p->getUnits())) {
-            glBindTexture(GL_TEXTURE_2D, tex->unit(u));
-            glPushMatrix();
-                glTranslatef(u->pos.x, u->pos.y, 0.);
-                glPushMatrix();
-                    glTranslatef(.5, .5, 0.);
-                    glScalef(1.1, 1.1, 1.);
-                    glBegin(GL_QUADS);
-                        glTexCoord2i(0, 0);
-                        glVertex2f(-.5, -.5);
-                        glTexCoord2i(0, 1);
-                        glVertex2f(-.5, 0.5);
-                        glTexCoord2i(1, 1);
-                        glVertex2f(0.5, 0.5);
-                        glTexCoord2i(1, 0);
-                        glVertex2f(0.5, -.5);
-                    glEnd();
-                glPopMatrix();
-                tex->text(to_string(u->getHp()).c_str(), 0, 0);
-            glPopMatrix();
+            drawSquare(u->pos.x, u->pos.y, tex->unit(u), 1.1);
+            tex->text(to_string(u->getHp()).c_str(), u->pos.x, u->pos.y);
         }
     }
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void View::renderTileCursor(int x, int y) {
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    Unit *tu = m->getMap()->getTile(x, y)->getUnit();
+    if (tu != NULL) {
+        if (tu->getPlayer() == m->getPlayerTurn())
+            drawSquare(x, y, tex->cursorSelect(), 2.);
+        else if (m->hasSelectedUnit())
+            if (m->getSelectedUnit()->canAttack(tu))
+                drawSquare(x, y, tex->cursorAttack(), 2.);
+    }
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void View::drawSquare(double x, double y) {
+    glPushMatrix();
+    glTranslatef(x, y, 0.);
+    glRecti(0, 0, 1, 1);
+    glPopMatrix();
+}
+
+void View::drawSquare(double x, double y, int r, int g, int b) {
+    drawSquare(x, y, r, g, b, 255);
+}
+
+void View::drawSquare(double x, double y, int r, int g, int b, int a) {
+    glPushMatrix();
+    glColor4ub(r, g, b, a);
+    glTranslatef(x, y, 0.);
+    glRecti(0, 0, 1, 1);
+    glPopMatrix();
+}
+
+
+void View::drawSquare(double x, double y, int idTex, float scale) {
+    if (idTex == 0)
+        return;
+    glPushMatrix();
+        glTranslated(x, y, 0);
+            glBindTexture(GL_TEXTURE_2D, idTex);
+            glPushMatrix();
+                glTranslatef(.5, .5, 0.);
+                glScalef(scale, scale, 1.);
+                glBegin(GL_QUADS);
+                    glTexCoord2i(0, 0);
+                    glVertex2f(-.5, -.5);
+                    glTexCoord2i(0, 1);
+                    glVertex2f(-.5, 0.5);
+                    glTexCoord2i(1, 1);
+                    glVertex2f(0.5, 0.5);
+                    glTexCoord2i(1, 0);
+                    glVertex2f(0.5, -.5);
+                glEnd();
+            glPopMatrix();
+            glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
 }

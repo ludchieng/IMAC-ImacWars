@@ -10,14 +10,49 @@ TextureManager::TextureManager() {
 	m_fontSize = .5;
 	font(m_fontFile);
 	fontColor3i(255, 255, 255);
-	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
-	m_duck.push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
-	m_duck.push_back(TextureManager::loadTex("assets/unit-red-1-east.png"));
-	m_duck.push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
+	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
+	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
+	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-north.png"));
+	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-south.png"));
+	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-east.png"));
+	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
+	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-north.png"));
+	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-south.png"));
+	m_cursorAttack.push_back(TextureManager::loadTex("assets/cursor-attack-1.png"));
+	m_cursorAttack.push_back(TextureManager::loadTex("assets/cursor-attack-2.png"));
+	m_cursorMoves.push_back(TextureManager::loadTex("assets/cursor-moves-1.png"));
+	m_cursorMoves.push_back(TextureManager::loadTex("assets/cursor-moves-2.png"));
+	m_cursorSelect.push_back(TextureManager::loadTex("assets/cursor-select-1.png"));
+	m_cursorSelect.push_back(TextureManager::loadTex("assets/cursor-select-2.png"));
+	m_forest.push_back(TextureManager::loadTex("assets/forest-1.png"));
+	m_forest.push_back(TextureManager::loadTex("assets/forest-2.png"));
+	m_forest.push_back(TextureManager::loadTex("assets/forest-3.png"));
+	m_forest.push_back(TextureManager::loadTex("assets/forest-4.png"));
+	m_forest.push_back(TextureManager::loadTex("assets/forest-5.png"));
+	m_grass.push_back(TextureManager::loadTex("assets/grass-1.png"));
+	m_grass.push_back(TextureManager::loadTex("assets/grass-2.png"));
+	m_grass.push_back(TextureManager::loadTex("assets/grass-3.png"));
+	m_mountain.push_back(TextureManager::loadTex("assets/mountain-1.png"));
+	m_mountain.push_back(TextureManager::loadTex("assets/mountain-2.png"));
+	m_mountain.push_back(TextureManager::loadTex("assets/mountain-3.png"));
+	m_mountain.push_back(TextureManager::loadTex("assets/mountain-4.png"));
+	m_mountain.push_back(TextureManager::loadTex("assets/mountain-5.png"));
+	m_sand.push_back(TextureManager::loadTex("assets/sand-1.png"));
+	m_sand.push_back(TextureManager::loadTex("assets/sand-2.png"));
+	m_sand.push_back(TextureManager::loadTex("assets/sand-3.png"));
 }
 
 TextureManager::~TextureManager() {
 	// Delete all textures
+}
+
+Uint32 TextureManager::hash(Tile *t) const {
+	long int tmp = t->getPosX() ^ ~(t->getPosY() << 4) * (int)(t->getAltitude() * 1000);
+	for (int i = 0; i < 5; i++) {
+		tmp <<= 6;
+		tmp ^= (int)(t->getAltitude() * 1000);
+	}
+	return tmp;
 }
 
 int TextureManager::loadTex(const char *file) {
@@ -107,5 +142,27 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
 
 int TextureManager::unit(Unit *u) const {
 	int idPlayer = u->getPlayer()->getId();
-	return m_duck[idPlayer*2];
+	int size = m_duck[idPlayer].size();
+	return m_duck[idPlayer][m_frame % size];
+}
+
+int TextureManager::tile(Tile *t) const {
+	Uint32 h = hash(t);
+	Land::Type lt = t->getLandType();
+	switch (lt) {
+	case Land::Type::OCEAN:
+		return 0;
+	case Land::Type::COAST:
+		return 0;
+	case Land::Type::SHORE:
+		return m_sand[h % m_sand.size()];
+	case Land::Type::PLAIN:
+		return m_grass[h % m_grass.size()];
+	case Land::Type::FOREST:
+		return m_forest[h % m_forest.size()];
+	case Land::Type::MOUNTAIN:
+		return m_mountain[h % m_mountain.size()];
+	case Land::Type::PEAK:
+		return m_mountain[h % m_mountain.size()];
+	}
 }

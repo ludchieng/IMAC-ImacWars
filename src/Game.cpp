@@ -24,8 +24,8 @@ Game::Game(bool againstComputer, bool fullscreen) {
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
 		SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetSwapInterval(1);
 
@@ -59,6 +59,7 @@ void Game::startLoop() {
 void Game::handleEvents() {
 	SDL_Event e;
 	while(SDL_PollEvent(&e)) {
+		Vector2d posGL;
 		switch(e.type) {
 			case SDL_WINDOWEVENT:
 				if (e.window.event == SDL_WINDOWEVENT_RESIZED)
@@ -70,7 +71,8 @@ void Game::handleEvents() {
 			case SDL_MOUSEBUTTONUP:
 				printf("clic en (%d, %d) -> ", e.button.x, e.button.y);
 				printf("(%f, %f)\n", Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
-				c->handleClick(&e, Game::coordsSDLtoGL(e.button.x, e.button.y).x, Game::coordsSDLtoGL(e.button.x, e.button.y).y);
+				posGL = Game::coordsSDLtoGL(e.button.x, e.button.y);
+				c->handleClick(&e, posGL.x, posGL.y);
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
@@ -88,6 +90,10 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
+	Vector2i mousePosSDL;
+	SDL_GetMouseState(&mousePosSDL.x, &mousePosSDL.y);
+	Vector2d mousePosGL = coordsSDLtoGL(&mousePosSDL);
+	c->setCursorPos(mousePosGL);
 	c->update();
 }
 
@@ -95,16 +101,16 @@ void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	c->v->render();
+	c->render(counter++);
 	SDL_GL_SwapWindow(m_window);
 }
 
 void Game::endLoop() {
 	Uint32 elapsedTime = SDL_GetTicks() - m_startTime;
-	if(elapsedTime < 1000 / FRAMERATE) 
-		SDL_Delay(1000 / FRAMERATE - elapsedTime);
+	if(elapsedTime < 1000 / LOOPRATE) 
+		SDL_Delay(1000 / LOOPRATE - elapsedTime);
 	/*else
-		printf("Cannot follow framerate\n");*/
+		printf("Cannot follow looprate\n");*/
 }
 
 void Game::quit() {

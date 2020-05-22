@@ -62,9 +62,9 @@ private:
 
     int SIZE_X;
     int SIZE_Y;
-    static const int ZOOM = 5;
-    static const int PLAYERS_SPAWN_MIN_DIST = 10;
-    static const int PLAYERS_SPAWN_MIN_DIST_MARGIN = 8;
+    static const int ZOOM = 4;
+    static const int PLAYERS_SPAWN_MIN_DIST = 12;
+    static const int PLAYERS_SPAWN_MIN_DIST_MARGIN = 5;
     static const int PLAYERS_SPAWN_MIN_DIST_FROM_BORDERS = 2;
 
     vector<vector<Tile*>> m_tiles;
