@@ -9,15 +9,26 @@ Tile::Tile(int posX, int posY) {
 	m_pos.y = posY;
 	m_altitude = 0.0;
 	m_unit = NULL;
+	hash();
 }
 
 Tile::Tile(Vector2i pos) {
 	m_pos = pos;
 	m_altitude = 0.0;
 	m_unit = NULL;
+	hash();
 }
 
 Tile::~Tile() {
+}
+
+void Tile::hash() {
+	long int tmp = m_pos.x ^ ~(m_pos.y << 4) * (int)(m_altitude * 1000);
+	for (int i = 0; i < 5; i++) {
+		tmp <<= 6;
+		tmp ^= (int)(m_altitude * 1000);
+	}
+	m_hash = tmp;
 }
 
 Tile::Path::Path()

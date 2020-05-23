@@ -13,6 +13,15 @@ View::~View() {
 
 }
 
+void View::update() {
+	list<Entity*> toDelete;
+    for (Entity *e : *getEntities())
+		if (!e->update())
+			toDelete.push_back(e);
+    for (Entity *e : toDelete)
+		delEntity(e);
+}
+
 void View::render(long int counter, Vector2d cursorPos) {
 	int xi = (int) (cursorPos.x >= 0.) ? cursorPos.x : cursorPos.x-1;
 	int yi = (int) (cursorPos.y >= 0.) ? cursorPos.y : cursorPos.y-1;
@@ -156,8 +165,9 @@ void View::renderTileCursor(Tile *t) {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     Unit *tu = t->getUnit();
     Unit *su = m->getSelectedUnit();
+    Player *pt = m->getPlayerTurn();
     if (tu != NULL) {
-        if (tu->getPlayer() == m->getPlayerTurn())
+        if (tu->getPlayer() == pt && !m->isAI(pt))
             tex->square(x, y, tex->cursorSelect(), 2.);
         else if (su != NULL && su->canAttack(tu))
             tex->square(x, y, tex->cursorAttack(), 2.);

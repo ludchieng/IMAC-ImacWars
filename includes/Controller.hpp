@@ -29,7 +29,7 @@ public:
 
     void handle(SDL_Event *e);
     void handleClick(SDL_Event *e, double x, double y);
-    void update();
+    void update(long int counter);
     void render(long int counter);
     bool checkWinner();
 private:

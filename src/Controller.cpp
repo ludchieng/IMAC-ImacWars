@@ -78,16 +78,9 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 	}
 }
 
-void Controller::update() {
-	m->update();
-	list<Entity*> toDelete;
-    for (Entity *e : *v->getEntities()) {
-		if (!e->update())
-			toDelete.push_back(e);
-	}
-    for (Entity *e : toDelete) {
-		v->delEntity(e);
-	}
+void Controller::update(long int counter) {
+	v->update();
+	m->update(counter);
 }
 
 void Controller::render(long int counter) {

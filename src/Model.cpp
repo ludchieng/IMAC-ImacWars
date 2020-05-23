@@ -8,7 +8,6 @@ Model::Model(bool againstComputer, int mapSize) {
 	SIZE = mapSize;
 	bool isSuccess = false;
 	m_selectedUnit = NULL;
-	m_againstComputer = againstComputer;
 	do {
 		try {
 			m_map = new Map(PLAYER_COUNT, SIZE);
@@ -48,6 +47,8 @@ Model::Model(bool againstComputer, int mapSize) {
 			isSuccess = false;
 		}
 	} while (!isSuccess);
+	m_againstComputer = againstComputer;
+	m_ai = new AI(this);
 }
 
 Model::~Model() {
@@ -58,14 +59,22 @@ Model::~Model() {
 	}
 }
 
-void Model::update() {
-	if (isEndTurn()) {
+bool Model::isAI(Player *p) const {
+	return isAgainstComputer() && p == m_ai->me;
+}
+
+void Model::update(long int counter) {
+	if (isEndTurn())
 		nextTurn();
-	}
+	if (isAgainstComputer()
+	 && m_playerTurn == m_ai->me
+	 && counter % m_ai->ACTION_INTERVAL == 0) {
+		m_ai->update();
+		m_ai->play();
+	 }
 }
 
 void Model::nextTurn() {
-	printf("NEXT TURN!\n");
 	m_selectedUnit = NULL;
 
 	// Reset units for next turn
@@ -139,6 +148,10 @@ void Model::updateSelectedUnitPossibleAttacks() {
 	}
 }
 
+int Model::distanceFrom(Unit *u1, Unit *u2, Land::Type lt, bool unitIsWall) const {
+	distanceFrom(u1->getTile(), u2->getTile(), lt, unitIsWall);
+}
+
 int Model::distanceFrom(Tile *t1, Tile *t2, Land::Type lt, bool unitIsWall) const {
 	Tile::Path p = m_map->findPath(t1, t2, lt, 0, unitIsWall);
 	return p.size;
@@ -147,6 +160,8 @@ int Model::distanceFrom(Tile *t1, Tile *t2, Land::Type lt, bool unitIsWall) cons
 Unit* Model::selectUnit(int x, int y, Player *p) {
 	Unit *u = getUnit(x, y);
 	if (u->getPlayer() != p)
+		throw new IllegalUnitSelection();
+	if (isAgainstComputer() && u->getPlayer() == m_ai->me)
 		throw new IllegalUnitSelection();
 	m_selectedUnit = u;
 	updateSelectedUnitPossibleMoves();

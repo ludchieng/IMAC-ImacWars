@@ -77,7 +77,7 @@ void Game::handleEvents() {
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
-					c = new Controller(true, MAP_SIZE);
+					c = new Controller(false, MAP_SIZE);
 				if (e.key.keysym.sym == SDLK_q)
 					m_isRunning = false;
 				if (e.key.keysym.sym == SDLK_n)
@@ -95,7 +95,7 @@ void Game::update() {
 	SDL_GetMouseState(&mousePosSDL.x, &mousePosSDL.y);
 	Vector2d mousePosGL = coordsSDLtoGL(&mousePosSDL);
 	c->setCursorPos(mousePosGL);
-	c->update();
+	c->update(counter);
 }
 
 void Game::render() {

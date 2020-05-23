@@ -39,7 +39,6 @@ public:
     int cursorAttack() const { return m_cursorAttack[m_frame % m_cursorAttack.size()]; };
     int cursorMoves() const { return m_cursorMoves[m_frame % m_cursorMoves.size()]; };
     int cursorSelect() const { return m_cursorSelect[m_frame % m_cursorSelect.size()]; };
-    Uint32 hash(Tile *t) const;
 
 private:
     TTF_Font *m_font;

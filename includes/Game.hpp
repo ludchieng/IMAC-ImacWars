@@ -53,7 +53,7 @@ private:
     static const float HEADER_H_GL;
     static const float FOOTER_H_GL;
 
-    static const int LOOPRATE = 60;
+    static const int LOOPRATE = 25;
 
     float m_wRatio;
     Uint32 m_startTime;

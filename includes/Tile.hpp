@@ -23,6 +23,7 @@ public:
 	Tile(Vector2i pos);
 	~Tile();
 
+	int getHash() const { return m_hash; }
 	Vector2i getPos() const { return m_pos; }
 	int getPosX() const { return m_pos.x; }
 	int getPosY() const { return m_pos.y; }
@@ -43,6 +44,8 @@ private:
 	float m_altitude;
 	Land::Type m_type;
 	Unit *m_unit;
+	int m_hash;
+	void hash();
 };
 
 

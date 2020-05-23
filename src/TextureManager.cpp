@@ -78,15 +78,6 @@ TextureManager::~TextureManager() {
 	}
 }
 
-Uint32 TextureManager::hash(Tile *t) const {
-	long int tmp = t->getPosX() ^ ~(t->getPosY() << 4) * (int)(t->getAltitude() * 1000);
-	for (int i = 0; i < 5; i++) {
-		tmp <<= 6;
-		tmp ^= (int)(t->getAltitude() * 1000);
-	}
-	return tmp;
-}
-
 int TextureManager::loadTex(const char *file) {
 	SDL_Surface *surf = IMG_Load(file);
 	if (surf == NULL) {
@@ -236,7 +227,7 @@ int TextureManager::unit(Unit *u) const {
 }
 
 int TextureManager::tile(Tile *t) const {
-	Uint32 h = hash(t);
+	unsigned int h = t->getHash();
 	Land::Type lt = t->getLandType();
 	switch (lt) {
 	case Land::Type::OCEAN:

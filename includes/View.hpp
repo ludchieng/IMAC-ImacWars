@@ -26,6 +26,7 @@ public:
 	void addEntity(Entity *e) { m_entities.push_back(e); }
 	void delEntity(Entity *e) { m_entities.remove(e); }
 
+	void update();
 	void render(long int counter, Vector2d cursorPos);
 	void renderMap();
 	void renderMapUI();
