@@ -52,9 +52,11 @@ public:
 
     void updateSelectedUnitPossibleMoves();
     void updateSelectedUnitPossibleAttacks();
+    int distanceFrom(Tile *t1, Tile *t2, Land::Type lt, bool unitIsWall) const;
+
     Unit* selectUnit(int x, int y, Player *p);
     void deselectUnit();
-    void createUnit(Player *p, Tile *t, Unit *u);
+    void assignUnit(Player *p, Tile *t, Unit *u);
     void moveUnit(Unit *u, int x, int y);
     FightReport attackUnit(Unit *assailant, Unit *target);
     void delUnit(Unit *u);

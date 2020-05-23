@@ -5,8 +5,9 @@
 #include "../includes/Game.hpp"
 
 const char Game::W_TITLE[] = "Imac Wars";
-//const float Game::GL_VIEW_SIZE = 200.;
 SDL_Renderer *Game::renderer = NULL;
+const float Game::HEADER_H_GL = 1.5; // !
+const float Game::FOOTER_H_GL = .35; // !
 
 Game::Game(bool againstComputer, bool fullscreen) {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -17,7 +18,7 @@ Game::Game(bool againstComputer, bool fullscreen) {
 	if (fullscreen)
 		flags |= SDL_WINDOW_FULLSCREEN;
 	
-	m_window = SDL_CreateWindow(W_TITLE, 1000, //TODO replace SDL_WINDOWPOS_CENTERED
+	m_window = SDL_CreateWindow(W_TITLE, SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, W_WIDTH, W_HEIGHT, flags);
 
 	m_gl = SDL_GL_CreateContext(m_window);
@@ -49,6 +50,8 @@ void Game::reshape() {
 	Vector2i sdlSize(w,h);
 	Vector2d topLeft = coordsSDLtoGL(0, 0);
 	Vector2d bottomRight = coordsSDLtoGL(sdlSize.x, sdlSize.y);
+	//printf("top left (gl): %f %f\n", topLeft.x, topLeft.y);
+	//printf("bottom right (gl): %f %f\n", bottomRight.x, bottomRight.y);
 	gluOrtho2D(topLeft.x, bottomRight.x, bottomRight.y, topLeft.y);
 }
 
@@ -138,11 +141,11 @@ Vector2d Game::coordsSDLtoGL(Vector2i* v) {
 	int sdlW = getWindowWidth();
 	int sdlH = getWindowHeight();
 	double ratio = sdlW / (double) sdlH;
-	double glW = MAP_SIZE * ratio;
-	double glH = MAP_SIZE;
-	double glOffsetX = (glW - glH) / 2;
+	double glW = (MAP_SIZE + HEADER_H_GL + FOOTER_H_GL) * ratio;
+	double glH = (MAP_SIZE + HEADER_H_GL + FOOTER_H_GL);
+	double glOffsetX = (glW - glH + HEADER_H_GL + FOOTER_H_GL) / 2;
 	res.x = v->x * glW / sdlW - glOffsetX;
-	res.y = v->y * glH / sdlH;
+	res.y = v->y * glH / sdlH - HEADER_H_GL;
 	return res;
 }
 
@@ -155,10 +158,12 @@ Vector2i Game::coordsGLtoSDL(Vector2d* v) {
 	int sdlW = getWindowWidth();
 	int sdlH = getWindowHeight();
 	double ratio = sdlW / (double) sdlH;
-	double glW = MAP_SIZE / ratio;
-	double glH = MAP_SIZE;
-	double sdlOffsetX = (sdlW - sdlH) / 2;
+	double glW = (MAP_SIZE + HEADER_H_GL + FOOTER_H_GL) / ratio;
+	double glH = (MAP_SIZE + HEADER_H_GL + FOOTER_H_GL);
+	double sdlHeaderH = HEADER_H_GL * sdlH/glH;
+	double sdlFooterH = FOOTER_H_GL * sdlH/glH;
+	double sdlOffsetX = (sdlW - sdlH + sdlHeaderH + sdlFooterH) / 2;
 	res.x = v->x * sdlW / glW + sdlOffsetX;
-	res.y = v->y * sdlH / glW;
+	res.y = v->y * sdlH / glW + sdlHeaderH;
 	return res;
 }

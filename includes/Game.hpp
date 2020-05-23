@@ -45,14 +45,15 @@ public:
     static SDL_Renderer *renderer;
 
 private:
-    static const unsigned int W_WIDTH = 1300;
+    static const unsigned int W_WIDTH = 1265;
     static const unsigned int W_HEIGHT = 900;
     static const char W_TITLE[];
 
     static const unsigned int MAP_SIZE = 16;
+    static const float HEADER_H_GL;
+    static const float FOOTER_H_GL;
 
     static const int LOOPRATE = 60;
-    static const float GL_VIEW_SIZE;
 
     float m_wRatio;
     Uint32 m_startTime;

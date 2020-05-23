@@ -33,7 +33,7 @@ void Tile::Path::add(Tile *t) {
 		tiles[size-1] = t;
 }
 
-int Tile::distanceFrom(Tile *t) const {
+int Tile::distanceDirectFrom(Tile *t) const {
 	int dx = t->getPosX() - m_pos.x;
 	int dy = t->getPosY() - m_pos.y;
 	if (dx < 0) {
@@ -45,7 +45,7 @@ int Tile::distanceFrom(Tile *t) const {
 	return dx + dy;
 }
 
-int Tile::distanceFrom(int x, int y) const {
+int Tile::distanceDirectFrom(int x, int y) const {
 	int dx = x - m_pos.x;
 	int dy = y - m_pos.y;
 	if (dx < 0) {

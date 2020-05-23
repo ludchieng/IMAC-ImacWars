@@ -11,40 +11,71 @@ TextureManager::TextureManager() {
 	m_fontOpacity = 255;
 	font(m_fontFile);
 	fontColor3i(255, 255, 255);
-	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-east.png"));
-	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-west.png"));
-	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-north.png"));
-	m_duck[0].push_back(TextureManager::loadTex("assets/unit-blue-1-south.png"));
-	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-east.png"));
-	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-west.png"));
-	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-north.png"));
-	m_duck[1].push_back(TextureManager::loadTex("assets/unit-red-1-south.png"));
+
+	m_guiBg = TextureManager::loadTex("assets/gui-bg.png");
+	m_guiBtnEndTurn.push_back(TextureManager::loadTex("assets/gui-btn-end-turn.png"));
+	m_guiBtnEndTurn.push_back(TextureManager::loadTex("assets/gui-btn-end-turn-hover.png"));
+	m_guiBtnEndTurn.push_back(TextureManager::loadTex("assets/gui-btn-end-turn-active.png"));
+	m_textures.push_back(&m_guiBtnEndTurn);
+
+	m_guiHead.push_back(TextureManager::loadTex("assets/gui-head-blue.png"));
+	m_guiHead.push_back(TextureManager::loadTex("assets/gui-head-red.png"));
+	m_textures.push_back(&m_guiHead);
+
+	m_duck[0].push_back(TextureManager::loadTex("assets/duck-blue-1.png"));
+	m_textures.push_back(&m_duck[0]);
+	m_duck[1].push_back(TextureManager::loadTex("assets/duck-red-1.png"));
+	m_textures.push_back(&m_duck[1]);
+	m_bee[0].push_back(TextureManager::loadTex("assets/bee-blue-1.png"));
+	m_textures.push_back(&m_bee[0]);
+	m_bee[1].push_back(TextureManager::loadTex("assets/bee-red-1.png"));
+	m_textures.push_back(&m_bee[1]);
+	m_rhino[0].push_back(TextureManager::loadTex("assets/rhino-blue-1.png"));
+	m_textures.push_back(&m_rhino[0]);
+	m_rhino[1].push_back(TextureManager::loadTex("assets/rhino-red-1.png"));
+	m_textures.push_back(&m_rhino[1]);
+
 	m_cursorAttack.push_back(TextureManager::loadTex("assets/cursor-attack-1.png"));
 	m_cursorAttack.push_back(TextureManager::loadTex("assets/cursor-attack-2.png"));
+	m_textures.push_back(&m_cursorAttack);
 	m_cursorMoves.push_back(TextureManager::loadTex("assets/cursor-moves-1.png"));
 	m_cursorMoves.push_back(TextureManager::loadTex("assets/cursor-moves-2.png"));
+	m_textures.push_back(&m_cursorMoves);
 	m_cursorSelect.push_back(TextureManager::loadTex("assets/cursor-select-1.png"));
 	m_cursorSelect.push_back(TextureManager::loadTex("assets/cursor-select-2.png"));
+	m_textures.push_back(&m_cursorSelect);
+
 	m_forest.push_back(TextureManager::loadTex("assets/forest-1.png"));
 	m_forest.push_back(TextureManager::loadTex("assets/forest-2.png"));
 	m_forest.push_back(TextureManager::loadTex("assets/forest-3.png"));
 	m_forest.push_back(TextureManager::loadTex("assets/forest-4.png"));
 	m_forest.push_back(TextureManager::loadTex("assets/forest-5.png"));
+	m_textures.push_back(&m_forest);
 	m_grass.push_back(TextureManager::loadTex("assets/grass-1.png"));
 	m_grass.push_back(TextureManager::loadTex("assets/grass-2.png"));
 	m_grass.push_back(TextureManager::loadTex("assets/grass-3.png"));
+	m_textures.push_back(&m_grass);
 	m_mountain.push_back(TextureManager::loadTex("assets/mountain-1.png"));
 	m_mountain.push_back(TextureManager::loadTex("assets/mountain-2.png"));
 	m_mountain.push_back(TextureManager::loadTex("assets/mountain-3.png"));
 	m_mountain.push_back(TextureManager::loadTex("assets/mountain-4.png"));
 	m_mountain.push_back(TextureManager::loadTex("assets/mountain-5.png"));
+	m_textures.push_back(&m_mountain);
 	m_sand.push_back(TextureManager::loadTex("assets/sand-1.png"));
 	m_sand.push_back(TextureManager::loadTex("assets/sand-2.png"));
 	m_sand.push_back(TextureManager::loadTex("assets/sand-3.png"));
+	m_textures.push_back(&m_sand);
+	m_sea.push_back(TextureManager::loadTex("assets/sea-1.png"));
+	m_sea.push_back(TextureManager::loadTex("assets/sea-2.png"));
+	m_textures.push_back(&m_sea);
 }
 
 TextureManager::~TextureManager() {
-	// Delete all textures
+	for (vector<int> *v : m_textures) {
+		for (GLuint idTex : *v) {
+			glDeleteTextures(1, &idTex);
+		}
+	}
 }
 
 Uint32 TextureManager::hash(Tile *t) const {
@@ -100,10 +131,14 @@ void TextureManager::font(const char* file) {
 		TTF_CloseFont(m_font);
     TTF_Font *tmp = TTF_OpenFont(file, 48);
     if (tmp == NULL) {
-        fprintf(stderr, "Failed to load font at %s", file);
+        fprintf(stderr, "Failed to load font at %s\n", file);
         exit(EXIT_FAILURE);
     }
 	m_font = tmp;
+}
+
+void TextureManager::text(string *text, double x, double y) const {
+	this->text(text->c_str(), x, y);
 }
 
 void TextureManager::text(const char* text, double x, double y) const {
@@ -138,6 +173,7 @@ void TextureManager::drawText(SDL_Surface* surf, double x, double y) const {
         glEnd();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glDeleteTextures(1, &idTex);
 	SDL_FreeSurface(surf);
 }
@@ -185,9 +221,18 @@ void TextureManager::square(double x, double y, int idTex, float scale) {
 }
 
 int TextureManager::unit(Unit *u) const {
+	int res;
 	int idPlayer = u->getPlayer()->getId();
-	int size = m_duck[idPlayer].size();
-	return m_duck[idPlayer][m_frame % size];
+	if (NULL != dynamic_cast<Duck*>(u))
+		res = m_duck[idPlayer][m_frame % m_duck[idPlayer].size()];
+	else if (NULL != dynamic_cast<Bee*>(u))
+		res = m_bee[idPlayer][m_frame % m_bee[idPlayer].size()];
+	else if (NULL != dynamic_cast<Rhino*>(u))
+		res = m_rhino[idPlayer][m_frame % m_rhino[idPlayer].size()];
+	else
+		fprintf(stderr, "Failed to load unit texture: unknown unit type\n");
+	
+	return res;
 }
 
 int TextureManager::tile(Tile *t) const {
@@ -195,9 +240,8 @@ int TextureManager::tile(Tile *t) const {
 	Land::Type lt = t->getLandType();
 	switch (lt) {
 	case Land::Type::OCEAN:
-		return 0;
 	case Land::Type::COAST:
-		return 0;
+		return m_sea[h % m_sea.size()];
 	case Land::Type::SHORE:
 		return m_sand[h % m_sand.size()];
 	case Land::Type::PLAIN:
@@ -205,7 +249,6 @@ int TextureManager::tile(Tile *t) const {
 	case Land::Type::FOREST:
 		return m_forest[h % m_forest.size()];
 	case Land::Type::MOUNTAIN:
-		return m_mountain[h % m_mountain.size()];
 	case Land::Type::PEAK:
 		return m_mountain[h % m_mountain.size()];
 	}

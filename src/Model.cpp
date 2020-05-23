@@ -14,9 +14,13 @@ Model::Model(bool againstComputer, int mapSize) {
 			m_map = new Map(PLAYER_COUNT, SIZE);
 			m_players = vector<Player*>(PLAYER_COUNT);
 
+			vector<string*> names;
+			names.push_back(new string("Jacky La Brute"));
+			names.push_back(new string("Myrabelle 2000"));
+
 			// Create player
 			for (int i = 0; i < PLAYER_COUNT; i++) {
-				Player *p = new Player(i);
+				Player *p = new Player(i, names[i]);
 				p->setSpawn(m_map->getSpawn(i));
 				m_players[i] = p;
 
@@ -24,14 +28,14 @@ Model::Model(bool againstComputer, int mapSize) {
 				Unit *army[] = {
 					new Duck(p), new Duck(p),
 					new Duck(p), new Bee(p),
-					new Bee(p), new Hippo(p),
+					new Bee(p), new Rhino(p),
 				};
 				int margin = 0;
 				// Create unit spawns
 				for (int unitCount = 0; unitCount < 6; ) {
 					Tile *t = m_map->getRandTileNear(p->getSpawn(), 2 + margin/10, Land::TYPE_FIELD);
 					if (!t->hasUnit())
-						createUnit(p, t, army[unitCount++]);
+						assignUnit(p, t, army[unitCount++]);
 					margin++;
 				}
 			}
@@ -100,7 +104,7 @@ bool Model::isEndTurn() const {
 }
 
 bool Model::unitCanMoveOn(Unit *u, Tile *t) const {
-	if (!(u->distanceFrom(t) <= u->getMp()))
+	if (!(u->distanceDirectFrom(t) <= u->getMp()))
 		return false;
 	if (!u->canStandOn(t))
 		return false;
@@ -135,6 +139,11 @@ void Model::updateSelectedUnitPossibleAttacks() {
 	}
 }
 
+int Model::distanceFrom(Tile *t1, Tile *t2, Land::Type lt, bool unitIsWall) const {
+	Tile::Path p = m_map->findPath(t1, t2, lt, 0, unitIsWall);
+	return p.size;
+}
+
 Unit* Model::selectUnit(int x, int y, Player *p) {
 	Unit *u = getUnit(x, y);
 	if (u->getPlayer() != p)
@@ -151,7 +160,7 @@ void Model::deselectUnit() {
 	updateSelectedUnitPossibleAttacks();
 }
 
-void Model::createUnit(Player *p, Tile *t, Unit *u) {
+void Model::assignUnit(Player *p, Tile *t, Unit *u) {
 	t->setUnit(u);
 	u->setTile(t);
 	p->addUnit(u);
@@ -160,15 +169,20 @@ void Model::createUnit(Player *p, Tile *t, Unit *u) {
 void Model::moveUnit(Unit *u, int x, int y) {
 	if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
 		throw new OutOfBound();
+
+	Tile *t = m_map->getTile(x, y);
 	
-	if (!unitCanMoveOn(u, m_map->getTile(x, y)))
+	if (!unitCanMoveOn(u, t))
 		throw new IllegalMoveOutOfRange();
 		
-	if (m_map->getTile(x, y)->hasUnit())
+	if (t->hasUnit())
 		throw new IllegalMoveOccupiedTile();
 		
 	// Update unit and tiles
-	u->move(m_map->getTile(x, y));
+	u->setMp(u->getMp() - distanceFrom(u->getTile(), t, u->getAllowedLandTypes(), true));
+	u->getTile()->delUnit();
+	t->setUnit(u);
+	u->setTile(t);
 	if (u->getMp() <= 0)
 		deselectUnit();
 	else {
@@ -197,11 +211,11 @@ Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
 	fr.assailant = a;
 	fr.target = t;
 
-	srand(time(NULL));
+	srand(time(NULL) % 971);
 	fr.bonus = rand() % 20;
-	srand(time(NULL));
+	srand(time(NULL) % 3199);
 	fr.varT = rand() % 20 - 10;
-	srand(time(NULL));
+	srand(time(NULL) % 1371);
 	fr.varA = rand() % 20 - 10;
 
 	float aPower = a->getAtk() + a->getDef();

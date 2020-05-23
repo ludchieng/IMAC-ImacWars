@@ -26,19 +26,12 @@ void Unit::setTile(Tile *t) {
 	m_tile = t;
 }
 
-int Unit::distanceFrom(Tile *t) const {
-	m_tile->distanceFrom(t);
+int Unit::distanceDirectFrom(Tile *t) const {
+	m_tile->distanceDirectFrom(t);
 }
 
-int Unit::distanceFrom(int x, int y) const {
-	return m_tile->distanceFrom(x, y);
-}
-
-void Unit::move(Tile *t) {
-	setMp(getMp() - distanceFrom(t));
-	getTile()->delUnit();
-	t->setUnit(this);
-	setTile(t);
+int Unit::distanceDirectFrom(int x, int y) const {
+	return m_tile->distanceDirectFrom(x, y);
 }
 
 void Unit::takeDamage(int dmg) {

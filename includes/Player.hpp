@@ -6,6 +6,7 @@
 #define PLAYER_HPP
 
 #include <list>
+#include <string>
 #include <algorithm>
 
 #include "../includes/Unit.hpp"
@@ -18,11 +19,12 @@ class Player {
 
 public:
 
-    Player(int id);
+    Player(int id, string *name);
     ~Player();
 
     bool hasActiveUnits() const;
     int getId() const { return m_id; }
+    string *getName() const { return m_name; }
 
     list<Unit*> *getUnits() { return &m_units; }
     void addUnit(Unit *u) { m_units.push_back(u); }
@@ -34,6 +36,7 @@ private:
     int m_id;
     Tile *m_spawn;
     list<Unit*> m_units;
+    string *m_name;
 };
 
 #endif /* PLAYER_HPP */

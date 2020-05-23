@@ -13,7 +13,15 @@ View::~View() {
 
 }
 
-void View::render(long int counter) {
+void View::render(long int counter, Vector2d cursorPos) {
+	int xi = (int) (cursorPos.x >= 0.) ? cursorPos.x : cursorPos.x-1;
+	int yi = (int) (cursorPos.y >= 0.) ? cursorPos.y : cursorPos.y-1;
+    Tile *t = NULL;
+	if (xi >= 0 && xi < m->getMap()->getSizeX()
+	 && yi >= 0 && yi < m->getMap()->getSizeY()) {
+		// Cursor is on map
+		t = m->getMap()->getTile(xi, yi);
+	}
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -21,8 +29,11 @@ void View::render(long int counter) {
     renderMap();
     renderMapUI();
     renderUnits();
-    for (Entity *e : m_entities)
-        e->render(tex);
+    renderEntities();
+    renderGUI(cursorPos);
+    if (t != NULL) {
+		renderTileCursor(t);
+    }
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     if (counter % FRAME_LENGTH == 0)
@@ -124,24 +135,25 @@ void View::renderAstar() {
 
 void View::renderUnits() {
     tex->fontColor3i(255, 255, 255);
-    tex->fontSize(.5);
+    tex->fontSize(0.47);
     tex->fontOpacity(255);
     for (Player *p : m->getPlayers()) {
         for (Unit *u : *(p->getUnits())) {
             Vector2i pos = u->getTile()->getPos();
-            tex->square(pos.x, pos.y, tex->unit(u), 1.1);
+            tex->square(pos.x, pos.y, tex->unit(u), 1.6);
             tex->text(to_string(u->getHp()).c_str(), pos.x, pos.y);
         }
     }
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void View::renderTileCursor(int x, int y) {
+void View::renderTileCursor(Tile *t) {
+    int x = t->getPosX();
+    int y = t->getPosY();
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    Tile *t = m->getMap()->getTile(x, y);
     Unit *tu = t->getUnit();
     Unit *su = m->getSelectedUnit();
     if (tu != NULL) {
@@ -155,4 +167,76 @@ void View::renderTileCursor(int x, int y) {
     }
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+}
+
+void View::renderEntities() {
+    for (Entity *e : m_entities)
+        e->render(tex);
+}
+
+void View::renderGUI(Vector2d cursorPos) {
+    float mapW = m->getMap()->getSizeX();
+    float mapH = m->getMap()->getSizeY();
+    float header_h_gl = 1.5;
+    float footer_h_gl = .35;
+    float top = -header_h_gl;
+    float right = mapW + 4.55;
+    float bottom = mapH + footer_h_gl;
+    float left = -4.55;
+    glBindTexture(GL_TEXTURE_2D, tex->guiBg());
+    glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);
+        glVertex2f(left, top);
+        glTexCoord2i(0, 1);
+        glVertex2f(left, bottom);
+        glTexCoord2i(1, 1);
+        glVertex2f(right, bottom);
+        glTexCoord2i(1, 0);
+        glVertex2f(right, top);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glBindTexture(GL_TEXTURE_2D, tex->guiHead(m->getPlayerTurn()->getId()));
+    glBegin(GL_QUADS);
+        glTexCoord2f(0., 0.);
+        glVertex2f(left, top);
+        glTexCoord2f(0., .99);
+        glVertex2f(left, top + header_h_gl);
+        glTexCoord2f(1., .99);
+        glVertex2f(right, top + header_h_gl);
+        glTexCoord2f(1., 0.);
+        glVertex2f(right, top);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    tex->fontColor3i(255, 255, 255);
+    tex->fontSize(1.);
+    tex->fontOpacity(255);
+    tex->text(m->getPlayerTurn()->getName(), 0., top + .2);
+
+    int btnState = (isHoverBtnNextTurn(cursorPos)) ? 1 : 0;
+    glBindTexture(GL_TEXTURE_2D, tex->guiBtnEndTurn(btnState));
+    glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);
+        glVertex2f(mapW - 2.5, top + .2);
+        glTexCoord2i(0, 1);
+        glVertex2f(mapW - 2.5, top + 1.);
+        glTexCoord2i(1, 1);
+        glVertex2f(mapW, top + 1.);
+        glTexCoord2i(1, 0);
+        glVertex2f(mapW, top + .2);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+bool View::isHoverBtnNextTurn(Vector2d pos) const {
+    float mapW = m->getMap()->getSizeX();
+    float mapH = m->getMap()->getSizeY();
+    float header_h_gl = 1.5;
+    float footer_h_gl = .35;
+    float top = -header_h_gl;
+    float right = mapW + 4.55;
+    float bottom = mapH + footer_h_gl;
+    float left = -4.55;
+    return pos.x > mapW - 2.5 && pos.x < mapW
+        && pos.y > top + .2 && pos.y < top + 1.;
 }

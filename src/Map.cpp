@@ -289,7 +289,7 @@ Tile::Path Map::findPath(Tile *start, Tile *target, Land::Type ltf, int maxDist,
 			Tile * t = getTile(i,j);
             bool isWall = !(ltf & t->getLandType());
 			isWall |= (unitIsWall && t->hasUnit());
-			isWall |= (maxDist != 0 && start->distanceFrom(t) > maxDist);
+			isWall |= (maxDist != 0 && start->distanceDirectFrom(t) > maxDist);
             grid[i][j] = new Astar::Node(i, j, isWall);
 		}
 	}

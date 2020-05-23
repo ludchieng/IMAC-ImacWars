@@ -7,6 +7,7 @@
 
 #include "../includes/Game.hpp"
 #include "../includes/Model.hpp"
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -24,11 +25,15 @@ public:
     void font(const char* file);
 
     void text(const char* text, double x, double y) const;
+    void text(string *text, double x, double y) const;
 	void square(double x, double y);
 	void square(double x, double y, int r, int g, int b);
 	void square(double x, double y, int r, int g, int b, int a);
 	void square(double x, double y, int idTex, float scale);
 
+    int guiBg() const { return m_guiBg; }
+    int guiBtnEndTurn(int state) const { return m_guiBtnEndTurn[state]; }
+    int guiHead(int idPlayer) const { return m_guiHead[idPlayer]; }
     int unit(Unit *u) const;
     int tile(Tile *t) const;
     int cursorAttack() const { return m_cursorAttack[m_frame % m_cursorAttack.size()]; };
@@ -44,9 +49,13 @@ private:
     SDL_Color m_fontColorShadow;
     int m_fontOpacity;
     long int m_frame = 0;
+
+    int m_guiBg;
+    vector<int> m_guiBtnEndTurn;
+    vector<int> m_guiHead;
     vector<int> m_duck[2];
     vector<int> m_bee[2];
-    vector<int> m_hippo[2];
+    vector<int> m_rhino[2];
     vector<int> m_cursorAttack;
     vector<int> m_cursorMoves;
     vector<int> m_cursorSelect;
@@ -54,6 +63,9 @@ private:
     vector<int> m_grass;
     vector<int> m_mountain;
     vector<int> m_sand;
+    vector<int> m_sea;
+
+    list<vector<int>*> m_textures;
     int loadTex(const char *file);
     void drawText(SDL_Surface* surf, double x, double y) const;
 

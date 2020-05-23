@@ -56,12 +56,22 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 					m->selectUnit(xi, yi, m->getPlayerTurn());
 				else if (tu->getPlayer() != su->getPlayer()) {
 					fr = m->attackUnit(su, tu);
-					printf("%d %d %d %d %d %d %d %d %d\n", fr.dmgOnAssailantBase, fr.dmgOnTargetBase,
-						fr.varT, fr.varA, fr.bonus, fr.dmgOnAssailantEffective, fr.dmgOnTargetEffective, fr.couldFightBack, fr.shouldHaveDoubleKO);
 					
-					v->addEntity(new Entity(xi, yi, "OUCH", 40));
+					if (fr.dmgOnTargetEffective != 0) {
+						string dmgOnT = to_string(-fr.dmgOnTargetEffective);
+						v->addEntity(new Entity(xi, yi, dmgOnT, 50));
+					}
+					if (fr.dmgOnAssailantEffective != 0) {
+						string dmgOnA = to_string(-fr.dmgOnAssailantEffective);
+						v->addEntity(new Entity(su->getTile()->getPosX(), su->getTile()->getPosY(), dmgOnA, 40));
+					}
 				}
 			}
+		} else {
+			// Click is outside the map
+			Vector2d cursorPos = {x,y};
+			if (v->isHoverBtnNextTurn(cursorPos))
+				m->nextTurn();
 		}
 	} catch (exception *e) {
 		printf("%s\n", e->what());
@@ -81,14 +91,7 @@ void Controller::update() {
 }
 
 void Controller::render(long int counter) {
-	v->render(counter);
-	int xi = (int) (m_cursorPos.x >= 0.) ? m_cursorPos.x : m_cursorPos.x-1;
-	int yi = (int) (m_cursorPos.y >= 0.) ? m_cursorPos.y : m_cursorPos.y-1;
-	if (xi >= 0 && xi < m->getMap()->getSizeX()
-	 && yi >= 0 && yi < m->getMap()->getSizeY()) {
-		Tile *t = m->getMap()->getTile(xi, yi);
-		v->renderTileCursor(xi, yi);
-	}
+	v->render(counter, m_cursorPos);
 }
 
 bool Controller::checkWinner() {

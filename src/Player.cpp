@@ -4,9 +4,10 @@
 
 #include "../includes/Player.hpp"
 
-Player::Player(int id) {
+Player::Player(int id, string *name) {
 	m_id = id;
 	m_units = list<Unit*>();
+	m_name = name;
 }
 
 Player::~Player() {

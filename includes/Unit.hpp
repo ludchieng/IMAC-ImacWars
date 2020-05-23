@@ -19,7 +19,7 @@ class Unit {
 
 public:
 	Unit(Player *player, int hpMax, int mpMax, int ratk, int atkcost, int atk, int def);
-	~Unit();
+	virtual ~Unit();
 
 	int getAtk() const { return m_atk; }
 	void setAtk(int atk) { m_atk = atk; }
@@ -42,18 +42,17 @@ public:
 	int getRatk() const { return m_ratk; }
 	void setRatk(int ratk) { m_ratk = ratk; }
 
-	int distanceFrom(Tile *t) const;
-	int distanceFrom(int x, int y) const;
+	int distanceDirectFrom(Tile *t) const;
+	int distanceDirectFrom(int x, int y) const;
 
 	bool isDead() const { return m_hp <= 0; }
-	bool canHit(Unit *u) const { return distanceFrom(u->getTile()) <= m_ratk; }
-	bool canHit(Tile *t) const { return distanceFrom(t) <= m_ratk; }
-	bool canHit(int x, int y) const { return distanceFrom(x, y) <= m_ratk; }
+	bool canHit(Unit *u) const { return distanceDirectFrom(u->getTile()) <= m_ratk; }
+	bool canHit(Tile *t) const { return distanceDirectFrom(t) <= m_ratk; }
+	bool canHit(int x, int y) const { return distanceDirectFrom(x, y) <= m_ratk; }
 	bool canAttack(Unit *u) const { return canHit(u) && m_mp >= m_atkcost; }
 	bool canAttack(Tile *t) const { return canHit(t) && m_mp >= m_atkcost; }
 	bool canAttack(int x, int y) const { return canHit(x, y) && m_mp >= m_atkcost; }
 
-	void move(Tile *t);
 	void takeDamage(int v);
 	void die();
 
@@ -76,6 +75,6 @@ protected:
 
 #include "../includes/Duck.hpp"
 #include "../includes/Bee.hpp"
-#include "../includes/Hippo.hpp"
+#include "../includes/Rhino.hpp"
 
 #endif /* UNIT_HPP */
