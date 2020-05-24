@@ -33,37 +33,31 @@ void AI::update() {
 
 void AI::play() {
     int moves = 0;
-    if (!m_rhinos.empty()) {
-        for (Unit *u : m_rhinos) {
-            Unit *n = nearestReachableUnit(u, enemy);
-            if (n != NULL && u->canAttack(n))
-                m->attackUnit(u, n);
-            if (n != NULL && u->getMp() > 0) {
-                if (moves += moveTowards(u, n) != 0)
-                    return;
-            }
+    for (Unit *u : m_rhinos) {
+        Unit *n = nearestReachableUnit(u, enemy);
+        if (n != NULL && u->canAttack(n))
+            m->attackUnit(u, n);
+        if (n != NULL && u->getMp() > 0) {
+            if (moves += moveTowards(u, n) != 0)
+                return;
         }
     }
-    if (!m_bees.empty()) {
-        for (Unit *u : m_bees) {
-            Unit *n = nearestReachableUnit(u, enemy);
-            if (n != NULL && u->canAttack(n))
-                m->attackUnit(u, n);
-            if (n != NULL && u->getMp() > 0) {
-                if (moves += moveTowards(u, n) != 0)
-                    return;
-            }
+    for (Unit *u : m_bees) {
+        Unit *n = nearestReachableUnit(u, enemy);
+        if (n != NULL && u->canAttack(n))
+            m->attackUnit(u, n);
+        if (n != NULL && u->getMp() > 0) {
+            if (moves += moveTowards(u, n) != 0)
+                return;
         }
     }
-    if (!m_ducks.empty()) {
-        for (Unit *u : m_ducks) {
-            Unit *n = nearestReachableUnit(u, enemy);
-            if (n != NULL && u->canAttack(n))
-                m->attackUnit(u, n);
-            if (n != NULL && u->getMp() > 0) {
-                if (moves += moveTowards(u, n) != 0)
-                    return;
-            }
+    for (Unit *u : m_ducks) {
+        Unit *n = nearestReachableUnit(u, enemy);
+        if (n != NULL && u->canAttack(n))
+            m->attackUnit(u, n);
+        if (n != NULL && u->getMp() > 0) {
+            if (moves += moveTowards(u, n) != 0)
+                return;
         }
     }
     if (moves == 0)

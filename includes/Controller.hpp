@@ -18,8 +18,6 @@ class Controller {
 public:
     View *v;
     Model *m;
-    Player *m_winner;
-    Unit *m_sUnit; // selected Unit
 
     Controller(bool againstComputer, int mapSize);
     ~Controller();
@@ -31,7 +29,6 @@ public:
     void handleClick(SDL_Event *e, double x, double y);
     void update(long int counter);
     void render(long int counter);
-    bool checkWinner();
 private:
 	Vector2d m_cursorPos;
 };

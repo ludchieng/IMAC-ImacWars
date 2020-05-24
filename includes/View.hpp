@@ -35,6 +35,7 @@ public:
     void renderEntities();
     void renderGUI(Vector2d cursorPos);
 	void renderTileCursor(Tile *t);
+	void renderVictory();
 
 	bool isHoverBtnNextTurn(Vector2d pos) const;
 

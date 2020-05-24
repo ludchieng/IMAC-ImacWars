@@ -25,13 +25,12 @@ Game::Game(bool againstComputer, bool fullscreen) {
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
 		SDL_GL_CONTEXT_PROFILE_CORE);
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetSwapInterval(1);
 
 	reshape();
 
+	m_againstComputer = againstComputer;
 	c = new Controller(againstComputer, MAP_SIZE);
 	m_isRunning = true;
 }
@@ -50,8 +49,6 @@ void Game::reshape() {
 	Vector2i sdlSize(w,h);
 	Vector2d topLeft = coordsSDLtoGL(0, 0);
 	Vector2d bottomRight = coordsSDLtoGL(sdlSize.x, sdlSize.y);
-	//printf("top left (gl): %f %f\n", topLeft.x, topLeft.y);
-	//printf("bottom right (gl): %f %f\n", bottomRight.x, bottomRight.y);
 	gluOrtho2D(topLeft.x, bottomRight.x, bottomRight.y, topLeft.y);
 }
 
@@ -77,7 +74,7 @@ void Game::handleEvents() {
 				break;
 			case SDL_KEYDOWN:
 				if (e.key.keysym.sym == 1073741902)
-					c = new Controller(false, MAP_SIZE);
+					c = new Controller(m_againstComputer, MAP_SIZE);
 				if (e.key.keysym.sym == SDLK_q)
 					m_isRunning = false;
 				if (e.key.keysym.sym == SDLK_n)
@@ -110,8 +107,6 @@ void Game::endLoop() {
 	Uint32 elapsedTime = SDL_GetTicks() - m_startTime;
 	if(elapsedTime < 1000 / LOOPRATE) 
 		SDL_Delay(1000 / LOOPRATE - elapsedTime);
-	/*else
-		printf("Cannot follow looprate\n");*/
 }
 
 void Game::quit() {

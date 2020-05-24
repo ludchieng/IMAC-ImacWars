@@ -45,7 +45,7 @@ public:
     static SDL_Renderer *renderer;
 
 private:
-    static const unsigned int W_WIDTH = 1265;
+    static const unsigned int W_WIDTH = 830;
     static const unsigned int W_HEIGHT = 900;
     static const char W_TITLE[];
 
@@ -62,6 +62,7 @@ private:
     SDL_Window *m_window;
     SDL_GLContext m_gl;
     Controller *c;
+    bool m_againstComputer;
 
     Vector2d coordsSDLtoGL(Vector2i*);
     Vector2d coordsSDLtoGL(int x, int y);

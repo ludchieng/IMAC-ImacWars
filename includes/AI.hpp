@@ -26,7 +26,7 @@ public:
     Player *me;
     Player *enemy;
 
-    const int ACTION_INTERVAL = 5;
+    const int ACTION_INTERVAL = 2;
 
 private:
     Model *m;

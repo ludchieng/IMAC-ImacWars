@@ -8,6 +8,7 @@ Model::Model(bool againstComputer, int mapSize) {
 	SIZE = mapSize;
 	bool isSuccess = false;
 	m_selectedUnit = NULL;
+	m_winner = NULL;
 	do {
 		try {
 			m_map = new Map(PLAYER_COUNT, SIZE);
@@ -64,6 +65,7 @@ bool Model::isAI(Player *p) const {
 }
 
 void Model::update(long int counter) {
+	checkWinner();
 	if (isEndTurn())
 		nextTurn();
 	if (isAgainstComputer()
@@ -71,7 +73,7 @@ void Model::update(long int counter) {
 	 && counter % m_ai->ACTION_INTERVAL == 0) {
 		m_ai->update();
 		m_ai->play();
-	 }
+	}
 }
 
 void Model::nextTurn() {
@@ -243,8 +245,7 @@ Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
 	if (t->canHit(a)) {
 		fr.couldFightBack = true;
 		dmgOnAssailant = fr.dmgOnAssailantBase + fr.varA;
-	}
-	else {
+	} else {
 		fr.couldFightBack = false;
 		dmgOnAssailant = 0;
 	}
@@ -256,8 +257,7 @@ Model::FightReport Model::attackUnit(Unit *a, Unit *t) {
 		fr.shouldHaveDoubleKO = false;
 		t->takeDamage(dmgOnTarget);
 		a->takeDamage(dmgOnAssailant);
-	}
-	else {
+	} else {
 		// Prevent double K.O.
 		fr.shouldHaveDoubleKO = true;
 		srand(time(NULL));
@@ -288,4 +288,18 @@ void Model::delUnit(Unit *u) {
 	Player *p = u->getPlayer();
 	u->die();
 	p->delUnit(u);
+}
+
+bool Model::checkWinner() {
+	for (unsigned int i = 0; i < m_players.size();) {
+		if (m_players[i]->hasActiveUnits() == 0)
+			m_players.erase(std::remove(m_players.begin(), m_players.end(), m_players[i]), m_players.end());
+		else
+			i++;
+	}
+	if (m_players.size() == 1) {
+		m_winner = m_players[0];
+		return true;
+	}
+	return false;
 }

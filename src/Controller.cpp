@@ -7,8 +7,6 @@
 Controller::Controller(bool againstComputer, int mapSize) {
 	m = new Model(againstComputer, mapSize);
 	v = new View(m);
-	m_winner = NULL;
-	m_sUnit = NULL;
 }
 
 Controller::~Controller() {
@@ -70,11 +68,12 @@ void Controller::handleClick(SDL_Event *e, double x, double y) {
 		} else {
 			// Click is outside the map
 			Vector2d cursorPos = {x,y};
-			if (v->isHoverBtnNextTurn(cursorPos))
+			if (v->isHoverBtnNextTurn(cursorPos)
+			 && !m->isAI(m->getPlayerTurn()))
 				m->nextTurn();
 		}
 	} catch (exception *e) {
-		printf("%s\n", e->what());
+		//printf("%s\n", e->what());
 	}
 }
 
@@ -85,21 +84,4 @@ void Controller::update(long int counter) {
 
 void Controller::render(long int counter) {
 	v->render(counter, m_cursorPos);
-}
-
-bool Controller::checkWinner() {
-	vector<Player*> players = m->getPlayers();
-	for (unsigned int i = 0; i < players.size();) {
-		if (players[i]->hasActiveUnits() == 0) {
-			players.erase(std::remove(players.begin(), players.end(), players[i]), players.end());
-		}
-		else {
-			i++;
-		}
-	}
-	if (players.size() == 1) {
-		m_winner = players[0];
-		return true;
-	}
-	return false;
 }

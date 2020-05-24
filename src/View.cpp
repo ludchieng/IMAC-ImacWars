@@ -43,6 +43,8 @@ void View::render(long int counter, Vector2d cursorPos) {
     if (t != NULL) {
 		renderTileCursor(t);
     }
+    if (m->hasWinner())
+        renderVictory();
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     if (counter % FRAME_LENGTH == 0)
@@ -159,10 +161,6 @@ void View::renderUnits() {
 void View::renderTileCursor(Tile *t) {
     int x = t->getPosX();
     int y = t->getPosY();
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     Unit *tu = t->getUnit();
     Unit *su = m->getSelectedUnit();
     Player *pt = m->getPlayerTurn();
@@ -175,8 +173,6 @@ void View::renderTileCursor(Tile *t) {
         if (su != NULL && m->unitCanMoveOn(su, t))
                 tex->square(x, y, tex->cursorSelect(), 2.);
     }
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void View::renderEntities() {
@@ -236,6 +232,15 @@ void View::renderGUI(Vector2d cursorPos) {
         glVertex2f(mapW, top + .2);
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void View::renderVictory() {
+    double x = m->getMap()->getSizeX() / 2 - 1.5;
+    double y = m->getMap()->getSizeY() / 2 - .5;
+    tex->fontColor3i(255, 255, 255);
+    tex->fontOpacity(255);
+    tex->fontSize(.9);
+    tex->text("Victoire !", x, y);
 }
 
 bool View::isHoverBtnNextTurn(Vector2d pos) const {

@@ -44,6 +44,7 @@ public:
     bool isAgainstComputer() const { return m_againstComputer; }
     bool isAI(Player *p) const;
     vector<Player*> getPlayers() const { return m_players; }
+    bool hasWinner() { return m_winner != NULL; }
     Unit *getSelectedUnit() const { return m_selectedUnit; }
     bool hasSelectedUnit() const { return m_selectedUnit != NULL; }
     list<Tile*> *getSelectedUnitPossibleMoves() { return &m_selectedUnitPossibleMoves; }
@@ -66,12 +67,15 @@ public:
     FightReport attackUnit(Unit *assailant, Unit *target);
     void delUnit(Unit *u);
 
+    bool checkWinner();
+
     static const int PLAYER_COUNT = 2;
 
 private:
     bool m_againstComputer;
     Map *m_map;
     Player *m_playerTurn;
+    Player *m_winner;
     Unit *m_selectedUnit;
     list<Tile*> m_selectedUnitPossibleMoves;
     list<Tile*> m_selectedUnitPossibleAttacks;
