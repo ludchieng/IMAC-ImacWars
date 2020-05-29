@@ -1,8 +1,10 @@
-# Rapport de projet
+# Rapport de projet de programmation C++
 
 **Alexandre Escudero**, **Théo Gautier**, **Ludwig Chieng**
 
 *Mini jeu vidéo de stratégie militaire 2D en tour par tour, type Advance Wars, en C++ sous SDL2 et OpenGL.*
+
+![](misc/preview.gif)
 
 ## Equipe
 
@@ -39,6 +41,8 @@ Le modèle utilise le pathfinding à travers la méthode `Map::findPath()`, qui:
 ### Génération procédurale de map
 
 Probablement le point dont on est le plus statisfait. On utilise du Perlin noise pour générer l'altitude de chaque Tile. On définit chaque intervalle d'altitude comme étant un type de biome (Ocean, Coast, Shore, Plain, Forest, Mountain, Peak) et le tour est joué.
+
+![](misc/map.gif)
 
 **En pratique, c'est un poil plus technique:**
 
