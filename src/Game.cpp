@@ -73,7 +73,7 @@ void Game::handleEvents() {
 				c->handleClick(&e, posGL.x, posGL.y);
 				break;
 			case SDL_KEYDOWN:
-				if (e.key.keysym.sym == 1073741902)
+				if (e.key.keysym.sym == SDLK_g)
 					c = new Controller(m_againstComputer, MAP_SIZE);
 				if (e.key.keysym.sym == SDLK_q)
 					m_isRunning = false;

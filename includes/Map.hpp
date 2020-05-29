@@ -12,7 +12,6 @@
 
 #include "../vendor/FastNoise/FastNoise.h"
 #include "../includes/Vector2i.hpp"
-#include "../includes/FX.hpp"
 #include "../includes/Tile.hpp"
 #include "../includes/Unit.hpp"
 #include "../includes/Astar.hpp"
@@ -35,8 +34,6 @@ public:
     list<Tile*> getTilesArea(Tile *t, int maxDist) const;
     list<Tile*> getTilesArea(Tile *t, int maxDist, Land::Type ltf) const;
     list<Tile*> getTilesArea(Tile *t, int maxDist, Land::Type ltf, bool disallowOccupiedTiles) const;
-    Unit *getUnit(int x, int y) const { return NULL; } //TODO
-    FX *getFX(int x, int y) const { return NULL; } //TODO
     Tile *getSpawn(int i) { return m_spawns[i]; }
 
     Tile *getRandTile() const;
