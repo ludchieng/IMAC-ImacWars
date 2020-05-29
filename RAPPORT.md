@@ -80,12 +80,16 @@ alt = (alt <= LIMIT_FOREST) ? alt : alt - (.05 + perlin3.GetNoise(x * ZOOM * 2, 
 
 `Map::generateSpawns1vs1()` prend deux Tiles au hasard qui sont des terrains praticables (Shore, Plain, Forest) et dont il existe au moins un chemin entre les deux (que les joueurs ne soient pas sur deux îles différentes). Enfin, la méthode dispose les unités dans un rayon de Tiles donné autour du spawn du joueur.
 
-### Améliorations possibles
+## Améliorations pour la suite
 
-#### Game design
+### Performances
+
+Fuite de mémoire quand on regénère la map. Cela vient probablement des destructeurs d'objets qu'on pas réalisé correctement (voire pas du tout parce que aled on sait pas comment faire). On atteint rarement les 60 fps, de l'optimisation à faire côté SDL_Texture sûrement.
+
+### Game design
 
 Ajouter des fonctionnalités pour choisir entre jeu contre IA ou contre un joueur. Chose qu'on a pas faite car on a pas trouvé d'architecture propre pour gérer des interfaces graphiques, les événements souris/claviers associés, etc... Idem pour les interfaces pour acheter des unités. Les interfaces graphiques sont des éléments lourds et délicats à gérer en programmation bas niveau donc on a préféré se concentrer sur le gameplay plus que sur les interfaces.
 
-#### Code
+### Code
 
-Le code commence à devenir lourd et le MVC qu'on a tenté de faire risque de ne pas être extensible. On a pris connaissance du livre `SDL Game Development` qui propose un autre Design Pattern qui semble éviter de tomber dans un code lourd. Ce design répartit le MVC au sein de chaque classe plutôt que d'avoir un modèle global, une vue globale et un controleur global. Si le projet serait à refaire, on opterait pour cette architecture.
+Le code commence à devenir lourd et le MVC qu'on a tenté de faire risque de ne pas être extensible. On a pris connaissance du livre *SDL Game Development* qui propose un autre design pattern qui semble éviter de tomber dans un code lourd. Ce design répartit le MVC au sein de chaque classe plutôt que d'avoir un modèle global, une vue globale et un controleur global. Si le projet serait à refaire, on opterait pour cette architecture.
